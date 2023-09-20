@@ -1,0 +1,4 @@
+
+class
+    def __innit__(self):
+        pass

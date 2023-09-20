@@ -1,1 +1,3 @@
-# ipre2023_builder
+# Nombre super cool del juego
+
+Manual
