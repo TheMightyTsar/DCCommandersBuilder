@@ -1,0 +1,11 @@
+
+class Commander:
+    def __innit__(self):
+        self.name = (*Input del Jugador*)
+        pass
+
+    def montar_tropas():
+        pass
+
+    def jugar_turno()
+        pass
