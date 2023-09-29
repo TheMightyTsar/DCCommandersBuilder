@@ -2,13 +2,12 @@ class Troop:
     def __innit__(self):
         self.posX = None
         self.posY = None
+        self.idTropa = None
         pass
 
-    def atacar(self):
+    def accion(self):
         pass
 
     def moverse(self):
         pass
 
-    def specialMove(self)
-        pass
