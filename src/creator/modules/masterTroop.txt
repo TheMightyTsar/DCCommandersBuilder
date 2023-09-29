@@ -1,0 +1,14 @@
+class Troop:
+    def __innit__(self):
+        self.posX = None
+        self.posY = None
+        pass
+
+    def atacar(self):
+        pass
+
+    def moverse(self):
+        pass
+
+    def specialMove(self)
+        pass
