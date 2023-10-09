@@ -1,5 +1,8 @@
 import importlib
-from src.review.utils.globals_modder import add_globals_to_file
+from src.review.utils.globals_modder import (
+    add_globals_to_file,
+    delete_extra_lines
+)
 import sys
 from src.review.reviewExceptions import ModuloNoPermitido
 
@@ -28,10 +31,10 @@ def check_imported_modules(commanderName):
     '''
 
     modules_whitelist = list(sys.modules).copy()
-    modules_whitelist.extend(["math", "numpy", "random", "time"])
+    modules_whitelist.extend(["math", "random", "time"])
 
     # Modificar archivo commander.py para agregar función get_globals
-    add_globals_to_file(commanderName)
+    original_lines = add_globals_to_file(commanderName)
 
     # commanderName -> Referencia a un directorio -> En su interior commander
     # Importar archivo creado por usuario con commanderName
@@ -49,6 +52,9 @@ def check_imported_modules(commanderName):
         # Filtra solo aquellas variables que son modulos
         if isinstance(val, type(sys)):
             modules.append(name)
+
+    # Eliminar líneas agregadas a commander.py
+    delete_extra_lines(commanderName, original_lines)
 
     invalid_modules = []
     for module in modules:

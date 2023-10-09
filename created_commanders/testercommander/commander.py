@@ -1,7 +1,8 @@
 
-# Supongamos que itertools es librería prohibida
+# Supongamos que itertools, requests y numpy son librerías prohibidas
 import itertools
 import requests
+import numpy
 # Y que math es permitida (en whitelist)
 import math
 
