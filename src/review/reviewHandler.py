@@ -1,5 +1,5 @@
 import importlib
-import types
+from src.review.utils.globals_modder import add_globals_to_file
 import sys
 from src.review.reviewExceptions import ModuloNoPermitido
 
@@ -30,6 +30,9 @@ def check_imported_modules(commanderName):
     modules_whitelist = list(sys.modules).copy()
     modules_whitelist.extend(["math", "numpy", "random", "time"])
 
+    # Modificar archivo commander.py para agregar función get_globals
+    add_globals_to_file(commanderName)
+
     # commanderName -> Referencia a un directorio -> En su interior commander
     # Importar archivo creado por usuario con commanderName
     user_module = importlib.import_module(f"created_commanders.{commanderName}.commander")
@@ -38,12 +41,17 @@ def check_imported_modules(commanderName):
     modules_whitelist.append("created_commanders")
 
     # Obtener todos los módulos importados
-    modules = sys.modules
-    print(modules.keys())
-    print(dir(user_module))
+    all_globals = user_module.get_globals()
+    merge(globals(), all_globals)
+
+    modules = []
+    for name, val in all_globals.items():
+        # Filtra solo aquellas variables que son modulos
+        if isinstance(val, type(sys)):
+            modules.append(name)
 
     invalid_modules = []
-    for module in modules.keys():
+    for module in modules:
         # print(module)
         if module not in modules_whitelist:
             # Problemas
@@ -51,3 +59,7 @@ def check_imported_modules(commanderName):
     if invalid_modules:
         raise ModuloNoPermitido(
             invalid_modules, "Se han encontrado módulos no permitidos:")
+
+
+def merge(dict1: dict, dict2: dict):
+    dict2.update(dict1)
