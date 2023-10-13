@@ -1,7 +1,7 @@
 ========================================
 |Bienvenido al builder de DCCommanders |
 |                                      |
-|    Escoge una opcion:                 |
+|    Escoge una opcion:                |
 |                                      |
 | [0] Crear Commander                  |
 | [1] Revisar Commander                |
