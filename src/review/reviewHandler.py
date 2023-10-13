@@ -1,4 +1,6 @@
 import importlib
+import types
+
 from src.review.utils.globals_modder import (
     add_globals_to_file,
     delete_extra_lines
@@ -69,6 +71,10 @@ def check_imported_modules(commanderName, user_module):
         "itertools", "importlib", "sys", "math", "random", "time"
     ]
 
+    functions_blacklist = [
+        "rmdir", "mkdir"
+    ]
+
     # Modificar archivo commander.py para agregar función get_globals
     original_lines = add_globals_to_file(commanderName)
 
@@ -83,23 +89,29 @@ def check_imported_modules(commanderName, user_module):
 
     # Obtener todos los módulos importados
     all_globals = user_module.get_globals()
-    merge(globals(), all_globals)
 
     modules = []
+    functions = []
     for name, val in all_globals.items():
         # Filtra solo aquellas variables que son modulos
         if isinstance(val, type(sys)):
             modules.append(name)
+        elif isinstance(val, types.BuiltinFunctionType):
+            functions.append(name)
 
     # Eliminar líneas agregadas a commander.py
     delete_extra_lines(commanderName, original_lines)
 
     invalid_modules = []
     for module in modules:
-        # print(module)
         if module not in modules_whitelist:
             # Problemas
             invalid_modules.append(module)
+
+    for func in functions:
+        if func in functions_blacklist:
+            invalid_modules.append(func)
+
     if invalid_modules:
         raise ModuloNoPermitido(
             invalid_modules, "Se han encontrado módulos no permitidos:")
@@ -136,7 +148,3 @@ def check_commander_structure(user_module):
     except AttributeError:
         raise AttributeError(
             "No se ha encontrado el método metodo en la clase Commander.")
-
-
-def merge(dict1: dict, dict2: dict):
-    dict2.update(dict1)
