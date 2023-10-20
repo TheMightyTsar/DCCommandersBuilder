@@ -15,14 +15,14 @@ def showScene(scene):
 
 
 def changeScene(scene, option):
-    next_scene = menus[scene].get(option, scene)
+    nextScene = menus[scene].get(option, scene)
     if scene == 'input_commander_name':
         verificacionNombre = verifyCommanderName(option)
         if verificacionNombre:
-            next_scene = menus[scene].get('0', scene)
+            nextScene = menus[scene].get('0', scene)
 
 
-    return next_scene
+    return nextScene
 
 
 def verifyCommanderName(name):
