@@ -1,5 +1,6 @@
 import importlib
 import types
+from os import path
 
 from src.review.utils.globals_modder import (
     add_globals_to_file,
@@ -9,14 +10,20 @@ from src.review.utils.print_styles import (
     print_test_pass,
     print_test_fail
 )
+
 import sys
-from src.review.reviewExceptions import ModuloNoPermitido
+from src.review.reviewExceptions import ModuloNoPermitido, FuncionNoPermitida
+from src.review.utils.mock_vars import mock_informe_1
 
 
 def check_code(commanderName):
     # debe retornar True si el codigo es Valido
     print(f"Validando commander.py de {commanderName}... ")
     try:
+        print("- Test funciones prohibidas...", end="")
+        check_forbidden_builtins(commanderName)
+        print_test_pass()
+
         print("- Test sintaxis...", end="")
         user_module = importlib.import_module(
             f"created_commanders.{commanderName}.commander"
@@ -30,6 +37,13 @@ def check_code(commanderName):
         print("- Test estructura...", end="")
         check_commander_structure(user_module)
         print_test_pass()
+
+    except FuncionNoPermitida as error:
+        print_test_fail()
+        print("Código commander.py inválido")
+        print(f"Motivo: {error.args[0]}")
+        error.imprimir_funciones_invalidas()
+        return False
 
     except ModuloNoPermitido as error:
         print_test_fail()
@@ -56,6 +70,26 @@ def check_code(commanderName):
         return False
 
     return True
+
+
+def check_forbidden_builtins(commanderName):
+    # Leer archivo commander.py en busca de " exec("" o " eval("
+    # Si se encuentra, levantar excepción
+
+    lines = []
+
+    with open(path.join("created_commanders", f"{commanderName}", "commander.py"), encoding='utf-8') as f:
+        lines = f.readlines()
+
+    for line in lines:
+        msg = []
+        if ' exec(' in line or line[0:5] == 'exec(':
+            msg.append("exec")
+        if ' eval(' in line or line[0:5] == 'eval(':
+            msg.append("eval")
+        if msg:
+            raise FuncionNoPermitida(
+                msg, "Se han encontrado funciones no permitidas:")
 
 
 # Definir tester de modulos importados
@@ -144,7 +178,13 @@ def check_commander_structure(user_module):
 
     # Revisar si la clase Commander tiene los métodos necesarios
     try:
-        commander.metodo()
+        commander.armar_tablero()
     except AttributeError:
         raise AttributeError(
-            "No se ha encontrado el método metodo en la clase Commander.")
+            "No se ha encontrado el método obligatorio \"armar_tablero\" en la clase Commander.")
+
+    try:
+        commander.realizar_accion(mock_informe_1)
+    except AttributeError:
+        raise AttributeError(
+            "No se ha encontrado el método obligatorio \"armar_tablero\" en la clase Commander.")
