@@ -15,7 +15,18 @@ def buildCommander(commanderName):
     commanderPath = 'commanders/'+commanderName+'/'
     commanderFile = commanderPath + commanderName + '.py'
     textPath = 'src/creator/modules/commanders.txt'
+    importSoldier = 'import commanders.' + commanderName + '.troops.soldier as soldier \n'
+    importScout = 'import commanders.' + commanderName + '.troops.scout as scout \n'
+    importGauss = 'import commanders.' + commanderName + '.troops.gauss as gauss \n'
+    importTower = 'import commanders.' + commanderName + '.troops.tower as tower \n'
+    importGrenadier = 'import commanders.' + commanderName + '.troops.grenadier as grenadier \n'
+
     with open(commanderFile, 'w') as cFile:
+        cFile.write(importSoldier)
+        cFile.write(importScout)
+        cFile.write(importGauss)
+        cFile.write(importTower)
+        cFile.write(importGrenadier)
 
         with open(textPath) as baseFile:
             for line in baseFile:
@@ -39,7 +50,7 @@ def buildCommander(commanderName):
 
     printMessage('creando clase Asbtracta de tus tropas')
 
-    importMasterTroop = 'import commanders.' + commanderName + '.troops.baseTroop as baseTroop'
+    importMasterTroop = 'import commanders.' + commanderName + '.troops.baseTroop as baseTroop \n'
     soldierPath = troopsFolderPath + '/soldier.py'
     soldierTextPath = 'src/creator/modules/soldier.txt'
     escribirTroops(importMasterTroop, soldierPath, soldierTextPath)

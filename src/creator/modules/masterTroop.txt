@@ -4,11 +4,11 @@ from abc import ABC, abstractmethod
 class BaseTroop(ABC):
     _id = 0
 
-    def __init__(self, _type, pos):
+    def __init__(self, pos):
         self.id = self._id
         BaseTroop._id += 1
-        self.type = _type
-        self.pos: str = pos
+        self.type = 'base'
+        self.pos: str = 'A0'
 
     @abstractmethod
     def mover(self):
