@@ -1,0 +1,10 @@
+========================================
+|Bienvenido al builder de DCCommanders |
+|                                      |
+|    Escoge una opcion:                |
+|                                      |
+| [0] Crear Commander                  |
+| [1] Revisar Commander                |
+| [2] Como funciona el builder?        |
+| [3] Manual de DCCommanders           |
+========================================

@@ -1,0 +1,15 @@
+
+class Commander:
+    def __innit__(self):
+        self.name =
+
+
+    def montar_tropas(self):
+        tropas = [[]]
+
+        return(tropas)
+
+    def jugar_turno(self, informe):
+        orden = {}
+
+        return(orden)

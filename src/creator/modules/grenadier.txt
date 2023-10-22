@@ -1,0 +1,13 @@
+class Grenadier(baseTroop):
+    # Clase Grenadier
+
+    def __init__(self, pos):
+        super().__init__()
+        self.type = 'grenadier'
+        self.pos = pos
+
+    def moverse(self):
+        pass
+
+    def atacar(self):
+        pass

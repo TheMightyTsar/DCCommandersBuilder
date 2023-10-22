@@ -1,0 +1,13 @@
+class Scout(baseTroop):
+    # Clase Scout
+
+    def __innit__(self, pos):
+        super().__innit__()
+        self.type = 'soldier'
+        self.pos = pos
+
+    def moverse(self):
+        pass
+
+    def atacar(self):
+        pass

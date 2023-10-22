@@ -1,0 +1,13 @@
+class Soldier(baseTroop):
+    # Clase de Soldado
+
+    def __innit__(self, pos):
+        super().__innit__()
+        self.type = 'soldier'
+        self.pos: str = pos
+
+    def moverse(self):
+        pass
+
+    def atacar(self):
+        pass
