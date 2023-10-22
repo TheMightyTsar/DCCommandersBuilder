@@ -4,6 +4,7 @@ from src.review import reviewHandler
 import threading
 import time
 
+
 def start():
 
     running = True
@@ -28,6 +29,7 @@ def start():
             running = False
 
 
-
-    pass
+    #review_result = reviewHandler.check_code("testercommander")
+    #if review_result:
+    #   print("Código válido")
 
