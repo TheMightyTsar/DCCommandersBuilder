@@ -1,4 +1,4 @@
-from src.creator import commanderBuilder
+from src.creator.commanderBuilder import buildCommander
 from src.scenes import sceneHandler
 from src.review import reviewHandler
 import threading
@@ -18,18 +18,16 @@ def start():
         sceneHandler.showScene(scene)
 
         if scene == 'building_commander':
-            waitThread = threading.Thread(target=forceWait())
-            commanderBuilder.buildCommander(option)
+            buildThread = threading.Thread(target=buildCommander, args=(option,))
 
-            waitThread.start()
-            waitThread.join()
+
+
+
+            buildThread.start()
+            buildThread.join()
             running = False
 
 
 
     pass
 
-def forceWait():
-    for i in range(0, 10):
-        print('...')
-        time.sleep(0.5)

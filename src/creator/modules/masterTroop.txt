@@ -1,13 +1,21 @@
-class Troop:
-    def __innit__(self):
-        self.posX = None
-        self.posY = None
-        self.idTropa = None
+from abc import ABC, abstractmethod
+
+
+class BaseTroop(ABC):
+    _id = 0
+
+    def __init__(self, _type, pos):
+        self.id = self._id
+        BaseTroop._id += 1
+        self.type = _type
+        self.pos: str = pos
+
+    @abstractmethod
+    def mover(self):
+        # decide donde moverse
         pass
 
-    def accion(self):
+    @abstractmethod
+    def atacar(self):
+        # decide donde ataca
         pass
-
-    def moverse(self):
-        pass
-
