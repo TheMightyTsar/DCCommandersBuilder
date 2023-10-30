@@ -1,6 +1,6 @@
 
 class Commander:
-    def __innit__(self):
+    def __init__(self):
         self.name =
 
 
