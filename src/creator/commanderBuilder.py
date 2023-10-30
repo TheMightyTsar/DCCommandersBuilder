@@ -15,11 +15,11 @@ def buildCommander(commanderName):
     commanderPath = 'commanders/'+commanderName+'/'
     commanderFile = commanderPath + commanderName + '.py'
     textPath = 'src/creator/modules/commanders.txt'
-    importSoldier = 'import commanders.' + commanderName + '.troops.soldier as soldier \n'
-    importScout = 'import commanders.' + commanderName + '.troops.scout as scout \n'
-    importGauss = 'import commanders.' + commanderName + '.troops.gauss as gauss \n'
-    importTower = 'import commanders.' + commanderName + '.troops.tower as tower \n'
-    importGrenadier = 'import commanders.' + commanderName + '.troops.grenadier as grenadier \n'
+    importSoldier = 'from commanders.' + commanderName + '.troops.soldier import Soldier \n'
+    importScout = 'from commanders.' + commanderName + '.troops.scout import Scout \n'
+    importGauss = 'from commanders.' + commanderName + '.troops.gauss import Gauss \n'
+    importTower = 'from commanders.' + commanderName + '.troops.tower import Tower \n'
+    importGrenadier = 'from commanders.' + commanderName + '.troops.grenadier import Grenadier \n'
 
     with open(commanderFile, 'w') as cFile:
         cFile.write(importSoldier)
@@ -50,7 +50,7 @@ def buildCommander(commanderName):
 
     printMessage('creando clase Asbtracta de tus tropas')
 
-    importMasterTroop = 'import commanders.' + commanderName + '.troops.baseTroop as baseTroop \n'
+    importMasterTroop = 'from commanders.' + commanderName + '.troops.baseTroop import BaseTroop \n'
     soldierPath = troopsFolderPath + '/soldier.py'
     soldierTextPath = 'src/creator/modules/soldier.txt'
     escribirTroops(importMasterTroop, soldierPath, soldierTextPath)

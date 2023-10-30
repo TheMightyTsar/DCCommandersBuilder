@@ -1,4 +1,4 @@
-class Gauss(baseTroop):
+class Gauss(BaseTroop):
     # Clase Gauss
 
     def __init__(self, pos):

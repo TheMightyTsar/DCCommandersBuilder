@@ -1,4 +1,4 @@
-class Soldier(baseTroop):
+class Soldier(BaseTroop):
     # Clase de Soldado
 
     def __innit__(self, pos):

@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class BaseTroop(ABC):
     _id = 0
 
-    def __init__(self, pos):
+    def __init__(self):
         self.id = self._id
         BaseTroop._id += 1
         self.type = 'base'
