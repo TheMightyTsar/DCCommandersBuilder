@@ -1,4 +1,4 @@
-class Grenadier(baseTroop):
+class Grenadier(BaseTroop):
     # Clase Grenadier
 
     def __init__(self, pos):

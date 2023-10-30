@@ -1,4 +1,4 @@
-class Scout(baseTroop):
+class Scout(BaseTroop):
     # Clase Scout
 
     def __innit__(self, pos):
