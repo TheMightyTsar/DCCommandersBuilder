@@ -2,7 +2,7 @@ class Soldier(BaseTroop):
     # Clase de Soldado
 
     def __init__(self, pos):
-        super().__innit__()
+        super().__init__()
         self.type = 'soldier'
         self.pos: str = pos
 
