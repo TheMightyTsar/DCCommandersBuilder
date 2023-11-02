@@ -21,7 +21,6 @@ def changeScene(scene, option):
         if verificacionNombre:
             nextScene = menus[scene].get('0', scene)
 
-
     return nextScene
 
 

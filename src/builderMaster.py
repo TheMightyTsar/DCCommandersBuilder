@@ -21,15 +21,13 @@ def start():
         if scene == 'building_commander':
             buildThread = threading.Thread(target=buildCommander, args=(option,))
 
-
-
-
             buildThread.start()
             buildThread.join()
             running = False
 
+        if scene == 'review_code':
+            commander_name = input()
+            reviewHandler.check_code(commander_name)
 
-    #review_result = reviewHandler.check_code("testercommander")
-    #if review_result:
-    #   print("Código válido")
-
+            scene = 'welcome'
+            sceneHandler.showScene(scene)
