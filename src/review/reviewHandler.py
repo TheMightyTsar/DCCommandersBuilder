@@ -178,13 +178,13 @@ def check_commander_structure(user_module):
 
     # Revisar si la clase Commander tiene los métodos necesarios
     try:
-        commander.armar_tablero()
+        commander.set_troops()
     except AttributeError:
         raise AttributeError(
             "No se ha encontrado el método obligatorio \"armar_tablero\" en la clase Commander.")
 
     try:
-        commander.realizar_accion(mock_informe_1)
+        commander.admin_troops(mock_informe_1)
     except AttributeError:
         raise AttributeError(
             "No se ha encontrado el método obligatorio \"armar_tablero\" en la clase Commander.")
