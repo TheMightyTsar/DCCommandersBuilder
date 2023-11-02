@@ -18,7 +18,7 @@ from src.review.utils.mock_vars import mock_informe_1
 
 def check_code(commanderName):
     # debe retornar True si el codigo es Valido
-    print(f"Validando commander.py de {commanderName}... ")
+    print(f"Validando {commanderName}.py de {commanderName}... ")
     try:
         print("- Test funciones prohibidas...", end="")
         check_forbidden_builtins(commanderName)
@@ -26,7 +26,7 @@ def check_code(commanderName):
 
         print("- Test sintaxis...", end="")
         user_module = importlib.import_module(
-            f"created_commanders.{commanderName}.commander"
+            f"commanders.{commanderName}.{commanderName}"
         )
         print_test_pass()
 
@@ -35,32 +35,32 @@ def check_code(commanderName):
         print_test_pass()
 
         print("- Test estructura...", end="")
-        check_commander_structure(user_module)
+        check_commander_structure(user_module, commanderName)
         print_test_pass()
 
     except FuncionNoPermitida as error:
         print_test_fail()
-        print("Código commander.py inválido")
+        print(f"Código {commanderName}.py inválido")
         print(f"Motivo: {error.args[0]}")
         error.imprimir_funciones_invalidas()
         return False
 
     except ModuloNoPermitido as error:
         print_test_fail()
-        print("Código commander.py inválido")
+        print(f"Código {commanderName}.py inválido")
         print(f"Motivo: {error.args[0]}")
         error.imprimir_modulos_invalidos()
         return False
 
     except (NameError, AttributeError, TypeError) as error:
         print_test_fail()
-        print("Código commander.py inválido")
+        print(f"Código {commanderName}.py inválido")
         print(f"Motivo: {error.args[0]}")
         return False
 
     except SyntaxError as error:
         print_test_fail()
-        print("Código commander.py inválido")
+        print(f"Código {commanderName}.py inválido")
         print("Motivo: Error de sintaxis")
         print("----")
         print(f"Línea: {error.lineno}\n")
@@ -78,7 +78,10 @@ def check_forbidden_builtins(commanderName):
 
     lines = []
 
-    with open(path.join("created_commanders", f"{commanderName}", "commander.py"), encoding='utf-8') as f:
+    with open(
+        path.join("commanders", f"{commanderName}", f"{commanderName}.py"),
+        encoding='utf-8'
+    ) as f:
         lines = f.readlines()
 
     for line in lines:
@@ -114,12 +117,12 @@ def check_imported_modules(commanderName, user_module):
 
     # Re-importar modulo usuario
     user_module = importlib.import_module(
-        f"created_commanders.{commanderName}.commander"
+        f"commanders.{commanderName}.{commanderName}"
     )
     user_module = importlib.reload(user_module)
-    modules_whitelist.append(f"created_commanders.{commanderName}.commander")
-    modules_whitelist.append(f"created_commanders.{commanderName}")
-    modules_whitelist.append("created_commanders")
+    modules_whitelist.append(f"commanders.{commanderName}.{commanderName}")
+    modules_whitelist.append(f"commanders.{commanderName}")
+    modules_whitelist.append("commanders")
 
     # Obtener todos los módulos importados
     all_globals = user_module.get_globals()
@@ -151,7 +154,12 @@ def check_imported_modules(commanderName, user_module):
             invalid_modules, "Se han encontrado módulos no permitidos:")
 
 
-def check_commander_structure(user_module):
+'''
+PARTE A MODIFICAR ADELANTE
+'''
+
+
+def check_commander_structure(user_module, commanderName):
     '''
     Revisa si el código para la clase Commander es válido o no.
     Debe poder instanciarse con los argumentos requeridos, y deben existir
@@ -164,27 +172,27 @@ def check_commander_structure(user_module):
         commander = user_module.Commander()
     except (NameError, AttributeError):
         raise NameError(
-            "No se ha encontrado la clase Commander en commander.py.")
+            f"No se ha encontrado la clase Commander en {commanderName}.py.")
     except TypeError:
         raise TypeError(
             "La clase Commander no debe recibir argumentos.")
 
     # Revisar si la clase Commander tiene los atributos necesarios
     try:
-        commander.atr1
+        commander.name
     except AttributeError:
         raise AttributeError(
-            "No se ha encontrado el atributo atr1 en la clase Commander.")
+            "No se ha encontrado el atributo \"name\" en la clase Commander.")
 
     # Revisar si la clase Commander tiene los métodos necesarios
     try:
-        commander.set_troops()
+        commander.montar_tropas()
     except AttributeError:
         raise AttributeError(
-            "No se ha encontrado el método obligatorio \"armar_tablero\" en la clase Commander.")
+            "No se ha encontrado el método obligatorio \"montar_tropas\" en la clase Commander.")
 
     try:
-        commander.admin_troops(mock_informe_1)
+        commander.jugar_turno(mock_informe_1)
     except AttributeError:
         raise AttributeError(
-            "No se ha encontrado el método obligatorio \"armar_tablero\" en la clase Commander.")
+            "No se ha encontrado el método obligatorio \"jugar_turno\" en la clase Commander.")
