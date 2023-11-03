@@ -15,7 +15,7 @@ class Commander:
 
         return (tropas)
 
-    def jugar_turno(self, informe):
+    def jugar_turno(self, informe, informeEnemigo):
         orden = {}
 
         return (orden)
