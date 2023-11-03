@@ -16,28 +16,77 @@
   * Tu **Comandante** debe destruir todas las tropas enemigas para ganar.
 
 * ## El Tablero:
-  * Tu tablero es de 10x10 unidades
+  * Tu tablero es de 10x10 unidades, la columna **A** es tu retaguardia y la Columna **J** es tu frente.
+  
   ![Tablero](img_1.png)
 
 
 
 
+* ## Las Tropas:
+* Las tropas son robots con mente propia! aunque el comandante decide la jugada las tropas pueden decidir donde atacar y moverse y contarle al comandante que haran para que el comandante mande la jugada.
 
-## Las Tropas:
-Las tropas son robots con mente propia! aunque el comandante decide la jugada las tropas pueden decidir donde atacar y moverse y contarle al comandante que haran para que el comandante mande la jugada.
+* **baseTroop:**
 
-baseTroop
-Es el programa basico de los soldados.
+  * Es el programa basico de todas las tropas, las tropas pueden usar su programacion base usando el comando 
+  ```python3 
+  super().mover()
+  o
+  super().atacar()
+  ```
+  * Tambien le entrega a las tropas su atributo id 
+  * ```python3
+    self.id
 
-**soldado (soldier.py)**
+* **soldado (soldier.py)**
+  * Unidad más sencilla 
+  * **Se mueve:** Una casilla a su alrededor.
+  * **Ataca:** La casilla enemiga seleccionada.
+  * **Unidades disponibles:** 5.
 
-**Scout (scout.py)**
+* **Scout (scout.py)**
+  * Puede revelar las tropas enemigas.
+  * **Se mueve:** Una casilla a su alrededor.
+  * **Ataca:** La casilla enemiga seleccionada y detecta las casillas a su alrededor, lo descubierto por el **Scout** se ve reflejado en el informe que recibas tu proximo turno.
+  * **Unidades disponibles:** 2.
 
-**Cañon Gauss (gauss.py)**
+* **Cañon Gauss (gauss.py)**
+  * Capaz de destruir una fila en solo un ataque.
+  * **Se mueve:** Una casilla en vertical, se mueve solo a lo largo de la columna.
+  * **Ataca:** Selecciona una casilla en la misma fila en la que se encuentra el **Cañon Gauss**, destruye toda las tropas en la fila enemiga.
+  * **Unidades disponibles:** 2.
 
-**Granadero (grenadier.py)**
+* **Granadero (grenadier.py)**
+  * Adora las granadas de racimo.
+  * **Se mueve:** Una casilla a su alrededor.
+  * **Ataca:** Una casilla enemiga y otras 4 alrededor de manera aleatoria.
 
-**Torre AA (tower.py)**
-
-## Que debo implementar?
-
+* **Torre AA (tower.py)**
+  * Brinda apoyo aereo a la batalla.
+  * **Se mueve:** No puede moverse.
+  * **Ataca:** Ataca una casilla enemiga y otras 5 aleatorias en el mapa.
+* ## Que debo implementar?
+  * Tu **Comandante** debe tener de manera obligatoria los metodos ```montar_tropas()``` y  ```jugar_turno()```.
+  * #### montar_tropas()
+    * Debe retornar una lista de listas las cuales contienen el id, tipoTropa y posicion
+    * ```python 
+      [
+      ...
+      [id, tipoTropa, posicion],
+      ...
+      ]
+      # Las tropas tienen el atributo id por BaseTroop
+    
+  * #### jugar_turno()
+    * #### Informe
+      * Al metodo se le entrega un informe como argumento, el cual tiene informacion de la partida.
+      * El informe tiene la siguiente estructura:
+      * 
+    * #### Retornar
+      * Debes retornar una lista con: 
+        * **id** de la tropa que jugaras en el turno.
+        * Que **accion** ```"mover"``` o ```"atacar"``` realizara.
+        * A que **casilla** se mueve o ataca la tropa.
+        * ```python
+          [id, accion, casilla]
+      
