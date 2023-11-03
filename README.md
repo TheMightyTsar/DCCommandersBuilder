@@ -78,10 +78,21 @@
       # Las tropas tienen el atributo id por BaseTroop
     
   * #### jugar_turno()
-    * #### Informe
-      * Al metodo se le entrega un informe como argumento, el cual tiene informacion de la partida.
+    * #### Informe e InformeEnemigo
+      * Al metodo se le entrega informes como argumento, los cuales tiene informacion de la partida.
       * El informe tiene la siguiente estructura:
-      * 
+      * ```python
+        {"ataque": [casillasAtacadas_por_ti],
+        "detectados": [pos_De_tropas_enemigas_detectadas],
+        "bajas": [ids_de_tus_tropas_destruidas],
+        "mov_exitoso": Bool # True si la jugada anterior es valida, False si no
+        }
+      * El informeEnemigo tiene la siguiente estructura:
+      * ```python
+        {"ataque": [casillasAtacadas_por_Enemigo],
+        "detectados": [id_De_Tus_Tropas_Detectadas],
+        "bajas": [tipo_de_tropas_enemigas_destruidas]
+        }
     * #### Retornar
       * Debes retornar una lista con: 
         * **id** de la tropa que jugaras en el turno.
