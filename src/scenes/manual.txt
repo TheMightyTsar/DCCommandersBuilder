@@ -12,6 +12,5 @@ estructura de tu comandante al
 escoger la opcion [1] e
 ingresar el nombre de tu comandante
 
-
+[v] para volver al menu
 [s] para Salir...
-
