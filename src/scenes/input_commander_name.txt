@@ -1,4 +1,8 @@
 ========================================
 |   Crea a tu nuevo DCCommanders       |
 ========================================
+* puedes ingresar 's' para salir
+
+
     Ingresa su nombre:
+

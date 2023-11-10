@@ -1,10 +1,10 @@
 
-menus = {'welcome': {'0': 'input_commander_name', '1': 'review_code'},
+menus = {'welcome': {'0': 'input_commander_name', '1': 'review_code', '2': 'manual', '3': 'test'},
          'input_commander_name': {'0': 'building_commander'}}
 
-invalidCharacters = [' ', 'ñ']
+invalidCharacters = [' ', 'ñ', '!']
 
-message = 'Usaste caracteres no validos, no ocupes espacio, ñ o simbolos raros'
+message = 'Usaste caracteres no validos, no ocupes caracteres NO alfanumericos'
 
 def showScene(scene):
     file_name = 'src/scenes/'+scene+'.txt'
@@ -28,20 +28,18 @@ def verifyCommanderName(name):
     name = name.strip()
     notification = f'Saludos comandante {name}'
     valid = True
-    print(len(name))
+
+    valid = name.isalnum()
+
     if len(name) == 0:
         notification = message
         valid = False
 
-    for char in invalidCharacters:
-        if char in name:
+    if not valid:
+        notification = message
 
-            notification = message
-            valid = False
-
-
-    print("")
+    print("-"*10)
     print(notification)
-    print("")
+    print("-"*10)
 
     return valid

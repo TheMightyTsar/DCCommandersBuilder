@@ -10,6 +10,6 @@ class Commander:
         return(tropas)
 
     def jugar_turno(self, informe, informeEnemigo):
-        orden = {}
+        orden = []
 
         return(orden)

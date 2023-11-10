@@ -1,0 +1,17 @@
+===============================
+|    Como usar el builder     |
+===============================
+* En el menu principal, puedes
+crear tu comandante, opcion [0],
+al darle un nombre
+Este se va a crear en la carpeta
+'commanders/NombreDelComandante'
+
+*Puedes revisar si es valida la
+estructura de tu comandante al
+escoger la opcion [1] e
+ingresar el nombre de tu comandante
+
+
+[s] para Salir...
+
