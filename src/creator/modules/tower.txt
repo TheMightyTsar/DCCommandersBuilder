@@ -6,7 +6,7 @@ class Tower(BaseTroop):
         self.type = 'tower'
         self.pos = pos
 
-    def moverse(self):
+    def mover(self):
         pass
 
     def atacar(self):

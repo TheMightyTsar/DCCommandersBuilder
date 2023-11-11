@@ -13,3 +13,6 @@ class Commander:
         orden = []
 
         return(orden)
+
+    def __repr__(self):
+        return(self.name)

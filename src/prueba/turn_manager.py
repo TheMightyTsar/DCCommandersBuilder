@@ -20,13 +20,15 @@ validPOS = ['A0', 'B0', 'C0', 'D0', 'E0', 'F0', 'G0', 'H0', 'I0', 'J0',
             'A8', 'B8', 'C8', 'D8', 'E8', 'F8', 'G8', 'H8', 'I8', 'J8',
             'A9', 'B9', 'C9', 'D9', 'E9', 'F9', 'G9', 'H9', 'I9', 'J9']
 
+validTipos = ['']
+
 class TurnManager:
     def __init__(self, commanders) -> None:
         print("-" * 40)
         print("Comienza la prueba de los comandantes")
         print("-" * 40)
         self.player_1 = commanders[0].Commander()
-        self.player_2 = commanders[0].Commander()
+        self.player_2 = commanders[1].Commander()
         self.players = [self.player_1, self.player_2]
 
         self.troops = {}
@@ -74,11 +76,21 @@ class TurnManager:
             if len(tropas) == 13:
 
                 for unit in tropas:
-                    if isinstance(tropas, list):
-                    # contar cantida de unidades
-                        pass
+                    if not isinstance(unit, list):
+                        message += 'ERROR: montar_tropas no devuelve una lista de listas \n'
                     else:
-                        listaDeListas = False
+                        if len(unit) != 3:
+                            message += f'ERROR: las sublistas no tienen los 3 ' \
+                                       f'elementos pedidos {unit}  \n'
+                        else:
+                            if not isinstance(unit[0], int):
+                                message += f'ERROR: el ID entregado no es un integer {unit} \n'
+                            else:
+                                if unit[0] in listID:
+                                    message += f'ERROR: el ID entregado no es unico {unit[0]}\n'
+                                else:
+                                    listID.append(unit[0])
+
             else:
                 message += 'ERROR: faltan tropas en el tablero \n'
         else:

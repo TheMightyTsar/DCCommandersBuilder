@@ -6,7 +6,7 @@ class Gauss(BaseTroop):
         self.type = "gauss"
         self.pos = pos
 
-    def moverse(self):
+    def mover(self):
         pass
 
     def atacar(self):
