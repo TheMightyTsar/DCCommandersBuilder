@@ -18,7 +18,7 @@ class Commander:
         self.attack_priority_list = [GRENADIER, TOWER, SOLDIER, GAUSS]
 
     def montar_tropas(self):
-        possible = [TC[(i, j)] for i in range(10) for j in range(10)]
+        possible = list(TC.values())
         possible = random.sample(possible, 13)
 
         tropas = []
