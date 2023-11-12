@@ -1,15 +1,8 @@
 import random
 
-from src.prueba.bots.SoloScout.troops.gauss import Gauss
-from src.prueba.bots.SoloScout.troops.grenadier import Grenadier
 from src.prueba.bots.SoloScout.troops.scout import Scout
-from src.prueba.bots.SoloScout.troops.soldier import Soldier
-from src.prueba.bots.SoloScout.troops.tower import Tower
-from src.prueba.parametros import ATACAR, ATACK, BAJAS
-from src.prueba.parametros import COORD_TO_TUPLE as ct
-from src.prueba.parametros import (DETECT, GAUSS, GRENADIER, MOV_SUCCESS,
-                                   MOVER, SCOUT, SOLDIER, TOWER)
-from src.prueba.parametros import TUPLE_TO_COORD as tc
+from src.prueba.parametros import ATACAR, BAJAS
+from src.prueba.parametros import TUPLE_TO_COORD as TC
 
 
 class Commander:
@@ -32,15 +25,14 @@ class Commander:
         return tropas
 
     def jugar_turno(self, informe: dict, informe_enemigo: dict):
-        for id_tropa in self.tropas:
-            if id_tropa in informe[BAJAS]:
+
+        for _id, tropa in self.tropas.items():
+            if _id in informe[BAJAS]:
                 continue
-            tropa = self.tropas[id_tropa]
             return [tropa.id, ATACAR, self.obtener_posicion()]
 
     def obtener_posicion(self):
-        fil, col = random.choice(list(tc.keys()))
-        return tc[(fil, col)]
+        return random.choice(list(TC.values()))
 
     def __repr__(self) -> str:
         return self.name

@@ -18,7 +18,7 @@ class Soldier(BaseTroop):
     def mover(self):
         possible = []
 
-        for i in range(-1, 2, 2):
+        for i in (-1, 1):
             possible.append((CT[self.pos][0] + i, CT[self.pos][1]))
             possible.append((CT[self.pos][0], CT[self.pos][1] + i))
 

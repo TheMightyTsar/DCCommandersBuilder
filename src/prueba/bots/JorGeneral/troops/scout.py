@@ -18,11 +18,11 @@ class Scout(BaseTroop):
     def mover(self):
         possible = []
 
-        for i in range(-2, 3):
+        for i in (-2, 2):
             possible.append(
-                (CT[self.pos][0] + i, CT[self.pos][1]) if i != 0 else None)
+                (CT[self.pos][0] + i, CT[self.pos][1]))
             possible.append(
-                (CT[self.pos][0], CT[self.pos][1] + i) if i != 0 else None)
+                (CT[self.pos][0], CT[self.pos][1] + i))
 
         possible = [TC[i] for i in possible if i in TC.keys()]
 
