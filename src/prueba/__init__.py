@@ -2,6 +2,7 @@
 
 import argparse
 import importlib.util
+import itertools
 import os
 import random
 import subprocess
@@ -122,15 +123,22 @@ def logo(player1_name, player2_name) -> None:
 
 
 def parse_args():
-    bot_files = '\n- '.join(os.listdir(os.path.join('src', 'prueba', 'bots'))
-                            ).replace('JorGeneral', 'JorGeneral (default)')
-    commander_files = '\n- '.join(os.listdir('commanders'))
-
+    bot_files = [
+        f"- {f}" for f in os.listdir(os.path.join('src', 'prueba', 'bots'))]
+    bot_files[bot_files.index('- JorGeneral')] = '- JorGeneral (default)'
+    commander_files = [
+        f"- {f}" for f in os.listdir('commanders') if f != '.gitkeep']
+    max_bot_length = max(len(f) for f in bot_files) + 3
+    formatted_files = "\n".join(f"{b.ljust(max_bot_length)} {c}" for b, c in itertools.zip_longest(
+        bot_files, commander_files, fillvalue=''))
+    epilog = f"{RST}Bots:{' ' * (max_bot_length - 4)}Players:\n{formatted_files}"
     parser = argparse.ArgumentParser(
-        description="enfrenta dos comandantes. [] -> opcional.".title(),
-        epilog=f"Bots:\n- {bot_files}\n\nPropios:\n- {commander_files}",
-        formatter_class=argparse.RawTextHelpFormatter)
-    parser._optionals.title = "syntax".title()
+        description=RST + "enfrenta dos comandantes.".title() + YEL +
+        " [] -> opcional.".title(),
+        epilog=epilog,
+        formatter_class=argparse.RawTextHelpFormatter
+    )
+    parser._optionals.title = CYA + "syntax".title()
     parser.add_argument(
         "-p1", "--player1", help="nombre comandante 1".title(), required=True
     )
@@ -138,7 +146,9 @@ def parse_args():
         "-p2", "--player2", help="nombre comandante 2".title(), required=False
     )
     if len(sys.argv) not in (3, 5):
+        print(GRE)
         parser.print_help()
+        print()
         sys.exit()
     return parser.parse_args()
 
