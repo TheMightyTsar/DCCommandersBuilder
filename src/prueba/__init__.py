@@ -55,7 +55,6 @@ except ModuleNotFoundError:
             subprocess.check_output(cmd)
             print("\x1b[1m\x1b[92m" + prett("[+] dependencies installed"))
             print("\x1b[1m\x1b[92m" + prett("[+] run the program again"))
-            PASSED = True
             sys.exit("\x1b[0m")
 
         except subprocess.CalledProcessError:
@@ -122,41 +121,47 @@ def logo(player1_name, player2_name) -> None:
     print(color1 + "_" * os.get_terminal_size().columns, end=RST)
 
 
-def parse_args():
-    bot_files = [
-        f"- {f}" for f in os.listdir(os.path.join('src', 'prueba', 'bots'))]
-    bot_files[bot_files.index('- JorGeneral')] = '- JorGeneral (default)'
-    commander_files = [
-        f"- {f}" for f in os.listdir('commanders') if f != '.gitkeep']
-    max_bot_length = max(len(f) for f in bot_files) + 3
-    formatted_files = "\n".join(f"{b.ljust(max_bot_length)} {c}" for b, c in itertools.zip_longest(
-        bot_files, commander_files, fillvalue=''))
-    epilog = f"{RST}Bots:{' ' * (max_bot_length - 4)}Players:\n{formatted_files}"
-    parser = argparse.ArgumentParser(
-        description=RST + "enfrenta dos comandantes.".title() + YEL +
-        " [] -> opcional.".title(),
-        epilog=epilog,
-        formatter_class=argparse.RawTextHelpFormatter
-    )
-    parser._optionals.title = CYA + "syntax".title()
-    parser.add_argument(
-        "-p1", "--player1", help="nombre comandante 1".title(), required=True
-    )
-    parser.add_argument(
-        "-p2", "--player2", help="nombre comandante 2".title(), required=False
-    )
-    if len(sys.argv) not in (3, 5):
-        print(GRE)
-        parser.print_help()
-        print()
-        sys.exit()
-    return parser.parse_args()
+bot_files = [
+    f"- {f}" for f in os.listdir(os.path.join('src', 'prueba', 'bots'))]
+bot_files[bot_files.index('- JorGeneral')] += ' (default)'
+commander_files = [
+    f"- {f}" for f in os.listdir('commanders') if f != '.gitkeep']
+max_bot_length = max(len(f) for f in bot_files) + 3
+formatted_files = "\n".join(f"{b.ljust(max_bot_length)} {c}" for b, c in itertools.zip_longest(
+    bot_files, commander_files, fillvalue=''))
+epilog = f"{RST}Bots:{' ' * (max_bot_length - 4)}Players:\n{formatted_files}"
+parser = argparse.ArgumentParser(
+    description=RST + "enfrenta dos comandantes.".title() + YEL +
+    " [] -> opcional.".title(),
+    epilog=epilog,
+    formatter_class=argparse.RawTextHelpFormatter
+)
+parser._optionals.title = CYA + "syntax".title()
+parser.add_argument(
+    "-p1", "--player1", help="nombre comandante 1".title(), required=True
+)
+parser.add_argument(
+    "-p2", "--player2", help="nombre comandante 2".title(), required=False
+)
+if len(sys.argv) not in (3, 5):
+    print(GRE)
+    parser.print_help()
+    print()
+    sys.exit()
 
+args = parser.parse_args()
 
-args = parse_args()
+valid_commanders = os.listdir(os.path.join(
+    'src', 'prueba', 'bots')) + os.listdir('commanders')
 
 if not args.player2:
     args.player2 = 'JorGeneral'
+
+if any(map(lambda x: x not in valid_commanders, (args.player1, args.player2))):
+    print(RED)
+    print(prett("[!] one or both commander names are not valid") + GRE)
+    parser.print_help()
+    sys.exit()
 
 logo(args.player1, args.player2)
 
