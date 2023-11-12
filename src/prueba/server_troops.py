@@ -1,18 +1,40 @@
-"""Cointains all troop classes."""
+"""Cointains all troop classes used by the 'server'."""
 
 import random
+from abc import ABC, abstractmethod
 
-from base_classes import BaseTroop
-from dicts import COORD_TO_TUPLE as ct
-from dicts import TUPLE_TO_COORD as tc
+from src.prueba.parametros import COORD_TO_TUPLE as CT
+from src.prueba.parametros import TUPLE_TO_COORD as TC
 
 
-class Common(BaseTroop):
-    """Common class."""
+class BaseTroop(ABC):
+    """Base class for all troops."""
+
+    def __init__(self, _id, pos) -> None:
+        self.pos: str = pos
+        self.type: str
+        self.id = _id
+
+    @abstractmethod
+    def move(self, pos: str) -> bool:
+        """Verify if the troop can move to the given position."""
+
+    @abstractmethod
+    def attack(self, pos: str) -> list[str]:
+        """Returns a list of positions affected by the attack."""
+
+    def __repr__(self) -> str:
+        return f"Id: {str(self.id).center(2)} \
+        Position: {self.pos.center(3)} \
+        Type: {self.type}"
+
+
+class Soldier(BaseTroop):
+    """Soldier class."""
 
     def __init__(self, id, pos):
         super().__init__(id, pos)
-        self.type = "common"
+        self.type = "soldier"
 
     def move(self, pos: str):
         """Moves 1 cell in cross pattern."""
@@ -20,11 +42,11 @@ class Common(BaseTroop):
         possible = []
 
         for i in range(-1, 2):
-            possible.append((ct[self.pos][0] + i, ct[self.pos][1]))
-            possible.append((ct[self.pos][0], ct[self.pos][1] + i))
+            possible.append((CT[self.pos][0] + i, CT[self.pos][1]))
+            possible.append((CT[self.pos][0], CT[self.pos][1] + i))
 
         try:
-            if ct[pos] in possible:
+            if CT[pos] in possible:
                 return True
         except KeyError:
             return False
@@ -50,10 +72,10 @@ class Gauss(BaseTroop):
         possible = []
 
         for i in range(-1, 2):
-            possible.append((ct[self.pos][0] + i, ct[self.pos][1]))
+            possible.append((CT[self.pos][0] + i, CT[self.pos][1]))
 
         try:
-            if ct[pos] in possible:
+            if CT[pos] in possible:
                 return True
         except KeyError:
             return False
@@ -66,23 +88,17 @@ class Gauss(BaseTroop):
         if pos[1] != self.pos[1]:
             return []
 
-        # affected = [
-        #     tc[(ct[pos][0] - i, ct[pos][1])]
-        #     for i in range(5) if
-        #     ct[pos][0] - i in range(0, 10)
-        # ]
-
-        affected = [tc[(ct[pos][0], i)] for i in range(10)]
+        affected = [TC[(CT[pos][0], i)] for i in range(10)]
 
         return affected
 
 
-class Scouter(BaseTroop):
-    """Scouter class."""
+class Scout(BaseTroop):
+    """Scout class."""
 
     def __init__(self, id, pos):
         super().__init__(id, pos)
-        self.type = "scouter"
+        self.type = "scout"
 
     def move(self, pos: str):
         """Moves 2 cells in cross pattern."""
@@ -90,11 +106,11 @@ class Scouter(BaseTroop):
         possible = []
 
         for i in range(-1, 2):
-            possible.append((ct[self.pos][0] + i, ct[self.pos][1]))
-            possible.append((ct[self.pos][0], ct[self.pos][1] + i))
+            possible.append((CT[self.pos][0] + i, CT[self.pos][1]))
+            possible.append((CT[self.pos][0], CT[self.pos][1] + i))
 
         try:
-            if ct[pos] in possible:
+            if CT[pos] in possible:
                 return True
         except KeyError:
             return False
@@ -105,21 +121,21 @@ class Scouter(BaseTroop):
         """Attcks targeted position and 8 cells around."""
 
         affected = [
-            tc[(ct[pos][0] + i, ct[pos][1] + j)]
+            TC[(CT[pos][0] + i, CT[pos][1] + j)]
             for i in range(-1, 2) for j in range(-1, 2) if
-            ct[pos][0] + i in range(0, 10) and
-            ct[pos][1] + j in range(0, 10)
+            CT[pos][0] + i in range(0, 10) and
+            CT[pos][1] + j in range(0, 10)
         ]
 
         return affected
 
 
-class ATC(BaseTroop):
+class Tower(BaseTroop):
     """Air Traffic Control class."""
 
     def __init__(self, id, pos):
         super().__init__(id, pos)
-        self.type = "aircraft_control_tower"
+        self.type = "tower"
 
     def move(self, pos: str):
         """Doesn't move."""
@@ -130,7 +146,7 @@ class ATC(BaseTroop):
         """Attcks targeted position and 4 random cells in the same row."""
 
         affected = [
-            tc[(i, ct[pos][1])]
+            TC[(i, CT[pos][1])]
             for i in range(10)
         ]
 
@@ -152,11 +168,11 @@ class Grenadier(BaseTroop):
         possible = []
 
         for i in range(-1, 2):
-            possible.append((ct[self.pos][0] + i, ct[self.pos][1]))
-            possible.append((ct[self.pos][0], ct[self.pos][1] + i))
+            possible.append((CT[self.pos][0] + i, CT[self.pos][1]))
+            possible.append((CT[self.pos][0], CT[self.pos][1] + i))
 
         try:
-            if ct[pos] in possible:
+            if CT[pos] in possible:
                 return True
         except KeyError:
             return False
@@ -167,10 +183,10 @@ class Grenadier(BaseTroop):
         """Attcks targeted position and 4 random cells around."""
 
         affected = [
-            tc[(ct[pos][0] + i, ct[pos][1] + j)]
+            TC[(CT[pos][0] + i, CT[pos][1] + j)]
             for i in range(-1, 2) for j in range(-1, 2) if
-            ct[pos][0] + i in range(0, 10) and
-            ct[pos][1] + j in range(0, 10)
+            CT[pos][0] + i in range(0, 10) and
+            CT[pos][1] + j in range(0, 10)
         ]
 
         affected.remove(pos)

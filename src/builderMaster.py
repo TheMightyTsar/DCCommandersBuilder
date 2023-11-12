@@ -1,8 +1,10 @@
-from src.creator.commanderBuilder import buildCommander
-from src.scenes import sceneHandler
-from src.review import reviewHandler
+import sys
 import threading
 import time
+
+from src.creator.commanderBuilder import buildCommander
+from src.review import reviewHandler
+from src.scenes import sceneHandler
 
 
 def start():
@@ -11,16 +13,19 @@ def start():
     scene = 'welcome'
     sceneHandler.showScene(scene)
 
-
-
     while running:
         option = input('')
+
+        if option == '3':
+            break
+
         if option != 's':
             scene = sceneHandler.changeScene(scene, option)
             sceneHandler.showScene(scene)
 
             if scene == 'building_commander':
-                buildThread = threading.Thread(target=buildCommander, args=(option,))
+                buildThread = threading.Thread(
+                    target=buildCommander, args=(option,))
 
                 buildThread.start()
                 buildThread.join()
@@ -34,3 +39,4 @@ def start():
                 sceneHandler.showScene(scene)
         else:
             running = False
+            sys.exit()

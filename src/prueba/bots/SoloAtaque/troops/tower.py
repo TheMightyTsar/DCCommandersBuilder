@@ -1,4 +1,6 @@
-from commanders.jeanpipe.troops.baseTroop import BaseTroop 
+from src.prueba.bots.SoloAtaque.troops.baseTroop import BaseTroop
+
+
 class Tower(BaseTroop):
     # Clase Tower
 
@@ -7,7 +9,7 @@ class Tower(BaseTroop):
         self.type = 'tower'
         self.pos = pos
 
-    def moverse(self):
+    def mover(self):
         pass
 
     def atacar(self):

@@ -1,4 +1,6 @@
-from commanders.jeanpipe.troops.baseTroop import BaseTroop 
+from src.prueba.bots.SoloAtaque.troops.baseTroop import BaseTroop
+
+
 class Gauss(BaseTroop):
     # Clase Gauss
 
@@ -7,7 +9,7 @@ class Gauss(BaseTroop):
         self.type = "gauss"
         self.pos = pos
 
-    def moverse(self):
+    def mover(self):
         pass
 
     def atacar(self):
