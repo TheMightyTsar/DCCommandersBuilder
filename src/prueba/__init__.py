@@ -178,7 +178,3 @@ for commander in (args.player1, args.player2):
     commanders.append(module)
 
 TurnManager(commanders)
-
-
-def start():
-    pass
