@@ -1,4 +1,4 @@
-import sys
+import os
 import threading
 import time
 
@@ -39,4 +39,4 @@ def start():
                 sceneHandler.showScene(scene)
         else:
             running = False
-            sys.exit()
+            os._exit(0)
