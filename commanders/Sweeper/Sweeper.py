@@ -32,9 +32,9 @@ class Commander:
         self.tropas[gauss_1.id] = gauss_1
         tropas.append([gauss_1.id, GAUSS, "I0"])
 
-        gauss_2 = Gauss("H9")
-        self.tropas[gauss_2.id] = gauss_2
-        tropas.append([gauss_2.id, GAUSS, "H9"])
+        # gauss_2 = Gauss("H9")
+        # self.tropas[gauss_2.id] = gauss_2
+        # tropas.append([gauss_2.id, GAUSS, "H9"])
 
         for i in range(5):
             tropa = Soldier(possible[i])
@@ -48,7 +48,7 @@ class Commander:
             tropa = Tower(possible[i])
             self.tropas[tropa.id] = tropa
             tropas.append([tropa.id, TOWER, possible[i]])
-        for i in range(10, 13):
+        for i in range(10, 12):
             tropa = Grenadier(possible[i])
             self.tropas[tropa.id] = tropa
             tropas.append([tropa.id, GRENADIER, possible[i]])
