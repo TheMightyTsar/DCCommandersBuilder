@@ -6,9 +6,9 @@ from commanders.Sweeper.troops.grenadier import Grenadier
 from commanders.Sweeper.troops.scout import Scout
 from commanders.Sweeper.troops.soldier import Soldier
 from commanders.Sweeper.troops.tower import Tower
-from src.prueba.parametros import (ATACAR, BAJAS, GAUSS, GRENADIER, MOVER,
-                                   SCOUT, SOLDIER, TOWER)
-from src.prueba.parametros import TUPLE_TO_COORD as TC
+from commanders.Sweeper.parametros import (ATACAR, BAJAS, GAUSS, GRENADIER, MOVER,
+                                           SCOUT, SOLDIER, TOWER)
+from commanders.Sweeper.parametros import TUPLE_TO_COORD as TC
 
 
 class Commander:
@@ -93,7 +93,7 @@ class Commander:
                 case "atk":
                     self.last_action = "move"
                     self.tropas[gauss].pos = self.tropas[gauss].pos[0] + \
-                        str(int(self.tropas[gauss].pos[1]) + move_dir)
+                                             str(int(self.tropas[gauss].pos[1]) + move_dir)
                     return [gauss, MOVER, self.tropas[gauss].pos]
 
         for priority in self.attack_priority_list:

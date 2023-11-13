@@ -5,6 +5,7 @@ import time
 from src.creator.commanderBuilder import buildCommander
 from src.review import reviewHandler
 from src.scenes import sceneHandler
+from src.tableroVerification.verificar import verifyTablero
 
 
 def start():
@@ -16,8 +17,7 @@ def start():
     while running:
         option = input('')
 
-        if option == '3':
-            break
+
 
         if option != 's':
             scene = sceneHandler.changeScene(scene, option)
@@ -37,6 +37,10 @@ def start():
 
                 scene = 'welcome'
                 sceneHandler.showScene(scene)
+
+            if scene == 'verificar_montarTablero':
+                verifyTablero()
+
         else:
             running = False
             sys.exit()

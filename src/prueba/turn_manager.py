@@ -22,10 +22,10 @@ validPOS = ['A0', 'B0', 'C0', 'D0', 'E0', 'F0', 'G0', 'H0', 'I0', 'J0',
             'A8', 'B8', 'C8', 'D8', 'E8', 'F8', 'G8', 'H8', 'I8', 'J8',
             'A9', 'B9', 'C9', 'D9', 'E9', 'F9', 'G9', 'H9', 'I9', 'J9']
 
-validTipos = ['']
+validTipos = ['soldier', 'scout', 'tower', 'gauss', 'grenadier']
 
 
-class TurnManager:
+class simulationManager:
     def __init__(self, commanders) -> None:
         print("-" * 40)
         print("Comienza la prueba de los comandantes")
@@ -50,10 +50,7 @@ class TurnManager:
 
             print()
 
-            print(f" Verificando tablero de {player.name} \n")
-            # print(self.verifyTablero(self.troops[player.name]))
-            print("-"*40)
-            print("-" * 40)
+
 
         self.turno = 1
         self.muertos = {self.player_1: {}, self.player_2: {}}
@@ -140,42 +137,7 @@ class TurnManager:
 
         self.troops[player] = troops_dict
 
-    def verifyTablero(self, tropas):
-         message = '| Verificacion al Montar Tablero |\n'
-         if isinstance(tropas, list):
-             message += 'Lista de Tropas: TRUE \n'
-             listaDeListas = True
-             listID = []
-             listPOS = []
-             numSoldier = 0
-             numGauss = 0
-             numTower = 0
-             numScout = 0
-             numGrenadier = 0
-             if len(tropas) == 12:
 
-                 for unit in tropas:
-                     if not isinstance(unit, list):
-                         message += 'ERROR: montar_tropas no devuelve una lista de listas \n'
-                     else:
-                         if len(unit) != 3:
-                             message += f'ERROR: las sublistas no tienen los 3 ' \
-                                        f'elementos pedidos {unit}  \n'
-                         else:
-                             if not isinstance(unit[0], int):
-                                 message += f'ERROR: el ID entregado no es un integer {unit} \n'
-                             else:
-                                 if unit[0] in listID:
-                                     message += f'ERROR: el ID entregado no es unico {unit[0]}\n'
-                                 else:
-                                     listID.append(unit[0])
-
-             else:
-                 message += 'ERROR: faltan tropas en el tablero \n'
-         else:
-             message += 'ERROR: montar_tropas no devuelve una lista \n'
-
-         return message
 
     def menu_modo_juego(self):
         """
@@ -318,7 +280,7 @@ class TurnManager:
         print(f"Player {player} wins!")
 
     def turn_into_enemy_report(
-        self, player, ids_detectados: list[int]
+            self, player, ids_detectados: list[int]
     ) -> dict[str, list]:
         """
         Turns a player report into an enemy report
@@ -340,12 +302,12 @@ class TurnManager:
         return False
 
     def handle_attack(
-        self,
-        tropa: troops.BaseTroop,
-        reporte: dict,
-        player,
-        enemy,
-        pos: str,
+            self,
+            tropa: troops.BaseTroop,
+            reporte: dict,
+            player,
+            enemy,
+            pos: str,
     ) -> None:
         if tropa.type == SCOUT:
             self.posiciones_detectadas = tropa.attack(pos)
@@ -380,7 +342,7 @@ class TurnManager:
         return ids, pos_bajas
 
     def scout(
-        self, enemy, pos: str, posiciones_detectadas: list[str]
+            self, enemy, pos: str, posiciones_detectadas: list[str]
     ) -> tuple[list[int], list[str], list[str], list[int]]:
         """
         Performs the scout action and returns the list of eliminated and detected troop types and ids
@@ -397,7 +359,7 @@ class TurnManager:
         return ids_bajas, posiciones, pos_detectados, ids_detectados
 
     def handle_movement(
-        self, tropa: troops.BaseTroop, reporte: dict, player, pos: str
+            self, tropa: troops.BaseTroop, reporte: dict, player, pos: str
     ):
         can_move = tropa.move(pos)
         if can_move and self.pos_is_empty(player, pos):
@@ -436,7 +398,7 @@ class TurnManager:
             for tropa in self.troops[player].values():
                 pos = COORD_TO_TUPLE[tropa.pos]
                 board[pos[0]][pos[1]
-                              ] = tropa.type[0] if tropa.type != GAUSS else tropa.type[0].upper()
+                ] = tropa.type[0] if tropa.type != GAUSS else tropa.type[0].upper()
             if current_player != player:
                 for ataque in ataques:
                     pos = COORD_TO_TUPLE[ataque]
@@ -449,10 +411,10 @@ class TurnManager:
                     objeto = board[pos[0]][pos[1]]
                     if objeto == ".":
                         board[pos[0]][pos[1]
-                                      ] = f"{BLU}X{RST}"
+                        ] = f"{BLU}X{RST}"
                     else:
                         board[pos[0]][pos[1]
-                                      ] = f"{CYA}{objeto}{RST}"
+                        ] = f"{CYA}{objeto}{RST}"
             elif reporte[MOV_SUCCESS]:
                 _id, old_pos = self.movimiento
                 old_pos = COORD_TO_TUPLE[old_pos]
