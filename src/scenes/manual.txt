@@ -12,9 +12,16 @@ estructura de tu comandante al
 escoger la opcion [1] e
 ingresar el nombre de tu comandante
 
+*Puedes verificar si es que tu
+Commander coloca de manera correcta
+las tropas en el tablero, escoge la
+opcion [3] e ingresa el nombre de
+tu Commander
+
 *Puedes poner a prueba a tu
-Commander, escoge la opcion [3] e
+Commander, escoge la opcion [4] e
 ingresar el nombre de tu comandante
+y de su contrincante
 
 [v] para volver al menu
 [s] para Salir...
