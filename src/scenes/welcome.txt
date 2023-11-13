@@ -6,6 +6,6 @@
 | [0] Crear Commander                  |
 | [1] Revisar Commander                |
 | [2] Como funciona el builder?        |
-| [3] Probar a tu Commander            |
+| [3] Verificar tu Tablero             |
 | [s] Salir                            |
 ========================================

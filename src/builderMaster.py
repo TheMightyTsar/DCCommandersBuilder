@@ -1,10 +1,11 @@
 import sys
 import threading
-import time
 
+from src.prueba import turn_manager
 from src.creator.commanderBuilder import buildCommander
 from src.review import reviewHandler
 from src.scenes import sceneHandler
+from src.tableroVerification.verificar import verifyTablero
 
 
 def start():
@@ -14,11 +15,8 @@ def start():
     sceneHandler.showScene(scene)
 
     while running:
-        option = input('')
 
-        if option == '3':
-            break
-
+        option = input('opcion: ')
         if option != 's':
             print('Scene: ', scene)
             print('Option: ', option)
@@ -38,6 +36,21 @@ def start():
 
                 scene = 'welcome'
                 sceneHandler.showScene(scene)
+
+            if scene == 'verificar_montarTablero':
+                option = verifyTablero()
+                if option == 's':
+                    running = False
+                    sys.exit()
+                scene = 'welcome'
+                sceneHandler.showScene(scene)
+            if scene == 'prueba':
+                turn_manager.start()
+                print('salio del juego')
+                scene = 'welcome'
+                sceneHandler.showScene(scene)
+
+
         else:
             running = False
             sys.exit()
