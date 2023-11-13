@@ -437,7 +437,7 @@ class TurnManager:
             for tropa in self.troops[player].values():
                 pos = COORD_TO_TUPLE[tropa.pos]
                 board[pos[0]][pos[1]
-                              ] = tropa.type[0] if tropa.type != GAUSS else tropa.type[0].upper()
+                              ] = tropa.type[0] if tropa.type not in (GAUSS, SCOUT) else tropa.type[0].upper()
             if current_player != player:
                 for ataque in ataques:
                     pos = COORD_TO_TUPLE[ataque]
