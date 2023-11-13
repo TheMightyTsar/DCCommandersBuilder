@@ -7,7 +7,7 @@ from os import listdir, path
 
 
 if __name__ == '__main__':
-    commanderName = 'JefeJorge'
+    '''commanderName = 'JefeJorge'
     pyFile = commanderName + '.py'
 
     pyPath = path.join('commanders', commanderName, pyFile)
@@ -19,6 +19,6 @@ if __name__ == '__main__':
     module_spec.loader.exec_module(module)
 
 
-    turn_manager.TurnManager([module, module])
-    # builderMaster.start()
+    turn_manager.TurnManager([module, module])'''
+    builderMaster.start()
 

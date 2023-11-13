@@ -337,5 +337,4 @@ class TurnManager:
                 print(f" - {bajas}")
 
 
-if __name__ == "__main__":
-    tm = TurnManager()
+
