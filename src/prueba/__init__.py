@@ -1,6 +1,6 @@
 # pylint: disable=missing-docstring, W0212, W1510
 
-import argparse
+'''import argparse
 import importlib.util
 import itertools
 import os
@@ -92,34 +92,5 @@ COLORS = BLU, CYA, GRE, YEL, RED, MAG
 RST = colorama.Style.RESET_ALL
 
 
+'''
 
-print(f'Comandantes disponibles: \n')
-for C in os.listdir('commanders'):
-    if C in ('SoloAtaque', 'SoloMover', 'SoloScout'):
-        print(f'{C} - [BOT] creado para poner a prueba tu Commander')
-    else:
-        print(f'{C} - Tu Commander')
-running = True
-while running:
-    valid = True
-    p1 = input('Ingresa el nombre del Commander 1: ')
-    p2 = input('Ingresa el nombre del Commander 2: ')
-    commanders = []
-    for commander in (p1, p2):
-        pyFile = commander + '.py'
-        path = 'commanders'
-
-        if commander in os.listdir('commanders'):
-
-            pyPath = os.path.join(path, commander, pyFile)
-
-            module_spec = importlib.util.spec_from_file_location(
-                commander, pyPath)
-            module = importlib.util.module_from_spec(module_spec)  # type: ignore
-            module_spec.loader.exec_module(module)  # type: ignore
-            commanders.append(module)
-        else:
-            print('Has ingresado mal el Nombre de un commander')
-            valid = False
-    if valid:
-        simulationManager(commanders)

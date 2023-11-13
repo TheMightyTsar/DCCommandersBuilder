@@ -1,7 +1,7 @@
 import sys
 import threading
-import time
 
+from src.prueba import turn_manager
 from src.creator.commanderBuilder import buildCommander
 from src.review import reviewHandler
 from src.scenes import sceneHandler
@@ -44,7 +44,8 @@ def start():
                 scene = 'welcome'
                 sceneHandler.showScene(scene)
             if scene == 'prueba':
-                import src.prueba
+                turn_manager.start()
+                print('salio del juego')
                 scene = 'welcome'
                 sceneHandler.showScene(scene)
 

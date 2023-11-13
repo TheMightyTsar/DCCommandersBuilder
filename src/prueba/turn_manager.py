@@ -3,13 +3,15 @@
 import random
 from itertools import cycle
 from traceback import print_exception
-
+import os
+import importlib.util
 import src.prueba.server_troops as troops
 from src.prueba.colors import BLD, BLU, CYA, GRN, RED, RST, YEL
 from src.prueba.parametros import (ACCIONES, ATACAR, ATACK, AVAILABLE_TROOPS,
                                    BAJAS, COORD_TO_TUPLE, DETECT, GAUSS,
                                    GRENADIER, MOV_SUCCESS, MOVER, SCOUT,
                                    SOLDIER, TOWER)
+
 
 validPOS = ['A0', 'B0', 'C0', 'D0', 'E0', 'F0', 'G0', 'H0', 'I0', 'J0',
             'A1', 'B1', 'C1', 'D1', 'E1', 'F1', 'G1', 'H1', 'I1', 'J1',
@@ -452,6 +454,35 @@ class simulationManager:
         for row in board:
             row.reverse()
 
+def start():
+    print(f'Comandantes disponibles: \n')
+    for C in os.listdir('commanders'):
+        if C in ('SoloAtaque', 'SoloMover', 'SoloScout'):
+            print(f'{C} - [BOT] creado para poner a prueba tu Commander')
+        else:
+            print(f'{C} - Tu Commander')
+    running = True
+    while running:
+        valid = True
+        p1 = input('Ingresa el nombre del Commander 1: ')
+        p2 = input('Ingresa el nombre del Commander 2: ')
+        commanders = []
+        for commander in (p1, p2):
+            pyFile = commander + '.py'
+            path = 'commanders'
 
-if __name__ == "__main__":
-    pass
+            if commander in os.listdir('commanders'):
+
+                pyPath = os.path.join(path, commander, pyFile)
+
+                module_spec = importlib.util.spec_from_file_location(
+                    commander, pyPath)
+                module = importlib.util.module_from_spec(module_spec)  # type: ignore
+                module_spec.loader.exec_module(module)  # type: ignore
+                commanders.append(module)
+            else:
+                print('Has ingresado mal el Nombre de un commander')
+                valid = False
+        if valid:
+            simulationManager(commanders)
+            running = False
