@@ -60,11 +60,13 @@
   * Adora las granadas de racimo.
   * **Se mueve:** Una casilla a su alrededor.
   * **Ataca:** Una casilla enemiga y otras 4 alrededor de manera aleatoria.
+  * **Unidades disponibles:** 2.
 
 * **Torre AA (tower.py)**
   * Brinda apoyo aereo a la batalla.
   * **Se mueve:** No puede moverse.
-  * **Ataca:** Ataca una casilla enemiga y otras 5 aleatorias en el mapa.
+  * **Ataca:** Ataca una casilla enemiga y otras 4 aleatorias la columna de la casilla atacada.
+  * **Unidades disponibles:** 1.
 * ## Que debo implementar?
   * Tu **Comandante** debe tener de manera obligatoria los metodos ```montar_tropas()``` y  ```jugar_turno()```.
   * #### montar_tropas()

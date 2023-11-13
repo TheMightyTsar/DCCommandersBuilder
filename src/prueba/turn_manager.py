@@ -492,5 +492,4 @@ class TurnManager:
             row.reverse()
 
 
-if __name__ == "__main__":
-    pass
+
