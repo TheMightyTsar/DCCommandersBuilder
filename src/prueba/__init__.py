@@ -1,6 +1,6 @@
 # pylint: disable=missing-docstring, W0212, W1510
 
-import argparse
+'''import argparse
 import importlib.util
 import itertools
 import os
@@ -38,7 +38,7 @@ try:
 
     colorama.init(convert=True)
 
-    from src.prueba.turn_manager import TurnManager
+    from src.prueba.turn_manager import simulationManager
 
 except ModuleNotFoundError:
 
@@ -92,94 +92,5 @@ COLORS = BLU, CYA, GRE, YEL, RED, MAG
 RST = colorama.Style.RESET_ALL
 
 
-def logo(player1_name, player2_name) -> None:
-    _ = subprocess.run([CLEAR], shell=True)
-    font = "cosmic"
-    color1, color2, color3 = random.sample(COLORS, k=3)
-    print(color1 + "_" * os.get_terminal_size().columns, end="\n" * 2)
-    print(
-        color2
-        + pyfiglet.figlet_format(
-            "DCComanders",
-            font=font,
-            justify="center",
-            width=os.get_terminal_size().columns,
-        ),
-        end="",
-    )
-    print(color1 + "_" * os.get_terminal_size().columns, end="\n" * 2 + RST)
-    print(
-        color3
-        + pyfiglet.figlet_format(
-            f"{player1_name} vs {player2_name}",
-            font=font,
-            justify="center",
-            width=os.get_terminal_size().columns,
-        ),
-        end="",
-    )
-    print(color1 + "_" * os.get_terminal_size().columns, end=RST)
+'''
 
-
-bot_files = [
-    f"- {f}" for f in os.listdir(os.path.join('src', 'prueba', 'bots'))]
-bot_files[bot_files.index('- JorGeneral')] += ' (default)'
-commander_files = [
-    f"- {f}" for f in os.listdir('commanders') if f != '.gitkeep']
-max_bot_length = max(len(f) for f in bot_files) + 3
-formatted_files = "\n".join(f"{b.ljust(max_bot_length)} {c}" for b, c in itertools.zip_longest(
-    bot_files, commander_files, fillvalue=''))
-epilog = f"{RST}Bots:{' ' * (max_bot_length - 4)}Players:\n{formatted_files}"
-parser = argparse.ArgumentParser(
-    description=RST + "enfrenta dos comandantes.".title() + YEL +
-    " [] -> opcional.".title(),
-    epilog=epilog,
-    formatter_class=argparse.RawTextHelpFormatter
-)
-parser._optionals.title = CYA + "syntax".title()
-parser.add_argument(
-    "-p1", "--player1", help="nombre comandante 1".title(), required=True
-)
-parser.add_argument(
-    "-p2", "--player2", help="nombre comandante 2".title(), required=False
-)
-if len(sys.argv) not in (3, 5):
-    print(GRE)
-    parser.print_help()
-    print()
-    sys.exit()
-
-args = parser.parse_args()
-
-valid_commanders = os.listdir(os.path.join(
-    'src', 'prueba', 'bots')) + os.listdir('commanders')
-
-if not args.player2:
-    args.player2 = 'JorGeneral'
-
-if any(map(lambda x: x not in valid_commanders, (args.player1, args.player2))):
-    print(RED)
-    print(prett("[!] one or both commander names are not valid") + GRE)
-    parser.print_help()
-    sys.exit()
-
-logo(args.player1, args.player2)
-
-commanders = []
-
-for commander in (args.player1, args.player2):
-    pyFile = commander + '.py'
-    path = 'commanders'
-
-    if commander in ('SoloAtaque', 'SoloMover', 'SoloScout', 'JorGeneral'):
-        path = os.path.join('src', 'prueba', 'bots')
-
-    pyPath = os.path.join(path, commander, pyFile)
-
-    module_spec = importlib.util.spec_from_file_location(
-        commander, pyPath)
-    module = importlib.util.module_from_spec(module_spec)  # type: ignore
-    module_spec.loader.exec_module(module)  # type: ignore
-    commanders.append(module)
-
-TurnManager(commanders)

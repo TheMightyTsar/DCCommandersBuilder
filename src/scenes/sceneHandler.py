@@ -1,8 +1,10 @@
 
-menus = {'welcome': {'0': 'input_commander_name', '1': 'review_code', '2': 'manual', '3': 'test'},
+menus = {'welcome': {'0': 'input_commander_name', '1': 'review_code', '2': 'manual', '3': 'verificar_montarTablero',
+                     '4': 'prueba'},
          'input_commander_name': {'0': 'building_commander', 'v': 'welcome'},
          'manual': {'v': 'welcome'},
-         'test': {'v': 'welcome'}}
+         'test': {'v': 'welcome'},
+         'verificar_montarTablero': {'v': 'welcome'}}
 
 invalidCharacters = [' ', 'ñ', '!']
 
