@@ -100,7 +100,7 @@ def logo(player1_name, player2_name) -> None:
     print(
         color2
         + pyfiglet.figlet_format(
-            "DCComanders",
+            "DCCommanders",
             font=font,
             justify="center",
             width=os.get_terminal_size().columns,
