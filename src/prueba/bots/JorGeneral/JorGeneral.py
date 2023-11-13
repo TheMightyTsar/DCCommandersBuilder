@@ -77,7 +77,7 @@ class Commander:
 
         if reporte[DETECT]:
             for _id in my_toops[GAUSS]:
-                if self.tropas[_id].pos[0] in [pos[0] for pos in reporte[DETECT]]:
+                if self.tropas[_id].pos[1] in [pos[1] for pos in reporte[DETECT]]:
                     return [_id, ATACAR, self.tropas[_id].pos]
 
             for priority in self.attack_priority_list:
