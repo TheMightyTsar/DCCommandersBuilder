@@ -1,4 +1,6 @@
-from commanders.jeanpipe.troops.baseTroop import BaseTroop 
+from commanders.Sweeper.troops.baseTroop import BaseTroop
+
+
 class Grenadier(BaseTroop):
     # Clase Grenadier
 
@@ -7,7 +9,7 @@ class Grenadier(BaseTroop):
         self.type = 'grenadier'
         self.pos = pos
 
-    def moverse(self):
+    def mover(self):
         pass
 
     def atacar(self):

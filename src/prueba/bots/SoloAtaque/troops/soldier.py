@@ -1,4 +1,6 @@
-from commanders.jeanpipe.troops.baseTroop import BaseTroop 
+from src.prueba.bots.SoloAtaque.troops.baseTroop import BaseTroop
+
+
 class Soldier(BaseTroop):
     # Clase de Soldado
 
@@ -7,7 +9,7 @@ class Soldier(BaseTroop):
         self.type = 'soldier'
         self.pos: str = pos
 
-    def moverse(self):
+    def mover(self):
         pass
 
     def atacar(self):
