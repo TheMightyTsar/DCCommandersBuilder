@@ -10,5 +10,5 @@ if __name__ == "__main__":
     if len(sys.argv) == 1:
         import src.builderMaster
         src.builderMaster.start()
-
-    import src.prueba
+    else:
+        import src.prueba

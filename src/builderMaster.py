@@ -1,4 +1,4 @@
-import os
+import sys
 import threading
 import time
 
@@ -15,9 +15,6 @@ def start():
 
     while running:
         option = input('')
-
-        if option == '3':
-            break
 
         if option != 's':
             scene = sceneHandler.changeScene(scene, option)
@@ -39,4 +36,3 @@ def start():
                 sceneHandler.showScene(scene)
         else:
             running = False
-            os._exit(0)

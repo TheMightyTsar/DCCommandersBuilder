@@ -1,4 +1,4 @@
-from os import _exit, mkdir, path
+from os import mkdir, path
 
 
 def buildCommander(commanderName):
@@ -73,8 +73,6 @@ def buildCommander(commanderName):
     grenadierPath = troopsFolderPath + '/grenadier.py'
     grenadierTextPath = 'src/creator/modules/grenadier.txt'
     escribirTroops(importMasterTroop, grenadierPath, grenadierTextPath)
-
-    _exit(0)
 
 
 def printMessage(msg):
