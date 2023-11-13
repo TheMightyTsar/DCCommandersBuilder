@@ -1,6 +1,7 @@
 
-menus = {'welcome': {'0': 'input_commander_name', '1': 'review_code', '2': 'manual', '3': 'test'},
+menus = {'welcome': {'0': 'input_commander_name', '1': 'input_review_code', '2': 'manual', '3': 'test'},
          'input_commander_name': {'0': 'building_commander', 'v': 'welcome'},
+         'input_review_code': {'0': 'review_code', 'v': 'welcome'},
          'manual': {'v': 'welcome'},
          'test': {'v': 'welcome'}}
 
@@ -18,10 +19,13 @@ def showScene(scene):
 
 def changeScene(scene, option):
     nextScene = menus[scene].get(option, scene)
+    print(nextScene)
     if scene == 'input_commander_name':
         verificacionNombre = verifyCommanderName(option)
         if verificacionNombre:
             nextScene = menus[scene].get('0', scene)
+    if scene == 'input_review_code' and option != 'v':
+        nextScene = menus[scene].get('0', scene)
 
     return nextScene
 

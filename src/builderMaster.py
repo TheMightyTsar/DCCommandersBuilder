@@ -20,6 +20,8 @@ def start():
             break
 
         if option != 's':
+            print('Scene: ', scene)
+            print('Option: ', option)
             scene = sceneHandler.changeScene(scene, option)
             sceneHandler.showScene(scene)
 
@@ -32,8 +34,7 @@ def start():
                 running = False
 
             if scene == 'review_code':
-                commander_name = input()
-                reviewHandler.check_code(commander_name)
+                reviewHandler.check_code(option)
 
                 scene = 'welcome'
                 sceneHandler.showScene(scene)
