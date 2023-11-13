@@ -43,6 +43,10 @@ def start():
                     sys.exit()
                 scene = 'welcome'
                 sceneHandler.showScene(scene)
+            if scene == 'prueba':
+                import src.prueba
+                scene = 'welcome'
+                sceneHandler.showScene(scene)
 
 
         else:
