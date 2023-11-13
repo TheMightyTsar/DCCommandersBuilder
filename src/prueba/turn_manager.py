@@ -464,6 +464,7 @@ def start():
     running = True
     while running:
         valid = True
+        print('='*25)
         p1 = input('Ingresa el nombre del Commander 1: ')
         p2 = input('Ingresa el nombre del Commander 2: ')
         commanders = []
