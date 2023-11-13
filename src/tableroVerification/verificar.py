@@ -128,8 +128,8 @@ def verifyTablero():
             message += 'TABLERO: Valido, felicidades :D'
             message += '\n'
             message += '\n'
-    elif commanderName == 'v':
-        print()
+    elif commanderName == 'v' or commanderName == 's':
+        return commanderName
     else:
         message = 'Entregaste un nombre de un Commander que no existe ....'
 

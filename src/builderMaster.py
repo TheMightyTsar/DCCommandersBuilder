@@ -15,10 +15,8 @@ def start():
     sceneHandler.showScene(scene)
 
     while running:
-        option = input('')
 
-
-
+        option = input('opcion: ')
         if option != 's':
             scene = sceneHandler.changeScene(scene, option)
             sceneHandler.showScene(scene)
@@ -39,7 +37,13 @@ def start():
                 sceneHandler.showScene(scene)
 
             if scene == 'verificar_montarTablero':
-                verifyTablero()
+                option = verifyTablero()
+                if option == 's':
+                    running = False
+                    sys.exit()
+                scene = 'welcome'
+                sceneHandler.showScene(scene)
+
 
         else:
             running = False
