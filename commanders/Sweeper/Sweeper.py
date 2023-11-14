@@ -6,8 +6,8 @@ from commanders.Sweeper.troops.grenadier import Grenadier
 from commanders.Sweeper.troops.scout import Scout
 from commanders.Sweeper.troops.soldier import Soldier
 from commanders.Sweeper.troops.tower import Tower
-from src.prueba.parametros import (ATACAR, BAJAS, GAUSS, GRENADIER, MOVER,
-                                   SCOUT, SOLDIER, TOWER)
+from src.prueba.parametros import (ATACAR, ATACK, BAJAS, GAUSS, GRENADIER,
+                                   MOVER, SCOUT, SOLDIER, TOWER)
 from src.prueba.parametros import TUPLE_TO_COORD as TC
 
 
@@ -18,7 +18,6 @@ class Commander:
         self.tropas: dict[int, BaseTroop] = {}
         self.attack_priority_list = [GRENADIER, TOWER, SOLDIER]
         self.last_action = "move"
-        self.wiped = set()
         self.attacked = set()
         self.reverse = False
 
@@ -32,9 +31,9 @@ class Commander:
         self.tropas[gauss_1.id] = gauss_1
         tropas.append([gauss_1.id, GAUSS, "I0"])
 
-        gauss_2 = Gauss("H9")
-        self.tropas[gauss_2.id] = gauss_2
-        tropas.append([gauss_2.id, GAUSS, "H9"])
+        # gauss_2 = Gauss("H9")
+        # self.tropas[gauss_2.id] = gauss_2
+        # tropas.append([gauss_2.id, GAUSS, "H9"])
 
         for i in range(5):
             tropa = Soldier(possible[i])
@@ -48,7 +47,7 @@ class Commander:
             tropa = Tower(possible[i])
             self.tropas[tropa.id] = tropa
             tropas.append([tropa.id, TOWER, possible[i]])
-        for i in range(10, 13):
+        for i in range(10, 12):
             tropa = Grenadier(possible[i])
             self.tropas[tropa.id] = tropa
             tropas.append([tropa.id, GRENADIER, possible[i]])
@@ -61,6 +60,10 @@ class Commander:
                 if isinstance(self.tropas[_id], Gauss):
                     self.last_action = "move"
                 del self.tropas[_id]
+
+        if reporte[ATACK]:
+            for pos in reporte[ATACK]:
+                self.attacked.add(pos)
 
         my_toops = self.get_ids()
 
@@ -88,7 +91,6 @@ class Commander:
             match self.last_action:
                 case "move":
                     self.last_action = "atk"
-                    self.wiped.add(self.tropas[gauss].pos[1])
                     return [gauss, ATACAR, self.tropas[gauss].pos]
                 case "atk":
                     self.last_action = "move"
@@ -100,9 +102,8 @@ class Commander:
             if my_toops[priority]:
                 for _id in my_toops[priority]:
                     pos = filter(
-                        lambda x: x[1] not in self.wiped and x not in self.attacked, TC.values())
+                        lambda x: x not in self.attacked, TC.values())
                     pos = random.choice(list(pos))
-                    self.attacked.add(pos)
                     return [_id, ATACAR, pos]
             else:
                 continue

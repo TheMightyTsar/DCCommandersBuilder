@@ -16,9 +16,6 @@ def start():
     while running:
         option = input('')
 
-        if option == '3':
-            break
-
         if option != 's':
             scene = sceneHandler.changeScene(scene, option)
             sceneHandler.showScene(scene)
@@ -39,4 +36,3 @@ def start():
                 sceneHandler.showScene(scene)
         else:
             running = False
-            sys.exit()

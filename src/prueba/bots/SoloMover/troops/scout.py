@@ -2,8 +2,6 @@
 
 from random import sample
 
-from icecream import ic
-
 from src.prueba.bots.SoloAtaque.troops.baseTroop import BaseTroop
 from src.prueba.parametros import COORD_TO_TUPLE as CT
 from src.prueba.parametros import TUPLE_TO_COORD as TC
@@ -27,7 +25,6 @@ class Scout(BaseTroop):
                 (CT[self.pos][0], CT[self.pos][1] + i))
 
         possible = [TC[i] for i in possible if i in TC.keys()]
-        ic(self.pos, possible)
 
         return sample(possible, len(possible))
 
