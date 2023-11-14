@@ -49,6 +49,7 @@ class simulationManager:
                 self.build_player(player)
             except Exception as e:
                 print(f"Commander {player.name} tuvo un error montando el tablero: {e}")
+                return (self.win(self.get_enemy(player)))
 
             print()
 

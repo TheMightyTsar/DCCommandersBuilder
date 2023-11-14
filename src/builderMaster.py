@@ -18,8 +18,7 @@ def start():
 
         option = input('opcion: ')
         if option != 's':
-            print('Scene: ', scene)
-            print('Option: ', option)
+
             scene = sceneHandler.changeScene(scene, option)
             sceneHandler.showScene(scene)
 
