@@ -6,8 +6,8 @@ from commanders.Sweeper.troops.grenadier import Grenadier
 from commanders.Sweeper.troops.scout import Scout
 from commanders.Sweeper.troops.soldier import Soldier
 from commanders.Sweeper.troops.tower import Tower
-from src.prueba.parametros import (ATACAR, BAJAS, GAUSS, GRENADIER, MOVER,
-                                   SCOUT, SOLDIER, TOWER)
+from src.prueba.parametros import (ATACAR, ATACK, BAJAS, GAUSS, GRENADIER,
+                                   MOVER, SCOUT, SOLDIER, TOWER)
 from src.prueba.parametros import TUPLE_TO_COORD as TC
 
 
@@ -18,7 +18,6 @@ class Commander:
         self.tropas: dict[int, BaseTroop] = {}
         self.attack_priority_list = [GRENADIER, TOWER, SOLDIER]
         self.last_action = "move"
-        self.wiped = set()
         self.attacked = set()
         self.reverse = False
 
@@ -62,6 +61,10 @@ class Commander:
                     self.last_action = "move"
                 del self.tropas[_id]
 
+        if reporte[ATACK]:
+            for pos in reporte[ATACK]:
+                self.attacked.add(pos)
+
         my_toops = self.get_ids()
 
         if my_toops[GAUSS]:
@@ -88,7 +91,6 @@ class Commander:
             match self.last_action:
                 case "move":
                     self.last_action = "atk"
-                    self.wiped.add(self.tropas[gauss].pos[1])
                     return [gauss, ATACAR, self.tropas[gauss].pos]
                 case "atk":
                     self.last_action = "move"
@@ -100,9 +102,8 @@ class Commander:
             if my_toops[priority]:
                 for _id in my_toops[priority]:
                     pos = filter(
-                        lambda x: x[1] not in self.wiped and x not in self.attacked, TC.values())
+                        lambda x: x not in self.attacked, TC.values())
                     pos = random.choice(list(pos))
-                    self.attacked.add(pos)
                     return [_id, ATACAR, pos]
             else:
                 continue
