@@ -60,7 +60,7 @@
   * Adora las granadas de racimo.
   * **Se mueve:** Una casilla a su alrededor.
   * **Ataca:** Una casilla enemiga y otras 4 alrededor de manera aleatoria.
-  * **Unidades disponibles:** 2.
+  * **Unidades disponibles:** 3.
 
 * **Torre AA (tower.py)**
   * Brinda apoyo aereo a la batalla.
