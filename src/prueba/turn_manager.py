@@ -45,9 +45,9 @@ class TurnManager:
             try:
                 # print(f" {player.name} esta montando su tablero\n")
                 self.build_player(player)
-            except Exception:  # ? as e:
-                # ? print(
-                # ? f"Commander {player.name} tuvo un error montando el tablero: {e}")
+            except Exception as e:
+                print(
+                f"Commander {player.name} tuvo un error montando el tablero: {e}")
                 return self.win(self.get_enemy(player))
             print()
 
@@ -140,43 +140,6 @@ class TurnManager:
         # ?         )
 
         self.troops[player] = troops_dict
-
-    # ? def verifyTablero(self, tropas):
-    # ?     message = '| Verificacion al Montar Tablero |\n'
-    # ?     if isinstance(tropas, list):
-    # ?         message += 'Lista de Tropas: TRUE \n'
-    # ?         listaDeListas = True
-    # ?         listID = []
-    # ?         listPOS = []
-    # ?         numSoldier = 0
-    # ?         numGauss = 0
-    # ?         numTower = 0
-    # ?         numScout = 0
-    # ?         numGrenadier = 0
-    # ?         if len(tropas) == 13:
-
-    # ?             for unit in tropas:
-    # ?                 if not isinstance(unit, list):
-    # ?                     message += 'ERROR: montar_tropas no devuelve una lista de listas \n'
-    # ?                 else:
-    # ?                     if len(unit) != 3:
-    # ?                         message += f'ERROR: las sublistas no tienen los 3 ' \
-    # ?                                    f'elementos pedidos {unit}  \n'
-    # ?                     else:
-    # ?                         if not isinstance(unit[0], int):
-    # ?                             message += f'ERROR: el ID entregado no es un integer {unit} \n'
-    # ?                         else:
-    # ?                             if unit[0] in listID:
-    # ?                                 message += f'ERROR: el ID entregado no es unico {unit[0]}\n'
-    # ?                             else:
-    # ?                                 listID.append(unit[0])
-
-    # ?         else:
-    # ?             message += 'ERROR: faltan tropas en el tablero \n'
-    # ?     else:
-    # ?         message += 'ERROR: montar_tropas no devuelve una lista \n'
-
-    # ?     return message
 
     def menu_modo_juego(self):
         """
