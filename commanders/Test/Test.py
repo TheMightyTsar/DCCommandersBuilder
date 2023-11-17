@@ -1,4 +1,4 @@
-"""Commander file for {commander_name}."""
+"""Commander file for Test."""
 
 
 from src.base_files.base_classes import BaseCommander
@@ -6,10 +6,10 @@ from src.base_files.parametros import (ATACAR, GAUSS, HIMARS, MOVER, SCOUT, SOLD
 
 
 class Commander(BaseCommander):
-    """Commander for {commander_name}."""
+    """Commander for Test."""
 
     def __init__(self):
-        super().__init__(nombre="{commander_name}")
+        super().__init__(nombre="Test")
         # Define aquí atributos adicionales para tu comandante
 
     def montar_tablero(self):
