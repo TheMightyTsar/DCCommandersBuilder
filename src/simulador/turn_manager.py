@@ -1,4 +1,4 @@
-# pylint: disable=missing-docstring, W0718, W719
+# pylint: disable=missing-docstring, W0718, W0719
 
 import random
 from itertools import cycle
