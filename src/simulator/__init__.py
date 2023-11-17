@@ -36,7 +36,7 @@ try:
 
     colorama.init(convert=True)
 
-    from src.simulador.turn_manager import TurnManager
+    from src.simulator.turn_manager import TurnManager
 
 except ModuleNotFoundError:
 

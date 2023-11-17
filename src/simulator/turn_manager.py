@@ -7,7 +7,7 @@ from traceback import print_exception
 import colorama
 
 # from icecream import ic
-import src.simulador.server_troops as troops
+import src.simulator.server_troops as troops
 from src.base_files.base_classes import Movement, Report
 from src.base_files.parametros import (ACCIONES, ATACAR, AVAILABLE_TROOPS,
                                        CANTIDAD_TOTAL_TROPAS, COORD_TO_TUPLE,
