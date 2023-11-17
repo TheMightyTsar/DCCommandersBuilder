@@ -60,8 +60,8 @@ class TurnManager:
         self.troops = {}
 
         self.reportes = {
-            self.player_1: {ATACK: [], DETECT: [], BAJAS: [], MOV_SUCCESS: None},
-            self.player_2: {ATACK: [], DETECT: [], BAJAS: [], MOV_SUCCESS: None},
+            self.player_1: Report(),
+            self.player_2: Report(),
         }
 
         self.turno = 1
@@ -301,11 +301,13 @@ class TurnManager:
         elif acc == MOVER:
             can_move = tropa.move(pos)
             if not can_move:
-                self.reportes[player][MOV_SUCCESS] = False
+                self.reportes[player].movimiento = Movement(
+                    False, tropa.id, pos)
                 raise InvalidActionException(
                     f"Movimiento inválido, la tropa de id {tropa.id} y tipo {tropa.type} no puede moverse a la posición {pos}")
             if not self.pos_is_empty(player, pos):
-                self.reportes[player][MOV_SUCCESS] = False
+                self.reportes[player].movimiento = Movement(
+                    False, tropa.id, pos)
                 raise InvalidActionException(
                     f"Movimiento inválido, la posición {pos} está ocupada")
 
@@ -313,9 +315,9 @@ class TurnManager:
         """
         Clears a report at the end of the turn
         """
-        self.reportes[player][ATACK] = []
-        self.reportes[player][DETECT] = []
-        self.reportes[player][MOV_SUCCESS] = None
+        self.reportes[player].ataques = []
+        self.reportes[player].detecciones = []
+        self.reportes[player].movimiento = None
 
     def game_finished(self, enemy) -> bool:
         """
@@ -343,14 +345,14 @@ class TurnManager:
 
     def turn_into_enemy_report(
         self, player, ids_detectados: list[int]
-    ) -> dict[str, list]:
+    ) -> Report:
         """
         Turns a player report into an enemy report
         """
-        reporte = self.reportes[player].copy()
-        del reporte[MOV_SUCCESS]
-        reporte[BAJAS] = self.get_troop_types(player)
-        reporte[DETECT] = ids_detectados
+        reporte = self.reportes[player]
+        new_reporte = Report(ataques=reporte.ataques)
+        new_reporte.eliminaciones = self.get_troop_types(player)
+        new_reporte.detecciones = ids_detectados
         return reporte
 
     def handle_exception(self, player) -> bool:
@@ -364,7 +366,7 @@ class TurnManager:
     def handle_attack(
         self,
         tropa: troops.BaseTroop,
-        reporte: dict,
+        reporte: Report,
         enemy,
         pos: str,
     ) -> None:
@@ -376,14 +378,14 @@ class TurnManager:
                 pos_detectados,
                 self.ids_detectados_turno,
             ) = self.scout(enemy, pos, self.posiciones_detectadas)
-            reporte[ATACK] = [pos]
-            reporte[DETECT] = pos_detectados
+            reporte.ataques = [pos]
+            reporte.detecciones = pos_detectados
         else:
             posiciones = tropa.attack(pos)
             self.ids_bajas_turno, self.pos_bajas = self.attack(
                 enemy, posiciones)
-            reporte[ATACK] = posiciones
-        self.reportes[enemy][BAJAS].extend(self.ids_bajas_turno)
+            reporte.ataques = posiciones
+        self.reportes[enemy].eliminaciones.extend(self.ids_bajas_turno)
 
     def attack(self, enemy, posiciones: list[str]) -> tuple[list[int], list[str]]:
         """
@@ -418,11 +420,11 @@ class TurnManager:
         return ids_bajas, posiciones, pos_detectados, ids_detectados
 
     def handle_movement(
-        self, tropa: troops.BaseTroop, reporte: dict, player, pos: str
+        self, tropa: troops.BaseTroop, reporte: Report, player, pos: str
     ):
         self.movimiento = (tropa.id, tropa.pos)
         tropa.pos = pos
-        reporte[MOV_SUCCESS] = True
+        reporte.movimiento = Movement(True, tropa.id, pos)
 
     def pos_is_empty(self, player, pos: str) -> bool:
         """
@@ -435,7 +437,7 @@ class TurnManager:
 
     def get_troop_types(self, player):
         return [
-            self.muertos[player][id].type for id in self.reportes[player][BAJAS].copy()
+            self.muertos[player][id].type for id in self.reportes[player].eliminaciones.copy()
         ]
 
     def print_game(self, current_player):
@@ -443,7 +445,7 @@ class TurnManager:
         Prints the game
         """
         reporte = self.reportes[current_player]
-        ataques = reporte[ATACK]
+        ataques = reporte.ataques
         boards = []
         for i, player in enumerate(self.players, 1):
             board = [["." for _ in range(10)] for _ in range(10)]
@@ -467,12 +469,14 @@ class TurnManager:
                     else:
                         board[pos[0]][pos[1]
                                       ] = f"{CYA}{objeto}{RST}"
-            elif reporte[MOV_SUCCESS]:
-                _id, old_pos = self.movimiento
-                old_pos = COORD_TO_TUPLE[old_pos]
-                board[old_pos[0]][old_pos[1]] = f"{GRN}.{RST}"
-                pos = COORD_TO_TUPLE[self.troops[player][_id].pos]
-                board[pos[0]][pos[1]] = f"{GRN}{board[pos[0]][pos[1]]}{RST}"
+            elif reporte.movimiento:
+                if reporte.movimiento.resultado:
+                    _id, old_pos = self.movimiento
+                    old_pos = COORD_TO_TUPLE[old_pos]
+                    board[old_pos[0]][old_pos[1]] = f"{GRN}.{RST}"
+                    pos = COORD_TO_TUPLE[self.troops[player][_id].pos]
+                    board[pos[0]][pos[1]
+                                  ] = f"{GRN}{board[pos[0]][pos[1]]}{RST}"
             if player == self.player_2:
                 self.mirror_board(board)
             boards.append(board)
