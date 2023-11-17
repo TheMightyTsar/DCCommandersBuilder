@@ -135,7 +135,7 @@ AVAILABLE_TROOPS = {
     SOLDIER: 5,
     HIMARS: 2,
     SCOUT: 2,
-    GAUSS: 1,
+    GAUSS: 2,
     TOWER: 1,
 }
 

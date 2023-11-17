@@ -21,7 +21,7 @@ class Commander(BaseCommander):
 
             SCOUT: ["C0", "C1"],
 
-            GAUSS: ["D0"],
+            GAUSS: ["D0", "D1"],
 
             TOWER: ["E0"],
         }

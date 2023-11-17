@@ -1,3 +1,4 @@
+"""Colors for the terminal output."""
 
 import colorama
 

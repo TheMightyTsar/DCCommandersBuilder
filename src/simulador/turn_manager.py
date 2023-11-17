@@ -4,12 +4,15 @@ import random
 from itertools import cycle
 from traceback import print_exception
 
-import src.prueba.server_troops as troops
-from src.prueba.colors import BLD, BLU, CYA, GRN, RED, RST, YEL
-from src.prueba.parametros import (ACCIONES, ATACAR, ATACK, AVAILABLE_TROOPS,
-                                   BAJAS, COORD_TO_TUPLE, DETECT, GAUSS,
-                                   GRENADIER, MOV_SUCCESS, MOVER, SCOUT,
-                                   SOLDIER, TOWER)
+import colorama
+
+# from icecream import ic
+import src.simulador.server_troops as troops
+from src.base_files.base_classes import Movement, Report
+from src.base_files.parametros import (ACCIONES, ATACAR, AVAILABLE_TROOPS,
+                                       CANTIDAD_TOTAL_TROPAS, COORD_TO_TUPLE,
+                                       GAUSS, HIMARS, MOVER, SCOUT, SOLDIER,
+                                       TOWER)
 
 validPOS = ['A0', 'B0', 'C0', 'D0', 'E0', 'F0', 'G0', 'H0', 'I0', 'J0',
             'A1', 'B1', 'C1', 'D1', 'E1', 'F1', 'G1', 'H1', 'I1', 'J1',
@@ -25,8 +28,25 @@ validPOS = ['A0', 'B0', 'C0', 'D0', 'E0', 'F0', 'G0', 'H0', 'I0', 'J0',
 validTipos = ['']
 
 
+GRN = colorama.Style.BRIGHT + colorama.Fore.GREEN   # ? MOVE
+RED = colorama.Style.BRIGHT + colorama.Fore.RED     # ? HIT
+YEL = colorama.Style.BRIGHT + colorama.Fore.YELLOW  # ? MISS
+CYA = colorama.Style.BRIGHT + colorama.Fore.CYAN    # ? DETECT HIT
+BLU = colorama.Style.BRIGHT + colorama.Fore.BLUE    # ? DETECT MISS
+BLD = colorama.Style.BRIGHT
+RST = colorama.Style.RESET_ALL
+
+
+class PlayerBuildException(Exception):
+    pass
+
+
+class InvalidActionException(Exception):
+    pass
+
+
 class TurnManager:
-    def __init__(self, commanders) -> None:
+    def __init__(self, commanders, iterations) -> None:
         # ? print("-" * 40)
         # ? print("Comienza la prueba de los comandantes")
         # ? print("-" * 40)
@@ -34,27 +54,15 @@ class TurnManager:
         self.player_2 = commanders[1].Commander()
         self.players = [self.player_1, self.player_2]
 
+        self.winner: str | None = None
+        self.prints: bool = False if iterations != 1 else True
+
         self.troops = {}
 
         self.reportes = {
             self.player_1: {ATACK: [], DETECT: [], BAJAS: [], MOV_SUCCESS: None},
             self.player_2: {ATACK: [], DETECT: [], BAJAS: [], MOV_SUCCESS: None},
         }
-
-        for player in self.players:
-            try:
-                # print(f" {player.name} esta montando su tablero\n")
-                self.build_player(player)
-            except Exception:  # ? as e:
-                # ? print(
-                # ? f"Commander {player.name} tuvo un error montando el tablero: {e}")
-                return self.win(self.get_enemy(player))
-            print()
-
-            # ? print(f" Verificando tablero de {player.name} \n")
-            # ? print(self.verifyTablero(self.troops[player.name]))
-            # ? print("-"*40)
-            # ? print("-" * 40)
 
         self.turno = 1
         self.muertos = {self.player_1: {}, self.player_2: {}}
@@ -71,7 +79,32 @@ class TurnManager:
         self.exception_break: bool = False
         self.invalid_action_break: bool = False
 
-        self.menu_modo_juego()
+    def start(self):
+        for player in self.players:
+            try:
+                # print(f" {player.name} esta montando su tablero\n")
+                self.build_player(player)
+            except PlayerBuildException as e:
+                print(
+                    f"Commander {player.name} tuvo un error montando el tablero: {e}")
+                return self.win(self.get_enemy(player))
+            except Exception as e:
+                print(
+                    f"Commander {player.name} tuvo un error montando el tablero")
+                print_exception(e)
+                return self.win(self.get_enemy(player))
+            if self.prints:
+                print()
+
+            # ? print(f" Verificando tablero de {player.name} \n")
+            # ? print(self.verifyTablero(self.troops[player.name]))
+            # ? print("-"*40)
+            # ? print("-" * 40)
+
+        if self.prints:
+            self.menu_modo_juego()
+        else:
+            self.run()
 
     def get_enemy(self, player):
         """
@@ -87,24 +120,29 @@ class TurnManager:
         player_troops = player.montar_tropas()
 
         if not isinstance(player_troops, list):
-            raise Exception(f"{player} did not return a list")
+            raise PlayerBuildException(
+                "Formato inválido, no retorno una lista con las tropas")
+        if len(player_troops) != CANTIDAD_TOTAL_TROPAS:
+            raise PlayerBuildException(
+                f"Cantidad de tropas inválida, se esperaban {CANTIDAD_TOTAL_TROPAS} y se recibieron {len(player_troops)}"
+            )
         for troop in player_troops:
             if len(troop) != 3:
-                raise Exception(
-                    f"{player} sent a troop with an invalid format: {troop} must be [id, tipo, pos]"
+                raise PlayerBuildException(
+                    f"Tropa con un formato inválido, {troop} debe tener la forma [id, tipo, pos]"
                 )
             _id, tipo, pos = troop
             if not isinstance(_id, int):
-                raise Exception(
-                    f"{player} sent a troop with an invalid id, id {_id} of type {type(_id)} must be a integer"
+                raise PlayerBuildException(
+                    f"Id inválida, la id {_id} de tipo {type(_id)} debe ser un int"
                 )
             if not isinstance(tipo, str) or tipo not in AVAILABLE_TROOPS.keys():
-                raise Exception(
-                    f"{player} sent a troop with an invalid type, type {tipo} must be a string and must be one of the available types"
+                raise PlayerBuildException(
+                    f"Tipo de tropa inválido, el tipo {tipo} debe ser un string y estar en {AVAILABLE_TROOPS.keys()}"
                 )
             if not isinstance(pos, str) or pos not in COORD_TO_TUPLE.keys():
-                raise Exception(
-                    f"Invalid position, position {pos} is not a string or is not in the board"
+                raise PlayerBuildException(
+                    f"Posición inválida, la posición {pos} de tipo {type(pos)} debe ser un str y estar en el tablero"
                 )
 
         for _id, tipo, pos in player_troops:
@@ -116,10 +154,8 @@ class TurnManager:
                 troops_dict[_id] = troops.Scout(_id, pos)
             elif tipo == TOWER:
                 troops_dict[_id] = troops.Tower(_id, pos)
-            elif tipo == GRENADIER:
+            elif tipo == HIMARS:
                 troops_dict[_id] = troops.Grenadier(_id, pos)
-            else:
-                raise Exception(f"{player} sent an invalid troop type")
             max_quantities[tipo] -= 1
 
         # ? for troop in troops_dict.values():
@@ -127,56 +163,17 @@ class TurnManager:
 
         ids = [troop.id for troop in troops_dict.values()]
         if len(ids) != len(set(ids)):
-            raise Exception(f"{player} sent troops with the same id")
+            raise PlayerBuildException(
+                f"Ids inválidas, hay tropas con ids repetidas")
         positions = [troop.pos for troop in troops_dict.values()]
         if len(positions) != len(set(positions)):
-            raise Exception(f"{player} sent troops to the same position")
+            raise PlayerBuildException(
+                f"Posiciones inválidas, hay tropas en posiciones repetidas")
         if any((quantity < 0 for quantity in max_quantities.values())):
-            raise Exception(f"{player} sent more troops than allowed")
-        # ? for troop, quantity in max_quantities.items():
-        # ?     if quantity > 0:
-        # ?         print(
-        # ?             f"\nWarning, {player} sent {quantity} less troops of type {troop} than allowed"
-        # ?         )
+            raise PlayerBuildException(
+                f"Cantidad de tropas inválida, hay tropas de un tipo que exceden el máximo permitido")
 
         self.troops[player] = troops_dict
-
-    # ? def verifyTablero(self, tropas):
-    # ?     message = '| Verificacion al Montar Tablero |\n'
-    # ?     if isinstance(tropas, list):
-    # ?         message += 'Lista de Tropas: TRUE \n'
-    # ?         listaDeListas = True
-    # ?         listID = []
-    # ?         listPOS = []
-    # ?         numSoldier = 0
-    # ?         numGauss = 0
-    # ?         numTower = 0
-    # ?         numScout = 0
-    # ?         numGrenadier = 0
-    # ?         if len(tropas) == 13:
-
-    # ?             for unit in tropas:
-    # ?                 if not isinstance(unit, list):
-    # ?                     message += 'ERROR: montar_tropas no devuelve una lista de listas \n'
-    # ?                 else:
-    # ?                     if len(unit) != 3:
-    # ?                         message += f'ERROR: las sublistas no tienen los 3 ' \
-    # ?                                    f'elementos pedidos {unit}  \n'
-    # ?                     else:
-    # ?                         if not isinstance(unit[0], int):
-    # ?                             message += f'ERROR: el ID entregado no es un integer {unit} \n'
-    # ?                         else:
-    # ?                             if unit[0] in listID:
-    # ?                                 message += f'ERROR: el ID entregado no es unico {unit[0]}\n'
-    # ?                             else:
-    # ?                                 listID.append(unit[0])
-
-    # ?         else:
-    # ?             message += 'ERROR: faltan tropas en el tablero \n'
-    # ?     else:
-    # ?         message += 'ERROR: montar_tropas no devuelve una lista \n'
-
-    # ?     return message
 
     def menu_modo_juego(self):
         """
@@ -205,6 +202,10 @@ class TurnManager:
 
     def run(self):
         for player in cycle(self.players):
+            if self.prints:
+                print(
+                    f"{BLD}\n------------------ Turno {self.turno} ------------------\n{RST}"
+                )
             if self.turno == 1000:
                 return self.find_timeout_winner()
             enemy = self.get_enemy(player)
@@ -217,35 +218,47 @@ class TurnManager:
                 self.reset_turn(player)
                 self.exception_counter[player] = 0
             except Exception as e:
+                if self.prints:
+                    print(
+                        f"El jugador {player} levantó una excepción en su codigo:")
+                    print_exception(e)
                 if self.exception_break:
-                    self.print_exception(player, e)
                     break
-                if self.handle_exception(player, e):
+                if self.handle_exception(player):
                     return self.win(enemy)
+                self.pasar_turno()
                 continue
 
-            if not self.validate_action(accion, player):
+            try:
+                self.validate_action(accion, player)
+            except InvalidActionException as e:
+                if self.prints:
+                    print(
+                        f"EL jugador {player} mandó una acción inválida: {e}")
                 if self.invalid_action_break:
-                    print(f"Player {player} sent an invalid action")
                     break
-                print(f"Player {player} sent an invalid action, skipping turn")
-                self.turno += 1
+                self.pasar_turno()
                 continue
+
             accion = self.convertir_accion(accion)
 
             acc, _id, pos = accion["action"], accion["id"], accion["pos"]
             tropa = self.troops[player][_id]
             if acc == ATACAR:
-                self.handle_attack(tropa, reporte, player, enemy, pos)
+                self.handle_attack(tropa, reporte, enemy, pos)
             elif acc == MOVER:
                 self.handle_movement(tropa, reporte, player, pos)
-            self.print_game(player)
+            if self.prints:
+                self.print_game(player)
             if self.game_finished(enemy):
                 self.win(player)
                 break
-            self.turno += 1
+            self.pasar_turno()
             if self.por_turno:
                 input(f"\n{BLD}Presione enter para continuar{RST}")
+
+    def pasar_turno(self):
+        self.turno += 1
 
     def convertir_accion(self, accion: list) -> dict:
         _id, action, pos = accion
@@ -258,35 +271,43 @@ class TurnManager:
         self.posiciones_detectadas = []
         self.clear_report(player)
 
-    def validate_action(self, action: list, player) -> bool:
+    def validate_action(self, action: list, player):
         """
         Validates a action sent by the player
         """
         if not isinstance(action, list):
-            print(
-                f"Invalid action format, action {action} of type {type(action)} must be a list"
-            )
-            return False
+            raise InvalidActionException(
+                f"Formato de acción inválido, la acción {action} de tipo {type(action)} debe ser una lista")
         if len(action) != 3:
-            print(
-                f"Invalid action format, action {action} must have 3 elements [id, action, pos]"
-            )
-            return False
+            raise InvalidActionException(
+                f"Formato de acción inválido, la acción {action} debe tener 3 elementos [id, acción, pos]")
         _id, acc, pos = action
         if acc not in ACCIONES:
-            print(
-                f"Invalid action type, action {acc} must be {MOVER} or {ATACAR}")
-            return False
+            raise InvalidActionException(
+                f"Tipo de acción inválida, la acción {acc} debe ser {MOVER} o {ATACAR}")
         if _id not in self.troops[player].keys():
-            print(
-                f"Invalid troop id, id {_id} is not in alive or does not exist")
-            return False
+            raise InvalidActionException(
+                f"Id de tropa inválida, la id {_id} no está viva o no existe")
         if not isinstance(pos, str) or pos not in COORD_TO_TUPLE.keys():
-            print(
-                f"Invalid position, position {pos} is not a string or is not in the board"
-            )
-            return False
-        return True
+            raise InvalidActionException(
+                f"Posición inválida, la posición {pos} de tipo {type(pos)} debe ser un str y estar en el tablero")
+        tropa = self.troops[player][_id]
+        if acc == ATACAR and tropa.type == GAUSS:
+            fila = COORD_TO_TUPLE[tropa.pos][0]
+            fila_ataque = COORD_TO_TUPLE[pos][0]
+            if fila != fila_ataque:
+                raise InvalidActionException(
+                    f"La tropa Gauss solo puede atacar en la misma fila")
+        elif acc == MOVER:
+            can_move = tropa.move(pos)
+            if not can_move:
+                self.reportes[player][MOV_SUCCESS] = False
+                raise InvalidActionException(
+                    f"Movimiento inválido, la tropa de id {tropa.id} y tipo {tropa.type} no puede moverse a la posición {pos}")
+            if not self.pos_is_empty(player, pos):
+                self.reportes[player][MOV_SUCCESS] = False
+                raise InvalidActionException(
+                    f"Movimiento inválido, la posición {pos} está ocupada")
 
     def clear_report(self, player):
         """
@@ -316,7 +337,9 @@ class TurnManager:
         """
         Prints the winner
         """
-        print(f"Player {player} wins!")
+        self.winner = player
+        if self.prints:
+            print(f"El jugador {player} ganó!")
 
     def turn_into_enemy_report(
         self, player, ids_detectados: list[int]
@@ -330,13 +353,11 @@ class TurnManager:
         reporte[DETECT] = ids_detectados
         return reporte
 
-    def handle_exception(self, player, e) -> bool:
-        print(f"Player {player} raised an exception")
-        print_exception(e)
+    def handle_exception(self, player) -> bool:
         self.reset_turn(player)
         self.exception_counter[player] += 1
         if self.exception_counter[player] == 10:
-            print(f"Player {player} raised 10 exceptions in a row")
+            print(f"El jugador {player} levantó 10 excepciones seguidas")
             return True
         return False
 
@@ -344,7 +365,6 @@ class TurnManager:
         self,
         tropa: troops.BaseTroop,
         reporte: dict,
-        player,
         enemy,
         pos: str,
     ) -> None:
@@ -400,13 +420,9 @@ class TurnManager:
     def handle_movement(
         self, tropa: troops.BaseTroop, reporte: dict, player, pos: str
     ):
-        can_move = tropa.move(pos)
-        if can_move and self.pos_is_empty(player, pos):
-            self.movimiento = (tropa.id, tropa.pos)
-            tropa.pos = pos
-            reporte[MOV_SUCCESS] = True
-        else:
-            reporte[MOV_SUCCESS] = False
+        self.movimiento = (tropa.id, tropa.pos)
+        tropa.pos = pos
+        reporte[MOV_SUCCESS] = True
 
     def pos_is_empty(self, player, pos: str) -> bool:
         """
@@ -426,9 +442,6 @@ class TurnManager:
         """
         Prints the game
         """
-        print(
-            f"{BLD}\n------------------ Turno {self.turno} ------------------\n{RST}"
-        )
         reporte = self.reportes[current_player]
         ataques = reporte[ATACK]
         boards = []
@@ -480,16 +493,9 @@ class TurnManager:
             for bajas in self.get_troop_types(player):
                 print(f" - {bajas}")
 
-    def print_exception(self, player, e):
-        print(f"Player {player} raised an exception")
-        print_exception(e)
-
     def mirror_board(self, board: list[list[str]]):
         """
         Mirrors a board
         """
         for row in board:
             row.reverse()
-
-
-
