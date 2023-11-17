@@ -381,7 +381,7 @@ class BaseCommander(ABC):
         if len(set(positions)) != len(positions):
             raise TroopsInSamePosition("Hay tropas en la misma posición")
 
-        if len(positions) > 11:
+        if len(positions) > 12:
             raise MoreTroopsThanAllowed("Hay más tropas de las permitidas")
 
         for troop_type, positions in troops_dict.items():
