@@ -56,7 +56,7 @@
   * **Ataca:** Selecciona una casilla en la misma fila en la que se encuentra el **Cañon Gauss**, destruye toda las tropas en la fila enemiga.
   * **Unidades disponibles:** 2.
 
-* **Granadero (grenadier.py)**
+* **Granadero (himars.py)**
   * Adora las granadas de racimo.
   * **Se mueve:** Una casilla a su alrededor.
   * **Ataca:** Una casilla enemiga y otras 4 alrededor de manera aleatoria.

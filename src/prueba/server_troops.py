@@ -156,7 +156,7 @@ class Tower(BaseTroop):
 
 
 class Grenadier(BaseTroop):
-    """Grenadier class."""
+    """HIMARS class."""
 
     def __init__(self, id, pos):
         super().__init__(id, pos)

@@ -102,7 +102,7 @@ def verifyTablero():
                                                         if numGrenadier < 3:
                                                             numGrenadier += 1
                                                         else:
-                                                            message += f'ERROR: Has entregado más de 2 Grenadier'
+                                                            message += f'ERROR: Has entregado más de 2 HIMARS'
                                                     elif unit[1] == 'tower':
                                                         if numTower < 1:
                                                             numTower += 1

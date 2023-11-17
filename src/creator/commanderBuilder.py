@@ -19,7 +19,7 @@ def buildCommander(commanderName):
     importScout = 'from commanders.' + commanderName + '.troops.scout import Scout \n'
     importGauss = 'from commanders.' + commanderName + '.troops.gauss import Gauss \n'
     importTower = 'from commanders.' + commanderName + '.troops.tower import Tower \n'
-    importGrenadier = 'from commanders.' + commanderName + '.troops.grenadier import Grenadier \n'
+    importGrenadier = 'from commanders.' + commanderName + '.troops.grenadier import HIMARS \n'
 
     with open(commanderFile, 'w') as cFile:
         cFile.write(importSoldier)
@@ -67,7 +67,7 @@ def buildCommander(commanderName):
     towerTextPath = 'src/creator/modules/tower.txt'
     escribirTroops(importMasterTroop, towerPath, towerTextPath)
 
-    grenadierPath = troopsFolderPath + '/grenadier.py'
+    grenadierPath = troopsFolderPath + '/himars.py'
     grenadierTextPath = 'src/creator/modules/grenadier.txt'
     escribirTroops(importMasterTroop, grenadierPath, grenadierTextPath)
 

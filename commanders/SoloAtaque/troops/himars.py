@@ -1,8 +1,8 @@
 from commanders.SoloAtaque.troops.baseTroop import BaseTroop
 
 
-class Grenadier(BaseTroop):
-    # Clase Grenadier
+class Himars(BaseTroop):
+    # Clase HIMARS
 
     def __init__(self, pos):
         super().__init__()

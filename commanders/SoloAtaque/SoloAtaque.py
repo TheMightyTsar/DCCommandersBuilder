@@ -1,6 +1,6 @@
 import random
 
-from commanders.SoloAtaque.troops.grenadier import Grenadier
+from commanders.SoloAtaque.troops.himars import Himars
 from commanders.SoloAtaque.troops.soldier import Soldier
 from commanders.SoloAtaque.troops.tower import Tower
 from commanders.SoloAtaque.parametros import ATACAR, BAJAS
@@ -15,7 +15,7 @@ class Commander:
     def montar_tropas(self):
         tropas = []
 
-        granadero = Grenadier("A5")
+        granadero = Himars("A5")
         tower = Tower("A6")
         soldado = Soldier("D8")
 

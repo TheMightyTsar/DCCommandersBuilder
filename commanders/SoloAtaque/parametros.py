@@ -10,7 +10,7 @@ SOLDIER = "soldier"
 GAUSS = "gauss"
 SCOUT = "scout"
 TOWER = "tower"
-GRENADIER = "grenadier"
+HIMARS = "himars"
 
 # Llaves reportes
 ATACK = "ataks"

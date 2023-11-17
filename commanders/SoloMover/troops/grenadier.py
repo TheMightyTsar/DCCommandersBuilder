@@ -8,7 +8,7 @@ from src.prueba.parametros import TUPLE_TO_COORD as TC
 
 
 class Grenadier(BaseTroop):
-    # Clase Grenadier
+    # Clase HIMARS
 
     def __init__(self, pos):
         super().__init__()

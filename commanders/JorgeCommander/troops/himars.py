@@ -1,3 +1,4 @@
+from commanders.JorgeCommander.troops.baseTroop import BaseTroop 
 class HIMARS(BaseTroop):
     # Clase HIMARS
 
