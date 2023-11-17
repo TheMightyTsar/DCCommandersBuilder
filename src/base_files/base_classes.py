@@ -264,6 +264,7 @@ class BaseCommander(ABC):
     ---------
     >>> nombre : str
     >>> tropas : dict[int, BaseTroop]
+    >>> coordenadas_validas : list[str]
 
     Métodos Obligatorios
     -------
@@ -280,6 +281,8 @@ class BaseCommander(ABC):
     """
     nombre: str = field(kw_only=True, on_setattr=setters.frozen)
     tropas: dict[int, BaseTroop] = field(init=False)
+    coordenadas_validas: list[str] = field(
+        init=False, factory=CTT.keys, on_setattr=setters.frozen)
 
     @abstractmethod
     def montar_tablero(self) -> list[list[int | str]]:
