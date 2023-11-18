@@ -1,19 +1,13 @@
 import importlib
+import sys
 import types
 from os import path
 
-from src.review.utils.globals_modder import (
-    add_globals_to_file,
-    delete_extra_lines
-)
-from src.review.utils.print_styles import (
-    print_test_pass,
-    print_test_fail
-)
-
-import sys
-from src.review.reviewExceptions import ModuloNoPermitido, FuncionNoPermitida
-from src.review.utils.mock_vars import mock_informe_1
+from src.review.reviewExceptions import FuncionNoPermitida, ModuloNoPermitido
+from src.review.utils.globals_modder import (add_globals_to_file,
+                                             delete_extra_lines)
+from src.review.utils.mock_vars import mock_informe, mock_informe_enemigo
+from src.review.utils.print_styles import print_test_fail, print_test_pass
 
 
 def check_code(commanderName):
@@ -90,6 +84,12 @@ def check_forbidden_builtins(commanderName):
             msg.append("exec")
         if ' eval(' in line or line[0:5] == 'eval(':
             msg.append("eval")
+        if ' open(' in line or line[0:5] == 'open(':
+            msg.append("open")
+        if ' input(' in line or line[0:6] == 'input(':
+            msg.append("input")
+        if ' print(' in line or line[0:6] == 'print(':
+            msg.append("print")
         if msg:
             raise FuncionNoPermitida(
                 msg, "Se han encontrado funciones no permitidas:")
@@ -179,10 +179,10 @@ def check_commander_structure(user_module, commanderName):
 
     # Revisar si la clase Commander tiene los atributos necesarios
     try:
-        commander.name
+        commander.nombre
     except AttributeError:
         raise AttributeError(
-            "No se ha encontrado el atributo \"name\" en la clase Commander.")
+            "No se ha encontrado el atributo \"nombre\" en la clase Commander.")
 
     # Revisar si la clase Commander tiene los métodos necesarios
     try:
@@ -192,7 +192,7 @@ def check_commander_structure(user_module, commanderName):
             "No se ha encontrado el método obligatorio \"montar_tropas\" en la clase Commander.")
 
     try:
-        commander.jugar_turno(mock_informe_1)
+        commander.jugar_turno(mock_informe, mock_informe_enemigo)
     except AttributeError:
         raise AttributeError(
             "No se ha encontrado el método obligatorio \"jugar_turno\" en la clase Commander.")

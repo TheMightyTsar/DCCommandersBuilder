@@ -1,14 +1,4 @@
+from src.base_files.base_classes import Report
 
-mock_informe_1 = {
-    "ataques": {
-        "enemigo": [],
-        "yo": []
-    },
-    "detecciones": {
-        "enemigo": [],
-        "yo": []
-    },
-    "bajas": [],
-    "eliminaciones": [],
-    "orden_exitosa": True
-}
+mock_informe = Report()
+mock_informe_enemigo = Report()

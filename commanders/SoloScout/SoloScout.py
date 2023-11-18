@@ -2,7 +2,8 @@
 
 
 from src.base_files.base_classes import BaseCommander
-from src.base_files.parametros import (ATACAR, GAUSS, HIMARS, MOVER, SCOUT, SOLDIER, TOWER)
+from src.base_files.parametros import (ATACAR, GAUSS, HIMARS, MOVER, SCOUT,
+                                       SOLDIER, TOWER)
 
 
 class Commander(BaseCommander):
@@ -12,7 +13,7 @@ class Commander(BaseCommander):
         super().__init__(nombre="SoloScout")
         # Define aquí atributos adicionales para tu comandante
 
-    def montar_tablero(self):
+    def montar_tropas(self):
         # Define aquí las posciciones iniciales de tus tropas
         tropas = {
             SOLDIER: ["A0", "A1", "A2", "A3", "A4"],

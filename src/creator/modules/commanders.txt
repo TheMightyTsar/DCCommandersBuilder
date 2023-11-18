@@ -12,7 +12,7 @@ class Commander(BaseCommander):
         super().__init__(nombre="{commander_name}")
         # Define aquí atributos adicionales para tu comandante
 
-    def montar_tablero(self):
+    def montar_tropas(self):
         # Define aquí las posciciones iniciales de tus tropas
         tropas = {
             SOLDIER: ["A0", "A1", "A2", "A3", "A4"],
@@ -35,3 +35,5 @@ class Commander(BaseCommander):
     def jugar_turno(self, reporte, reporte_enemigo):
         # Completa tu código aquí
         ...
+
+    # Define aquí tus funciones adicionales

@@ -102,7 +102,7 @@ class TurnManager:
 
         max_quantities = AVAILABLE_TROOPS.copy()
 
-        player_troops = player.montar_tablero()
+        player_troops = player.montar_tropas()
 
         if not isinstance(player_troops, list):
             raise PlayerBuildException(

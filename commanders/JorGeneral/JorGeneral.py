@@ -17,7 +17,7 @@ class Commander(BaseCommander):
         self.attacked_cells = set()
         self.attack_priority_list = [TOWER, HIMARS, SOLDIER, GAUSS]
 
-    def montar_tablero(self):
+    def montar_tropas(self):
         # Define aquí las posciciones iniciales de tus tropas
 
         p = random.sample(self.coordenadas_validas, 12)
@@ -111,3 +111,5 @@ class Commander(BaseCommander):
                             return [_id, ATACAR, pos]
                     else:
                         continue
+
+    # Define aquí tus funciones adicionales

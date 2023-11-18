@@ -260,7 +260,7 @@ class BaseCommander(ABC):
 
     Métodos Obligatorios
     -------
-    >>> montar_tablero()
+    >>> montar_tropas()
     >>> jugar_turno(reporte: Report, reporte_enemigo: Report)
 
     Métodos Opcionales
@@ -277,7 +277,7 @@ class BaseCommander(ABC):
         init=False, factory=CTT.keys, on_setattr=setters.frozen)
 
     @abstractmethod
-    def montar_tablero(self) -> list[list[int | str]]:
+    def montar_tropas(self) -> list[list[int | str]]:
         """
         Función
         -------

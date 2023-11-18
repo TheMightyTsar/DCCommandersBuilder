@@ -16,7 +16,7 @@ class Commander(BaseCommander):
         # Define aquí atributos adicionales para tu comandante
         self.attacked_cells = set()
 
-    def montar_tablero(self):
+    def montar_tropas(self):
         # Define aquí las posciciones iniciales de tus tropas
 
         p = random.sample(self.coordenadas_validas, 12)
