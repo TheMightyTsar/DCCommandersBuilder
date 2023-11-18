@@ -1,7 +1,5 @@
 import subprocess
-import sys
 import threading
-import time
 
 from src.creator.commanderBuilder import buildCommander
 from src.review import reviewHandler
