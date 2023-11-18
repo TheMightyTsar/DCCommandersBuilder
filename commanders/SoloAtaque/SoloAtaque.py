@@ -1,8 +1,11 @@
 """Commander file for SoloAtaque."""
 
 
+import random
+
 from src.base_files.base_classes import BaseCommander
-from src.base_files.parametros import (ATACAR, GAUSS, HIMARS, MOVER, SCOUT, SOLDIER, TOWER)
+from src.base_files.parametros import (ATACAR, GAUSS, HIMARS, MOVER, SCOUT,
+                                       SOLDIER, TOWER)
 
 
 class Commander(BaseCommander):
@@ -14,16 +17,19 @@ class Commander(BaseCommander):
 
     def montar_tablero(self):
         # Define aquí las posciciones iniciales de tus tropas
+
+        p = random.sample(self.coordenadas_validas, 12)
+
         tropas = {
-            SOLDIER: ["A0", "A1", "A2", "A3", "A4"],
+            SOLDIER: [p[0], p[1], p[2], p[3], p[4]],
 
-            HIMARS: ["B0", "B1"],
+            HIMARS: [p[5], p[6]],
 
-            SCOUT: ["C0", "C1"],
+            SCOUT: [p[7], p[8]],
 
-            GAUSS: ["D0", "D1"],
+            GAUSS: [p[9], p[10]],
 
-            TOWER: ["E0"],
+            TOWER: [p[11]],
         }
 
         my_troops, troop_list = self.instanciar_tropas(tropas)

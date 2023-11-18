@@ -113,22 +113,14 @@ class Gauss(BaseTroop):
 
     Movimiento
     ----------
-    * Una casilla en dirección vertical
+    * No se puede mover
     """
 
     def __init__(self, coord: str):
         super().__init__(tipo=GAUSS, coord=coord)
 
     def mover(self):
-        moves = []
-
-        for i in range(-1, 2):
-
-            moves.append((CTT[self.coord][0] + i, CTT[self.coord][1]))
-
-        moves = [TTC[move] for move in moves if move in TTC]
-
-        return sorted(set(moves))
+        return [self.coord]
 
     def atacar(self):
         return [coord for coord in CTT if coord[1] == self.coord[1]]
