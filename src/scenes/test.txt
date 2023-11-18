@@ -1,4 +1,7 @@
-========================================
-|   Pon a prueba tu Commander          |
-========================================
-    Ingresa su nombre:
+
+Para enfrentamientos personalizados, escribe en la consola:
+    python main.py -h
+
+y sigue las instrucciones.
+
+e.g. python main.py -c1 {Commander_Name}

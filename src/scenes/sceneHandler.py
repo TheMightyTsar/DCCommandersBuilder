@@ -4,9 +4,10 @@ menus = {'welcome': {'0': 'input_commander_name', '1': 'review_code', '2': 'manu
          'manual': {'v': 'welcome'},
          'test': {'v': 'welcome'}}
 
-invalidCharacters = [' ', 'ñ', '!']
+invalidCharacters = [' ', 'ñ', '!', '.']
 
 message = 'Usaste caracteres no validos, no ocupes caracteres NO alfanumericos'
+
 
 def showScene(scene):
     file_name = 'src/scenes/'+scene+'.txt'

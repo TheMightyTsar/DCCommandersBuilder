@@ -34,5 +34,9 @@ def start():
 
                 scene = 'welcome'
                 sceneHandler.showScene(scene)
+
+            if scene == 'test':
+                sys.exit()
+
         else:
             running = False

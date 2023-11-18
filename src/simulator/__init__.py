@@ -141,7 +141,7 @@ formatted_files = "\n".join(f"{b.ljust(max_bot_length)} {c}" for b, c in itertoo
 epilog = f"{MAG}Bots:{' ' * (max_bot_length - 4)}Players:\n{formatted_files}"
 
 parser = argparse.ArgumentParser(
-    description=BLD + "enfrenta dos comandantes." + YEL + " [] -> opcional.",
+    description=BLD + "enfrenta dos comandantes.".title() + YEL + " [] -> opcional.",
     epilog=epilog,
     formatter_class=argparse.RawTextHelpFormatter
 )
@@ -155,7 +155,7 @@ parser.add_argument(
 parser.add_argument(
     "-i", "--iterations", help="numero de iteraciones (> 1)", required=False, type=int, default=1,
 )
-if len(sys.argv) == 1:
+if len(sys.argv) not in (3, 5, 7):
     print(GRE)
     parser.print_help()
     print(RST)
