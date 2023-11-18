@@ -38,19 +38,18 @@ def start():
                 commander_name = input()
 
                 try:
-                    try:
-                        subprocess.run(
-                            ['python', 'main.py', '-c1', commander_name], check=True)
+                    subprocess.run(
+                        ['python', 'main.py', '-c1', commander_name], check=True)
 
-                        scene = 'welcome'
-                        sceneHandler.showScene(scene)
+                    scene = 'welcome'
+                    sceneHandler.showScene(scene)
 
-                    except FileNotFoundError:
-                        subprocess.run(
-                            ['python3', 'main.py', '-c1', commander_name], check=True)
+                except FileNotFoundError:
+                    subprocess.run(
+                        ['python3', 'main.py', '-c1', commander_name], check=True)
 
-                        scene = 'welcome'
-                        sceneHandler.showScene(scene)
+                    scene = 'welcome'
+                    sceneHandler.showScene(scene)
 
                 except KeyboardInterrupt:
                     scene = 'welcome'
