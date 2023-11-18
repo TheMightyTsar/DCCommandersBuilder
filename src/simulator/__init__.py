@@ -8,6 +8,8 @@ import random
 import subprocess
 import sys
 
+from src.review.reviewHandler import check_code
+
 
 def prett(text, mode: str = "t"):
     if mode == "n":
@@ -196,6 +198,11 @@ if not CHECK:
     print(GRE)
     parser.print_help()
     print()
+    sys.exit()
+
+if not check_code(args.commander1):
+    sys.exit()
+if not check_code(args.commander2):
     sys.exit()
 
 logo(args.commander1, args.commander2)

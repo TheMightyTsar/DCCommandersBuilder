@@ -9,7 +9,7 @@ from src.base_files.parametros import (ATACAR, GAUSS, HIMARS, MOVER, SCOUT,
 
 
 class Commander(BaseCommander):
-    """Commander for JorGeneral."""
+    """Commander JorGeneral."""
 
     def __init__(self):
         super().__init__(nombre="JorGeneral")
@@ -61,7 +61,7 @@ class Commander(BaseCommander):
             ):
                 tropa = self.tropas[_id]
 
-                if tropa.tipo == TOWER:
+                if tropa.tipo in [TOWER, GAUSS]:
                     continue
 
                 posibles = tropa.mover()
@@ -71,8 +71,6 @@ class Commander(BaseCommander):
                         continue
 
                     return [_id, MOVER, pos]
-
-            # ! RETURNS NONE WHEN ONLY TOWER IS DETECTED
 
         if reporte.detecciones:
             for _id in ids_actuales[GAUSS]:

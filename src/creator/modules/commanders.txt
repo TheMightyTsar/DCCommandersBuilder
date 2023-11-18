@@ -6,7 +6,7 @@ from src.base_files.parametros import (ATACAR, GAUSS, HIMARS, MOVER, SCOUT, SOLD
 
 
 class Commander(BaseCommander):
-    """Commander for {commander_name}."""
+    """Commander {commander_name}."""
 
     def __init__(self):
         super().__init__(nombre="{commander_name}")

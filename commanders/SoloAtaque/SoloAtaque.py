@@ -9,7 +9,7 @@ from src.base_files.parametros import (ATACAR, GAUSS, HIMARS, MOVER, SCOUT,
 
 
 class Commander(BaseCommander):
-    """Commander for SoloAtaque."""
+    """Commander SoloAtaque."""
 
     def __init__(self):
         super().__init__(nombre="SoloAtaque")
@@ -51,7 +51,6 @@ class Commander(BaseCommander):
             return [tropa.id, ATACAR, self.obtener_posicion()]
 
     # Define aquí tus funciones adicionales
-
     def obtener_posicion(self):
         for pos in self.coordenadas_validas:
             if pos not in self.attacked_cells:
