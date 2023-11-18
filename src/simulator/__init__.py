@@ -213,7 +213,7 @@ for commander in (args.commander1, args.commander2):
         commander, pyPath)
     module = importlib.util.module_from_spec(module_spec)  # type: ignore
     module_spec.loader.exec_module(module)  # type: ignore
-    commanders.append(module)
+    commanders.append(module.Commander())
 
 wins = {commander: 0 for commander in (args.commander1, args.commander2)}
 

@@ -38,7 +38,7 @@ class Soldier(BaseTroop):
         self.type = SOLDIER
 
     def move(self, pos: str):
-        """Moves 1 cell in cross pattern."""
+        """Moves 3 cell in cross pattern."""
 
         possible = []
 
@@ -55,8 +55,7 @@ class Soldier(BaseTroop):
         return False
 
     def attack(self, pos: str):
-        """Attacks targeted position."""
-        # Atacks to the right, up and down
+        """Attacks targeted position and 3 cell behind in a t shape"""
         affected = []
         affected.append((ct[pos][0] + 1, ct[pos][1]))
         affected.append((ct[pos][0], ct[pos][1] + 1))
@@ -78,16 +77,10 @@ class Gauss(BaseTroop):
         return False
 
     def attack(self, pos: str):
-        """Attacks targeted position and 4 cells behind."""
+        """Attacks entire row."""
 
         if pos[1] != self.pos[1]:
             return []
-
-        # affected = [
-        #     tc[(ct[pos][0] - i, ct[pos][1])]
-        #     for i in range(5) if
-        #     ct[pos][0] - i in range(0, 10)
-        # ]
 
         affected = [tc[(ct[pos][0], i)] for i in range(10)]
 
@@ -123,9 +116,9 @@ class Scout(BaseTroop):
 
         affected = [
             (ct[pos][0] + i, ct[pos][1] + j)
-            for i in range(-1, 2) for j in range(-1, 2) if
-            ct[pos][0] + i in range(0, 10) and
-            ct[pos][1] + j in range(0, 10)
+            for i in range(-1, 2)
+            for j in range(-1, 2)
+            if ct[pos][0] + i in range(0, 10) and ct[pos][1] + j in range(0, 10)
         ]
 
         affected.append((ct[pos][0] + 2, ct[pos][1]))
@@ -137,7 +130,7 @@ class Scout(BaseTroop):
 
 
 class Tower(BaseTroop):
-    """Air Traffic Control class."""
+    """Air Tower class."""
 
     def __init__(self, id, pos):
         super().__init__(id, pos)
@@ -149,20 +142,17 @@ class Tower(BaseTroop):
         return False
 
     def attack(self, pos: str):
-        """Attacks targeted position and 4 random cells in the same row."""
+        """Attacks targeted position and 5 random cells in the same row."""
 
-        affected = [
-            tc[(i, ct[pos][1])]
-            for i in range(10)
-        ]
+        affected = [tc[(i, ct[pos][1])] for i in range(10)]
 
         affected.remove(pos)
 
         return [pos] + random.sample(affected, 5)
 
 
-class Grenadier(BaseTroop):
-    """Grenadier class."""
+class Himars(BaseTroop):
+    """HIMARS class."""
 
     def __init__(self, id, pos):
         super().__init__(id, pos)
@@ -186,11 +176,10 @@ class Grenadier(BaseTroop):
         return False
 
     def attack(self, pos: str):
-        """Attacks targeted position and 4 random cells around."""
+        """Attacks targeted position and 6 random cells around."""
 
         affected = [
-            (ct[pos][0] + i, ct[pos][1] + j)
-            for i in range(-1, 2) for j in range(-1, 2)
+            (ct[pos][0] + i, ct[pos][1] + j) for i in range(-1, 2) for j in range(-1, 2)
         ]
         affected.append((ct[pos][0] + 2, ct[pos][1]))
         affected.append((ct[pos][0], ct[pos][1] + 2))
@@ -205,5 +194,5 @@ class Grenadier(BaseTroop):
         return [pos] + affected
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ...
