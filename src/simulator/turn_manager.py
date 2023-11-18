@@ -32,12 +32,12 @@ class InvalidActionException(Exception):
 
 
 class TurnManager:
-    def __init__(self, commanders: list[BaseCommander], iterations) -> None:
+    def __init__(self, commanders, iterations) -> None:
         # ? print("-" * 40)
         # ? print("Comienza la prueba de los comandantes")
         # ? print("-" * 40)
-        self.player_1 = commanders[0]
-        self.player_2 = commanders[1]
+        self.player_1 = commanders[0].Commander()
+        self.player_2 = commanders[1].Commander()
         self.players = [self.player_1, self.player_2]
 
         self.winner: str | None = None

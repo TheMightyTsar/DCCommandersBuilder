@@ -237,13 +237,13 @@ class Report:
     Atributos
     ---------
     >>> ataques : list[str]
-    >>> eliminaciones : list[int]
+    >>> eliminaciones : list[int | str]
     >>> detecciones : list[int | str]
     >>> movimiento : Movement | None
     """
     ataques: list[str] = field(factory=list)
-    eliminaciones: list[int] = field(factory=list)
-    detecciones: list[int | str] = field(factory=list)
+    eliminaciones: list = field(factory=list)
+    detecciones: list = field(factory=list)
     movimiento: Movement | None = field(default=None)
 
 
@@ -313,8 +313,11 @@ class BaseCommander(ABC):
 
         Estructura Reporte
         ------------------
-        * ataques : list[str]
-                * lista de coordenadas atacadas
+        * ataques : varia según el reporte
+                * reporte : list[str]
+                        * lista de tipo de tropas del oponente eliminadoas
+                * reporte_enemigo : list[int] 
+                        * lista de ids de tus tropas eliminadas
 
         * eliminaciones : list[int]
                 * lista de ids de tropas eliminadas
@@ -430,7 +433,7 @@ class BaseCommander(ABC):
 
         return my_troops, troop_list
 
-    def eliminar_tropas(self, reporte_enemigo: Report):
+    def eliminar_tropas(self, reporte_enemigo: Report) -> None:
         """
         Función
         -------
@@ -448,9 +451,12 @@ class BaseCommander(ABC):
 
         if reporte_enemigo.eliminaciones:
             for _id in reporte_enemigo.eliminaciones:
-                del self.tropas[_id]
+                try:
+                    del self.tropas[_id]
+                except KeyError:
+                    pass
 
-    def mover_tropas(self, reporte: Report):
+    def mover_tropas(self, reporte: Report) -> None:
         """
         Función
         -------
@@ -479,7 +485,7 @@ class BaseCommander(ABC):
             if resultado is True:
                 self.tropas[id_tropa].coord = posicion
 
-    def obtener_ids(self):
+    def obtener_ids(self) -> dict[str, list[int]]:
         """
         Función
         -------
@@ -505,7 +511,7 @@ class BaseCommander(ABC):
 
         return troops
 
-    def obtener_posiciones(self):
+    def obtener_posiciones(self) -> list[str]:
         """
         Función
         -------
