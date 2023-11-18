@@ -225,34 +225,41 @@ for commander in (args.commander1, args.commander2):
 wins = {commander: 0 for commander in (args.commander1, args.commander2)}
 
 
-if args.iterations == 1:
-    turn_manager = TurnManager(commanders, 1)
-    turn_manager.start()
-
-else:
-    pbar = tqdm.tqdm(
-        iterable=range(args.iterations),
-        ascii=True,
-        bar_format=COLOR_SAMPLE[3] + "{bar}" + RST,
-    )
-
-    for _ in pbar:
-        turn_manager = TurnManager(commanders, args.iterations)
+try:
+    if args.iterations == 1:
+        turn_manager = TurnManager(commanders, 1)
         turn_manager.start()
 
-        wins[str(turn_manager.winner)] += 1
+    else:
+        pbar = tqdm.tqdm(
+            iterable=range(args.iterations),
+            ascii=True,
+            bar_format=COLOR_SAMPLE[3] + "{bar}" + RST,
+        )
 
-    win_rates = {player: f"{wins/args.iterations:.0%}" for player,
-                 wins in wins.items()}
+        for _ in pbar:
+            turn_manager = TurnManager(commanders, args.iterations)
+            turn_manager.start()
 
-    win_rates = dict(sorted(
-        win_rates.items(), key=lambda item: item[1], reverse=True))
+            wins[str(turn_manager.winner)] += 1
 
+        win_rates = {player: f"{wins/args.iterations:.0%}" for player,
+                     wins in wins.items()}
+
+        win_rates = dict(sorted(
+            win_rates.items(), key=lambda item: item[1], reverse=True))
+
+        print()
+        print(prett("Resultados:"))
+        print()
+        print(
+            GRE + prett(f"{list(win_rates.keys())[0]}: {list(win_rates.values())[0]}", mode="n"))
+        print(
+            RED + prett(f"{list(win_rates.keys())[1]}: {list(win_rates.values())[1]}", mode="n"))
+        print(RST)
+
+except KeyboardInterrupt:
     print()
-    print(prett("Resultados:"))
-    print()
-    print(
-        GRE + prett(f"{list(win_rates.keys())[0]}: {list(win_rates.values())[0]}", mode="n"))
-    print(
-        RED + prett(f"{list(win_rates.keys())[1]}: {list(win_rates.values())[1]}", mode="n"))
+    print(RED + prett("[!] keyboard interrupt"))
     print(RST)
+    sys.exit()
