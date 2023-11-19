@@ -124,6 +124,3 @@ class Commander:
     def __repr__(self) -> str:
         return self.name
 
-
-if __name__ == "__main__":
-    pass
