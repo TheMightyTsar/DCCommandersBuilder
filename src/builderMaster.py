@@ -1,5 +1,7 @@
 import sys
 import threading
+import os
+
 
 from src.prueba import turn_manager
 from src.creator.commanderBuilder import buildCommander
@@ -9,31 +11,37 @@ from src.tableroVerification.verificar import verifyTablero
 
 
 def start():
-
     running = True
-    scene = 'welcome'
+    scene = "welcome"
     sceneHandler.showScene(scene)
 
     while running:
-
         option = input('opcion: ')
         if option != 's':
+
+
+            if option == "3":
+                os.system("python main.py -h")
+                sys.exit()
+
 
             scene = sceneHandler.changeScene(scene, option)
             sceneHandler.showScene(scene)
 
-            if scene == 'building_commander':
-                buildThread = threading.Thread(
-                    target=buildCommander, args=(option,))
+            if scene == "building_commander":
+                buildThread = threading.Thread(target=buildCommander, args=(option,))
 
                 buildThread.start()
                 buildThread.join()
                 running = False
 
-            if scene == 'review_code':
-                reviewHandler.check_code(option)
 
-                scene = 'welcome'
+            if scene == "review_code":
+                commander_name = input("Nombre del Commander: ")
+                reviewHandler.check_code(commander_name)
+
+
+                scene = "welcome"
                 sceneHandler.showScene(scene)
 
             if scene == 'verificar_montarTablero':
@@ -52,4 +60,3 @@ def start():
 
         else:
             running = False
-            sys.exit()

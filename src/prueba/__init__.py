@@ -1,6 +1,6 @@
 # pylint: disable=missing-docstring, W0212, W1510
 
-'''import argparse
+import argparse
 import importlib.util
 import itertools
 import os
@@ -92,5 +92,34 @@ COLORS = BLU, CYA, GRE, YEL, RED, MAG
 RST = colorama.Style.RESET_ALL
 
 
-'''
+
+def logo(player1_name, player2_name) -> None:
+    _ = subprocess.run([CLEAR], shell=True)
+    font = "cosmic"
+    color1, color2, color3 = random.sample(COLORS, k=3)
+    print(color1 + "_" * os.get_terminal_size().columns, end="\n" * 2)
+    print(
+        color2
+        + pyfiglet.figlet_format(
+            "DCCommanders",
+            font=font,
+            justify="center",
+            width=os.get_terminal_size().columns,
+        ),
+        end="",
+    )
+    print(color1 + "_" * os.get_terminal_size().columns, end="\n" * 2 + RST)
+    print(
+        color3
+        + pyfiglet.figlet_format(
+            f"{player1_name} vs {player2_name}",
+            font=font,
+            justify="center",
+            width=os.get_terminal_size().columns,
+        ),
+        end="",
+    )
+    print(color1 + "_" * os.get_terminal_size().columns, end=RST)
+
+
 
