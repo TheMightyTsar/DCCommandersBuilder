@@ -48,8 +48,10 @@ class simulationManager:
                 print(f" {player.name} esta montando su tablero\n")
                 self.build_player(player)
             except Exception as e:
-                print(f"Commander {player.name} tuvo un error montando el tablero: {e}")
-                return (self.win(self.get_enemy(player)))
+
+                print(
+                f"Commander {player.name} tuvo un error montando el tablero: {e}")
+                return self.win(self.get_enemy(player))
 
             print()
 
@@ -139,6 +141,7 @@ class simulationManager:
         # ?         )
 
         self.troops[player] = troops_dict
+
 
 
 
@@ -401,7 +404,9 @@ class simulationManager:
             for tropa in self.troops[player].values():
                 pos = COORD_TO_TUPLE[tropa.pos]
                 board[pos[0]][pos[1]
-                ] = tropa.type[0] if tropa.type != GAUSS else tropa.type[0].upper()
+
+                              ] = tropa.type[0] if tropa.type not in (GAUSS, SCOUT) else tropa.type[0].upper()
+
             if current_player != player:
                 for ataque in ataques:
                     pos = COORD_TO_TUPLE[ataque]
