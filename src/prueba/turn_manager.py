@@ -463,7 +463,7 @@ class simulationManager:
 def start():
     print(f'Comandantes disponibles: \n')
     for C in os.listdir('commanders'):
-        if C in ('SoloAtaque', 'SoloMover', 'SoloScout'):
+        if C in ('SoloAtaque', 'SoloMover', 'SoloScout', 'Sweeper'):
             print(f'{C} - [BOT] creado para poner a prueba tu Commander')
         else:
             print(f'{C} - Tu Commander')

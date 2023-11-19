@@ -20,9 +20,7 @@ def start():
         if option != 's':
 
 
-            if option == "3":
-                os.system("python main.py -h")
-                sys.exit()
+
 
 
             scene = sceneHandler.changeScene(scene, option)
