@@ -1,5 +1,5 @@
 ========================================
-|   Crea a tu nuevo DCCommander        |
+|   Revisa un DCCommander              |
 ========================================
 [v] para volver al menu
 [s] para Salir...

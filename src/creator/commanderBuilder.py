@@ -34,7 +34,7 @@ def buildCommander(commanderName):
             for line in baseFile:
                 if 'import' in line:
                     line = line.strip('\n') + commanderName + '.troops' + '\n'
-                if 'name' in line:
+                if 'name =' in line:
                     line = line.strip('\n') + "'" + commanderName + "'" + '\n'
                 cFile.write(line)
     printMessage('Creado el modulo de comandante')

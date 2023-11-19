@@ -1,4 +1,3 @@
 ========================================
-|   Revisa un Commander                |
+|   Revisando tu DCCommander...        |
 ========================================
-    Ingresa su nombre:

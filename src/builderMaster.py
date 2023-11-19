@@ -1,11 +1,13 @@
 import sys
 import threading
 import os
-import time
 
+
+from src.prueba import turn_manager
 from src.creator.commanderBuilder import buildCommander
 from src.review import reviewHandler
 from src.scenes import sceneHandler
+from src.tableroVerification.verificar import verifyTablero
 
 
 def start():
@@ -14,12 +16,15 @@ def start():
     sceneHandler.showScene(scene)
 
     while running:
-        option = input("")
-        if option == "3":
-            os.system("python main.py -h")
-            sys.exit()
+        option = input('opcion: ')
+        if option != 's':
 
-        if option != "s":
+
+            if option == "3":
+                os.system("python main.py -h")
+                sys.exit()
+
+
             scene = sceneHandler.changeScene(scene, option)
             sceneHandler.showScene(scene)
 
@@ -30,11 +35,28 @@ def start():
                 buildThread.join()
                 running = False
 
+
             if scene == "review_code":
-                commander_name = input()
+                commander_name = input("Nombre del Commander: ")
                 reviewHandler.check_code(commander_name)
+
 
                 scene = "welcome"
                 sceneHandler.showScene(scene)
+
+            if scene == 'verificar_montarTablero':
+                option = verifyTablero()
+                if option == 's':
+                    running = False
+                    sys.exit()
+                scene = 'welcome'
+                sceneHandler.showScene(scene)
+            if scene == 'prueba':
+                turn_manager.start()
+                print('salio del juego')
+                scene = 'welcome'
+                sceneHandler.showScene(scene)
+
+
         else:
             running = False

@@ -1,0 +1,5 @@
+==========================================
+|        Campo de pruebas...             |
+==========================================
+Deberas indicar el nombre de dos comandantes
+que participaran en el enfrentamiento de prueba
