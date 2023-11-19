@@ -1,38 +1,54 @@
 import subprocess
 import threading
 
+import sys
+from src.prueba import turn_manager
 from src.creator.commanderBuilder import buildCommander
 from src.review import reviewHandler
 from src.scenes import sceneHandler
+from src.tableroVerification.verificar import verifyTablero
 
 
 def start():
-
     running = True
-    scene = 'welcome'
+    scene = "welcome"
     sceneHandler.showScene(scene)
 
     while running:
-        option = input('')
-
+        option = input('opcion: ')
         if option != 's':
+
+
+
+
+
             scene = sceneHandler.changeScene(scene, option)
             sceneHandler.showScene(scene)
 
-            if scene == 'building_commander':
-                buildThread = threading.Thread(
-                    target=buildCommander, args=(option,))
+            if scene == "building_commander":
+                buildThread = threading.Thread(target=buildCommander, args=(option,))
 
                 buildThread.start()
                 buildThread.join()
                 running = False
 
-            if scene == 'review_code':
-                commander_name = input()
+
+            if scene == "review_code":
+                commander_name = input("Nombre del Commander: ")
                 reviewHandler.check_code(commander_name)
 
+
+                scene = "welcome"
+                sceneHandler.showScene(scene)
+
+            if scene == 'verificar_montarTablero':
+                option = verifyTablero()
+                if option == 's':
+                    running = False
+                    sys.exit()
                 scene = 'welcome'
                 sceneHandler.showScene(scene)
+
 
             if scene == 'test':
                 commander_name = input()
@@ -54,6 +70,7 @@ def start():
                 except KeyboardInterrupt:
                     scene = 'welcome'
                     sceneHandler.showScene(scene)
+
 
         else:
             running = False

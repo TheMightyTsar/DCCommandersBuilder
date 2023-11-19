@@ -18,8 +18,10 @@ def buildCommander(commanderName):
 
         with open(textPath) as baseFile:
             for line in baseFile:
+
                 if "{commander_name}" in line:
                     line = line.replace("{commander_name}", commanderName)
+
                 cFile.write(line)
     printMessage('Creado el modulo de comandante')
 

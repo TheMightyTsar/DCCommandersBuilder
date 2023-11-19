@@ -38,7 +38,9 @@ try:
 
     colorama.init(convert=True)
 
+
     from src.simulator.turn_manager import TurnManager
+
 
 except ModuleNotFoundError:
 
@@ -222,6 +224,7 @@ for commander in (args.commander1, args.commander2):
     module_spec.loader.exec_module(module)  # type: ignore
     commanders.append(module)
 
+
 wins = {commander: 0 for commander in (args.commander1, args.commander2)}
 
 
@@ -263,3 +266,4 @@ except KeyboardInterrupt:
     print(RED + prett("[!] keyboard interrupt"))
     print(RST)
     sys.exit()
+

@@ -531,7 +531,7 @@ class BaseCommander(ABC):
         return troops
 
     def __repr__(self):
-        return f"{self.nombre}"
+        return f"Commander {self.nombre}"
 
 
 if __name__ == "__main__":

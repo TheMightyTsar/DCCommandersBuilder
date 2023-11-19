@@ -1,3 +1,4 @@
+
 """Commander file for SoloScout."""
 
 import random
@@ -49,3 +50,4 @@ class Commander(BaseCommander):
     # Define aquí tus funciones adicionales
     def obtener_posicion(self):
         return random.choice(list(self.coordenadas_validas))
+

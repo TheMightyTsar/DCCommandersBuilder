@@ -15,6 +15,12 @@ from src.review.utils.print_styles import print_test_fail, print_test_pass
 
 def check_code(commanderName):
     # debe retornar True si el codigo es Valido
+
+    # Inmediatamente probar si el archivo existe
+    if not path.exists(path.join("commanders", f"{commanderName}", f"{commanderName}.py")):
+        print(f"No se ha encontrado el archivo {commanderName}.py\n")
+        return False
+
     print(f"Validando {commanderName}.py de {commanderName}... ")
     try:
         print("- Test funciones prohibidas...", end="")
@@ -40,6 +46,7 @@ def check_code(commanderName):
         print(f"Código {commanderName}.py inválido")
         print(f"Motivo: {error.args[0]}")
         error.imprimir_funciones_invalidas()
+        print("\n")
         return False
 
     except ModuloNoPermitido as error:
@@ -47,12 +54,14 @@ def check_code(commanderName):
         print(f"Código {commanderName}.py inválido")
         print(f"Motivo: {error.args[0]}")
         error.imprimir_modulos_invalidos()
+        print("\n")
         return False
 
     except (NameError, AttributeError, TypeError) as error:
         print_test_fail()
         print(f"Código {commanderName}.py inválido")
         print(f"Motivo: {error.args[0]}")
+        print("\n")
         return False
 
     except SyntaxError as error:
@@ -64,6 +73,7 @@ def check_code(commanderName):
         print(error.text, end="")
         print((error.offset - 1) * " " + "^\n")
         print("SyntaxError:", error.msg)
+        print("\n")
         return False
 
     return True
@@ -108,11 +118,11 @@ def check_imported_modules(commanderName, user_module):
     '''
 
     modules_whitelist = [
-        "itertools", "importlib", "sys", "math", "random", "time"
+        "itertools", "importlib", "sys", "math", "random", "time",
     ]
 
     functions_blacklist = [
-        "rmdir", "mkdir"
+        "rmdir", "mkdir", "call", "exec", "eval"
     ]
 
     # Modificar archivo commander.py para agregar función get_globals
@@ -198,7 +208,15 @@ def check_commander_structure(user_module, commanderName):
             f"El método \"montar_tropas\" de la clase Commander no es válido. Motivo: {error.args[0]}") from error
 
     try:
+
         commander.jugar_turno(mock_informe, mock_informe_enemigo)
+
     except AttributeError:
         raise AttributeError(
             "No se ha encontrado el método obligatorio \"jugar_turno\" en la clase Commander.")
+    
+    try:
+        commander.__repr__()
+    except AttributeError:
+        raise AttributeError(
+            "No se ha encontrado el método obligatorio \"__repr__\" en la clase Commander.")
