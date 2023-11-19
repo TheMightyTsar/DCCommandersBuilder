@@ -1,12 +1,11 @@
 
-
+import sys
 
 if __name__ == "__main__":
 
-
-    import src.builderMaster
-
-    src.builderMaster.start()
-
-
+    if len(sys.argv) == 1:
+        import src.builderMaster
+        src.builderMaster.start()
+    else:
+        import src.simulator
 

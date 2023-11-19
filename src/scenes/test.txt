@@ -1,4 +1,12 @@
+
+Para enfrentamientos personalizados, escribe en la consola:
+    python main.py -h
+        o
+    python3 main.py -h
+
+y sigue las instrucciones.
+
 ========================================
-|   Pon a prueba tu Commander          |
+|   Prueba un Commander                |
 ========================================
     Ingresa su nombre:

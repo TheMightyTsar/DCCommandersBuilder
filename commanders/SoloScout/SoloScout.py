@@ -1,38 +1,53 @@
+
+"""Commander file for SoloScout."""
+
 import random
 
-from commanders.SoloScout.troops.scout import Scout
-from commanders.SoloScout.parametros import ATACAR, BAJAS
-from commanders.SoloScout.parametros import TUPLE_TO_COORD as TC
+from src.base_files.base_classes import BaseCommander
+from src.base_files.parametros import (ATACAR, GAUSS, HIMARS, MOVER, SCOUT,
+                                       SOLDIER, TOWER)
 
 
-class Commander:
+class Commander(BaseCommander):
+    """Commander SoloScout."""
+
     def __init__(self):
-        self.name = 'SoloScout'
-        self.tropas = {}
+        super().__init__(nombre="SoloScout")
+        # Define aquí atributos adicionales para tu comandante
 
     def montar_tropas(self):
-        tropas = []
+        # Define aquí las posciciones iniciales de tus tropas
 
-        scout1 = Scout("A5")
-        scout2 = Scout("D7")
+        p = random.sample(self.coordenadas_validas, 12)
 
-        self.tropas[scout1.id] = scout1
-        self.tropas[scout2.id] = scout2
+        tropas = {
+            SOLDIER: [p[0], p[1], p[2], p[3], p[4]],
 
-        tropas.append([scout1.id, scout1.type, scout1.pos])
-        tropas.append([scout2.id, scout2.type, scout2.pos])
+            HIMARS: [p[5], p[6]],
 
-        return tropas
+            SCOUT: [p[7], p[8]],
 
-    def jugar_turno(self, informe: dict, informe_enemigo: dict):
+            GAUSS: [p[9], p[10]],
 
+            TOWER: [p[11]],
+        }
+
+        my_troops, troop_list = self.instanciar_tropas(tropas)
+
+        self.tropas = my_troops
+
+        return troop_list
+
+    def jugar_turno(self, reporte, reporte_enemigo):
+        # Completa tu código aquí
         for _id, tropa in self.tropas.items():
-            if _id in informe[BAJAS]:
+            if _id in reporte_enemigo.eliminaciones:
                 continue
-            return [tropa.id, ATACAR, self.obtener_posicion()]
+            if tropa.tipo == SCOUT:
+                return [tropa.id, ATACAR, self.obtener_posicion()]
+            # Si no quedan scouts, el comandante enviara acciones invalidas
 
+    # Define aquí tus funciones adicionales
     def obtener_posicion(self):
-        return random.choice(list(TC.values()))
+        return random.choice(list(self.coordenadas_validas))
 
-    def __repr__(self) -> str:
-        return self.name

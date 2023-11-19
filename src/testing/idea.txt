@@ -1,5 +1,0 @@
-En este módulo la gracia es definir algunos test que llamen a los métodos del
-comandante programado, una vez validados por el reviewHandler
-
-Se pueden probar los outputs de las funciones importantes en cada caso, para ayudar
-a debuggear sus funcionalidades

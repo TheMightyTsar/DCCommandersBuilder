@@ -1,43 +1,61 @@
+
+"""Commander file for SoloAtaque."""
+
+
 import random
 
-from commanders.SoloAtaque.troops.grenadier import Grenadier
-from commanders.SoloAtaque.troops.soldier import Soldier
-from commanders.SoloAtaque.troops.tower import Tower
-from commanders.SoloAtaque.parametros import ATACAR, BAJAS
-from commanders.SoloAtaque.parametros import TUPLE_TO_COORD as TC
+from src.base_files.base_classes import BaseCommander
+from src.base_files.parametros import (ATACAR, GAUSS, HIMARS, MOVER, SCOUT,
+                                       SOLDIER, TOWER)
 
 
-class Commander:
+class Commander(BaseCommander):
+    """Commander SoloAtaque."""
+
     def __init__(self):
-        self.name = 'SoloAtaque'
-        self.tropas = {}
+        super().__init__(nombre="SoloAtaque")
+        # Define aquí atributos adicionales para tu comandante
+        self.attacked_cells = set()
 
     def montar_tropas(self):
-        tropas = []
+        # Define aquí las posciciones iniciales de tus tropas
 
-        granadero = Grenadier("A5")
-        tower = Tower("A6")
-        soldado = Soldier("D8")
+        p = random.sample(self.coordenadas_validas, 12)
 
-        self.tropas[granadero.id] = granadero
-        self.tropas[tower.id] = tower
-        self.tropas[soldado.id] = soldado
+        tropas = {
+            SOLDIER: [p[0], p[1], p[2], p[3], p[4]],
 
-        tropas.append([granadero.id, granadero.type, granadero.pos])
-        tropas.append([tower.id, tower.type, tower.pos])
-        tropas.append([soldado.id, soldado.type, soldado.pos])
+            HIMARS: [p[5], p[6]],
 
-        return tropas
+            SCOUT: [p[7], p[8]],
 
-    def jugar_turno(self, informe: dict, informe_enemigo: dict):
+            GAUSS: [p[9], p[10]],
 
+            TOWER: [p[11]],
+        }
+
+        my_troops, troop_list = self.instanciar_tropas(tropas)
+
+        self.tropas = my_troops
+
+        return troop_list
+
+    def jugar_turno(self, reporte, reporte_enemigo):
+        # Completa tu código aquí
+
+        self.attacked_cells.update(reporte.ataques)
         for _id, tropa in self.tropas.items():
-            if _id in informe[BAJAS]:
+            if _id in reporte_enemigo.eliminaciones:
                 continue
+            if tropa.tipo == GAUSS:
+                return [tropa.id, ATACAR, tropa.coord]
             return [tropa.id, ATACAR, self.obtener_posicion()]
 
+    # Define aquí tus funciones adicionales
     def obtener_posicion(self):
-        return random.choice(list(TC.values()))
+        for pos in self.coordenadas_validas:
+            if pos not in self.attacked_cells:
+                return pos
 
-    def __repr__(self) -> str:
-        return self.name
+        self.attacked_cells.clear()
+        return random.choice(list(self.coordenadas_validas))

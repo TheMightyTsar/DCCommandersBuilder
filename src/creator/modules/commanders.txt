@@ -1,18 +1,39 @@
+"""Commander file for {commander_name}."""
 
-class Commander:
+
+from src.base_files.base_classes import BaseCommander
+from src.base_files.parametros import (ATACAR, GAUSS, HIMARS, MOVER, SCOUT, SOLDIER, TOWER)
+
+
+class Commander(BaseCommander):
+    """Commander {commander_name}."""
+
     def __init__(self):
-        self.name =
-
+        super().__init__(nombre="{commander_name}")
+        # Define aquí atributos adicionales para tu comandante
 
     def montar_tropas(self):
-        tropas = [[]]
+        # Define aquí las posciciones iniciales de tus tropas
+        tropas = {
+            SOLDIER: ["A0", "A1", "A2", "A3", "A4"],
 
-        return(tropas)
+            HIMARS: ["B0", "B1"],
 
-    def jugar_turno(self, informe, informeEnemigo):
-        orden = []
+            SCOUT: ["C0", "C1"],
 
-        return(orden)
+            GAUSS: ["D0", "D1"],
 
-    def __repr__(self):
-        return(self.name)
+            TOWER: ["E0"],
+        }
+
+        my_troops, troop_list = self.instanciar_tropas(tropas)
+
+        self.tropas = my_troops
+
+        return troop_list
+
+    def jugar_turno(self, reporte, reporte_enemigo):
+        # Completa tu código aquí
+        ...
+
+    # Define aquí tus funciones adicionales

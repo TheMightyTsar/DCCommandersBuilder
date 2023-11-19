@@ -1,8 +1,7 @@
-import sys
+import subprocess
 import threading
-import os
 
-
+import sys
 from src.prueba import turn_manager
 from src.creator.commanderBuilder import buildCommander
 from src.review import reviewHandler
@@ -49,11 +48,28 @@ def start():
                     sys.exit()
                 scene = 'welcome'
                 sceneHandler.showScene(scene)
-            if scene == 'prueba':
-                turn_manager.start()
-                print('salio del juego')
-                scene = 'welcome'
-                sceneHandler.showScene(scene)
+
+
+            if scene == 'test':
+                commander_name = input()
+
+                try:
+                    _ = subprocess.run(
+                        ['python', 'main.py', '-c1', commander_name], check=True, shell=True)
+
+                    scene = 'welcome'
+                    sceneHandler.showScene(scene)
+
+                except FileNotFoundError:
+                    _ = subprocess.run(
+                        ['python3', 'main.py', '-c1', commander_name], check=True, shell=True)
+
+                    scene = 'welcome'
+                    sceneHandler.showScene(scene)
+
+                except KeyboardInterrupt:
+                    scene = 'welcome'
+                    sceneHandler.showScene(scene)
 
 
         else:
