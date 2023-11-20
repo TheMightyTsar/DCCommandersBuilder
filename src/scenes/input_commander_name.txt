@@ -3,5 +3,3 @@
 ========================================
 [v] para volver al menu
 [s] para Salir...
-
-    Ingresa su nombre:
