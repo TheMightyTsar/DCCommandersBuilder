@@ -48,7 +48,7 @@ def start():
                 sceneHandler.showScene(scene)
 
             if scene == "test":
-                c1 = input("Nombre del Commander: ")
+                c1 = input()
 
                 try:
                     if (
