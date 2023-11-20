@@ -8,17 +8,26 @@ import colorama
 
 # from icecream import ic
 import src.simulator.server_troops as troops
-from src.base_files.base_classes import BaseCommander, Movement, Report
-from src.base_files.parametros import (ACCIONES, ATACAR, AVAILABLE_TROOPS,
-                                       CANTIDAD_TOTAL_TROPAS, COORD_TO_TUPLE,
-                                       GAUSS, HIMARS, MOVER, SCOUT, SOLDIER,
-                                       TOWER)
+from src.base_files.base_classes import Movement, Report
+from src.base_files.parametros import (
+    ACCIONES,
+    ATACAR,
+    AVAILABLE_TROOPS,
+    CANTIDAD_TOTAL_TROPAS,
+    COORD_TO_TUPLE,
+    GAUSS,
+    HIMARS,
+    MOVER,
+    SCOUT,
+    SOLDIER,
+    TOWER,
+)
 
-GRN = colorama.Style.BRIGHT + colorama.Fore.GREEN   # ? MOVE
-RED = colorama.Style.BRIGHT + colorama.Fore.RED     # ? HIT
+GRN = colorama.Style.BRIGHT + colorama.Fore.GREEN  # ? MOVE
+RED = colorama.Style.BRIGHT + colorama.Fore.RED  # ? HIT
 YEL = colorama.Style.BRIGHT + colorama.Fore.YELLOW  # ? MISS
-CYA = colorama.Style.BRIGHT + colorama.Fore.CYAN    # ? DETECT HIT
-BLU = colorama.Style.BRIGHT + colorama.Fore.BLUE    # ? DETECT MISS
+CYA = colorama.Style.BRIGHT + colorama.Fore.CYAN  # ? DETECT HIT
+BLU = colorama.Style.BRIGHT + colorama.Fore.BLUE  # ? DETECT MISS
 BLD = colorama.Style.BRIGHT
 RST = colorama.Style.RESET_ALL
 
@@ -71,11 +80,11 @@ class TurnManager:
                 self.build_player(player)
             except PlayerBuildException as e:
                 print(
-                    f"Commander {player.nombre} tuvo un error montando el tablero: {e}")
+                    f"Commander {player.nombre} tuvo un error montando el tablero: {e}"
+                )
                 return self.win(self.get_enemy(player))
             except Exception as e:
-                print(
-                    f"Commander {player.nombre} tuvo un error montando el tablero")
+                print(f"Commander {player.nombre} tuvo un error montando el tablero")
                 print_exception(e)
                 return self.win(self.get_enemy(player))
             if self.prints:
@@ -149,8 +158,7 @@ class TurnManager:
 
         ids = [troop.id for troop in troops_dict.values()]
         if len(ids) != len(set(ids)):
-            raise PlayerBuildException(
-                f"Ids inválidas, hay tropas con ids repetidas")
+            raise PlayerBuildException(f"Ids inválidas, hay tropas con ids repetidas")
         positions = [troop.pos for troop in troops_dict.values()]
         if len(positions) != len(set(positions)):
             raise PlayerBuildException(
@@ -207,8 +215,7 @@ class TurnManager:
                 self.exception_counter[player.nombre] = 0
             except Exception as e:
                 if self.prints:
-                    print(
-                        f"El jugador {player} levantó una excepción en su codigo:")
+                    print(f"El jugador {player} levantó una excepción en su codigo:")
                     print_exception(e)
                 if self.exception_break:
                     break
@@ -221,8 +228,7 @@ class TurnManager:
                 self.validate_action(accion, player)
             except InvalidActionException as e:
                 if self.prints:
-                    print(
-                        f"EL jugador {player} mandó una acción inválida: {e}")
+                    print(f"EL jugador {player} mandó una acción inválida: {e}")
                 if self.invalid_action_break:
                     break
                 self.pasar_turno()
@@ -294,14 +300,12 @@ class TurnManager:
         elif acc == MOVER:
             can_move = tropa.move(pos)
             if not can_move:
-                self.reportes[player.nombre].movimiento = Movement(
-                    False, tropa.id, pos)
+                self.reportes[player.nombre].movimiento = Movement(False, tropa.id, pos)
                 raise InvalidActionException(
                     f"Movimiento inválido, la tropa de id {tropa.id} y tipo {tropa.type} no puede moverse a la posición {pos}"
                 )
             if not self.pos_is_empty(player, pos):
-                self.reportes[player.nombre].movimiento = Movement(
-                    False, tropa.id, pos)
+                self.reportes[player.nombre].movimiento = Movement(False, tropa.id, pos)
                 raise InvalidActionException(
                     f"Movimiento inválido, la posición {pos} está ocupada"
                 )
@@ -324,9 +328,13 @@ class TurnManager:
         """
         Finds the winner in case of timeout
         """
-        if len(self.troops[self.player_1.nombre]) > len(self.troops[self.player_2.nombre]):
+        if len(self.troops[self.player_1.nombre]) > len(
+            self.troops[self.player_2.nombre]
+        ):
             return self.win(self.player_1)
-        elif len(self.troops[self.player_1.nombre]) < len(self.troops[self.player_2.nombre]):
+        elif len(self.troops[self.player_1.nombre]) < len(
+            self.troops[self.player_2.nombre]
+        ):
             return self.win(self.player_2)
         return self.win(random.choice(self.players))
 
@@ -334,9 +342,9 @@ class TurnManager:
         """
         Prints the winner
         """
-        self.winner = player
+        self.winner = player.nombre
         if self.prints:
-            print(f"El jugador {player} ganó!")
+            print(f"El comandante {player.nombre} ganó!")
 
     def turn_into_enemy_report(self, player, ids_detectados: list[int]) -> Report:
         """
@@ -345,7 +353,8 @@ class TurnManager:
         reporte = self.reportes[player.nombre]
         new_reporte = Report(ataques=reporte.ataques)
         new_reporte.eliminaciones = list(
-            self.muertos[self.get_enemy(player).nombre].keys())
+            self.muertos[self.get_enemy(player).nombre].keys()
+        )
         new_reporte.detecciones = ids_detectados
         return new_reporte
 
@@ -391,8 +400,7 @@ class TurnManager:
             for id, troop in self.troops[enemy.nombre].items():
                 if troop.pos == pos:
                     pos_bajas.append(pos)
-                    self.muertos[enemy.nombre][id] = self.troops[enemy.nombre].pop(
-                        id)
+                    self.muertos[enemy.nombre][id] = self.troops[enemy.nombre].pop(id)
                     break
         return pos_bajas
 
@@ -465,8 +473,7 @@ class TurnManager:
                     old_pos = COORD_TO_TUPLE[old_pos]
                     board[old_pos[0]][old_pos[1]] = f"{GRN}.{RST}"
                     pos = COORD_TO_TUPLE[self.troops[player.nombre][_id].pos]
-                    board[pos[0]][pos[1]
-                                  ] = f"{GRN}{board[pos[0]][pos[1]]}{RST}"
+                    board[pos[0]][pos[1]] = f"{GRN}{board[pos[0]][pos[1]]}{RST}"
             if player == self.player_2:
                 self.mirror_board(board)
             boards.append(board)
