@@ -134,14 +134,14 @@ CANTIDAD_TOTAL_TROPAS = sum(AVAILABLE_TROOPS.values())
 
 
 COMMANDS = [
-    ["python3", "-m", "pip3", "install", "-r", "requirements.txt"],
-    ["python3", "-m", "pip", "install", "-r", "requirements.txt"],
     ["pip", "install", "-r", "requirements.txt"],
     ["pip3", "install", "-r", "requirements.txt"],
     ["py", "-m", "pip", "install", "-r", "requirements.txt"],
     ["py", "-m", "pip3", "install", "-r", "requirements.txt"],
     ["python", "-m", "pip", "install", "-r", "requirements.txt"],
     ["python", "-m", "pip3", "install", "-r", "requirements.txt"],
+    ["python3", "-m", "pip", "install", "-r", "requirements.txt"],
+    ["python3", "-m", "pip3", "install", "-r", "requirements.txt"],
 ]
 
 
