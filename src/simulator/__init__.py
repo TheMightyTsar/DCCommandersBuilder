@@ -34,30 +34,34 @@ def logo(commander1_name, commander2_name) -> None:
     _ = subprocess.run([CLEAR], shell=True)
     font = "cosmic"
     color1, color2, color3, _ = COLOR_SAMPLE
-    print(color1 + "_" * os.get_terminal_size().columns, end="\n" * 2)
+    try:
+        width = os.get_terminal_size().columns
+    except OSError:
+        width = 160
+    print(color1 + "_" * width, end="\n" * 2)
     print(
         color2
         + pyfiglet.figlet_format(
             "DCCommanders",
             font=font,
             justify="center",
-            width=os.get_terminal_size().columns,
+            width=width,
         ),
         end="",
     )
-    print(color1 + "_" * os.get_terminal_size().columns, end="\n" * 2 + RST)
+    print(color1 + "_" * width, end="\n" * 2 + RST)
     print(
         color3
         + pyfiglet.figlet_format(
             f"{commander1_name}\nvs\n{commander2_name}",
             font=font,
             justify="center",
-            width=os.get_terminal_size().columns,
+            width=width,
         ),
         end="",
     )
 
-    print(color1 + "_" * os.get_terminal_size().columns, end=RST)
+    print(color1 + "_" * width, end=RST)
 
 
 bots = {"JorGeneral", "SoloAtaque", "SoloMover", "SoloScout"}
