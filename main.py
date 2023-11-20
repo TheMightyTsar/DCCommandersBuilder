@@ -1,11 +1,14 @@
+"""Runs the builder or simulator depending on the command line arguments."""
 
 import sys
 
-if __name__ == "__main__":
+from installer import install_dependencies
 
-    if len(sys.argv) == 1:
-        import src.builderMaster
-        src.builderMaster.start()
-    else:
-        import src.simulator
+install_dependencies()
 
+if len(sys.argv) == 1:
+    import src.builderMaster
+
+    src.builderMaster.start()
+else:
+    import src.simulator

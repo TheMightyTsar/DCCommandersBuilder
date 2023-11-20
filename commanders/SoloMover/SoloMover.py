@@ -1,11 +1,17 @@
-
 """Commander file for SoloMover."""
 
 import random
 
 from src.base_files.base_classes import BaseCommander
-from src.base_files.parametros import (ATACAR, GAUSS, HIMARS, MOVER, SCOUT,
-                                       SOLDIER, TOWER)
+from src.base_files.parametros import (
+    ATACAR,
+    GAUSS,
+    HIMARS,
+    MOVER,
+    SCOUT,
+    SOLDIER,
+    TOWER,
+)
 
 
 class Commander(BaseCommander):
@@ -22,13 +28,9 @@ class Commander(BaseCommander):
 
         tropas = {
             SOLDIER: [p[0], p[1], p[2], p[3], p[4]],
-
             HIMARS: [p[5], p[6]],
-
             SCOUT: [p[7], p[8]],
-
             GAUSS: [p[9], p[10]],
-
             TOWER: [p[11]],
         }
 
@@ -64,7 +66,6 @@ class Commander(BaseCommander):
 
                 # Si la tropa es una torre o gauss, se ignora ya que no se puede mover
                 if tropa.tipo in [TOWER, GAUSS]:
-
                     continue
 
                 # Se obtienen las posiciones a las que se puede mover la tropa
@@ -75,11 +76,9 @@ class Commander(BaseCommander):
 
                 # Se itera sobre las posiciones posibles
                 for pos in posibles:
-
                     # Si la posicion esta ocupada por una tropa aliada, se ignora
                     if pos in my_troop_pos:
                         continue
-
 
                     # Si la posicion no esta ocupada, se retorna la accion
                     return [_id, MOVER, pos]
@@ -88,17 +87,13 @@ class Commander(BaseCommander):
 
         # Si no se detecto ninguna tropa...
         else:
-
             # Se randomiza el orden de las tropas del comandante
-            tropas = random.sample(
-                list(self.tropas.values()), len(self.tropas))
+            tropas = random.sample(list(self.tropas.values()), len(self.tropas))
 
             # Se itera sobre las tropas
             for tropa in tropas:
-
                 # Si la tropa es una torre o gauss, se ignora ya que no se puede mover
                 if tropa.tipo in [TOWER, GAUSS]:
-
                     continue
 
                 # Se obtienen las posiciones a las que se puede mover la tropa
@@ -108,14 +103,11 @@ class Commander(BaseCommander):
 
                 # Se itera sobre las posiciones posibles
                 for pos in posibles:
-
                     # Si la posicion esta ocupada por una tropa aliada, se ignora
                     if pos in my_troop_pos:
                         continue
-
 
                     # Si la posicion no esta ocupada, se retorna la accion
                     return [tropa.id, MOVER, pos]
 
     # Define aquí tus funciones adicionales
-

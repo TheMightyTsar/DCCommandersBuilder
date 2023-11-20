@@ -1,20 +1,23 @@
+menus = {
+    "welcome": {
+        "0": "input_commander_name",
+        "1": "input_review_code",
+        "2": "manual",
+        "3": "verificar_montarTablero",
+        "4": "test",
+    },
+    "input_commander_name": {"0": "building_commander", "v": "welcome"},
+    "input_review_code": {"0": "review_code", "v": "welcome"},
+    "manual": {"v": "welcome"},
+    "test": {"v": "welcome"},
+    "verificar_montarTablero": {"v": "welcome"},
+}
 
-
-menus = {'welcome': {'0': 'input_commander_name', '1': 'input_review_code', '2': 'manual', '3': 'verificar_montarTablero',
-                     '4': 'prueba'},
-         'input_commander_name': {'0': 'building_commander', 'v': 'welcome'},
-         'input_review_code': {'0': 'review_code', 'v': 'welcome'},
-         'manual': {'v': 'welcome'},
-         'test': {'v': 'welcome'},
-         'verificar_montarTablero': {'v': 'welcome'}}
-
-invalidCharacters = [' ', 'ñ', '!', '.']
-
-message = 'Usaste caracteres no validos, no ocupes caracteres NO alfanumericos'
+message = "Usaste caracteres no validos, no ocupes caracteres NO alfanumericos"
 
 
 def showScene(scene):
-    file_name = 'src/scenes/'+scene+'.txt'
+    file_name = "src/scenes/" + scene + ".txt"
     with open(file_name) as escena:
         print(escena.read())
         pass
@@ -23,20 +26,20 @@ def showScene(scene):
 
 def changeScene(scene, option):
     nextScene = menus[scene].get(option, scene)
-    print(nextScene)
-    if scene == 'input_commander_name':
+
+    if nextScene == "input_commander_name":
         verificacionNombre = verifyCommanderName(option)
         if verificacionNombre:
-            nextScene = menus[scene].get('0', scene)
-    if scene == 'input_review_code' and option != 'v':
-        nextScene = menus[scene].get('0', scene)
+            nextScene = menus[nextScene].get("0", scene)
+    if nextScene == "input_review_code" and option != "v":
+        nextScene = menus[nextScene].get("0", scene)
 
     return nextScene
 
 
 def verifyCommanderName(name):
     name = name.strip()
-    notification = f'Saludos comandante {name}'
+    notification = f"Saludos comandante {name}"
     valid = True
 
     valid = name.isalnum()
@@ -48,8 +51,8 @@ def verifyCommanderName(name):
     if not valid:
         notification = message
 
-    print("-"*10)
+    print("-" * 10)
     print(notification)
-    print("-"*10)
+    print("-" * 10)
 
     return valid

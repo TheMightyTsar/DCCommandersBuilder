@@ -24,7 +24,6 @@ COORD_TO_TUPLE: dict[str, tuple[int, int]] = {
     "A7": (7, 0),
     "A8": (8, 0),
     "A9": (9, 0),
-
     "B0": (0, 1),
     "B1": (1, 1),
     "B2": (2, 1),
@@ -35,7 +34,6 @@ COORD_TO_TUPLE: dict[str, tuple[int, int]] = {
     "B7": (7, 1),
     "B8": (8, 1),
     "B9": (9, 1),
-
     "C0": (0, 2),
     "C1": (1, 2),
     "C2": (2, 2),
@@ -46,7 +44,6 @@ COORD_TO_TUPLE: dict[str, tuple[int, int]] = {
     "C7": (7, 2),
     "C8": (8, 2),
     "C9": (9, 2),
-
     "D0": (0, 3),
     "D1": (1, 3),
     "D2": (2, 3),
@@ -57,7 +54,6 @@ COORD_TO_TUPLE: dict[str, tuple[int, int]] = {
     "D7": (7, 3),
     "D8": (8, 3),
     "D9": (9, 3),
-
     "E0": (0, 4),
     "E1": (1, 4),
     "E2": (2, 4),
@@ -68,7 +64,6 @@ COORD_TO_TUPLE: dict[str, tuple[int, int]] = {
     "E7": (7, 4),
     "E8": (8, 4),
     "E9": (9, 4),
-
     "F0": (0, 5),
     "F1": (1, 5),
     "F2": (2, 5),
@@ -79,7 +74,6 @@ COORD_TO_TUPLE: dict[str, tuple[int, int]] = {
     "F7": (7, 5),
     "F8": (8, 5),
     "F9": (9, 5),
-
     "G0": (0, 6),
     "G1": (1, 6),
     "G2": (2, 6),
@@ -90,7 +84,6 @@ COORD_TO_TUPLE: dict[str, tuple[int, int]] = {
     "G7": (7, 6),
     "G8": (8, 6),
     "G9": (9, 6),
-
     "H0": (0, 7),
     "H1": (1, 7),
     "H2": (2, 7),
@@ -101,7 +94,6 @@ COORD_TO_TUPLE: dict[str, tuple[int, int]] = {
     "H7": (7, 7),
     "H8": (8, 7),
     "H9": (9, 7),
-
     "I0": (0, 8),
     "I1": (1, 8),
     "I2": (2, 8),
@@ -112,7 +104,6 @@ COORD_TO_TUPLE: dict[str, tuple[int, int]] = {
     "I7": (7, 8),
     "I8": (8, 8),
     "I9": (9, 8),
-
     "J0": (0, 9),
     "J1": (1, 9),
     "J2": (2, 9),
@@ -141,5 +132,18 @@ AVAILABLE_TROOPS = {
 
 CANTIDAD_TOTAL_TROPAS = sum(AVAILABLE_TROOPS.values())
 
+
+COMMANDS = [
+    ["pip", "install", "-r", "requirements.txt"],
+    ["pip3", "install", "-r", "requirements.txt"],
+    ["py", "-m", "pip", "install", "-r", "requirements.txt"],
+    ["py", "-m", "pip3", "install", "-r", "requirements.txt"],
+    ["python", "-m", "pip", "install", "-r", "requirements.txt"],
+    ["python", "-m", "pip3", "install", "-r", "requirements.txt"],
+    ["python3", "-m", "pip", "install", "-r", "requirements.txt"],
+    ["python3", "-m", "pip3", "install", "-r", "requirements.txt"],
+]
+
+
 if __name__ == "__main__":
-    ...
+    pass

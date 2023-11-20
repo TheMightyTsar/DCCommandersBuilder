@@ -1,11 +1,17 @@
 """Commander file for JorGeneral."""
 
-
 import random
 
 from src.base_files.base_classes import BaseCommander
-from src.base_files.parametros import (ATACAR, GAUSS, HIMARS, MOVER, SCOUT,
-                                       SOLDIER, TOWER)
+from src.base_files.parametros import (
+    ATACAR,
+    GAUSS,
+    HIMARS,
+    MOVER,
+    SCOUT,
+    SOLDIER,
+    TOWER,
+)
 
 
 class Commander(BaseCommander):
@@ -24,13 +30,9 @@ class Commander(BaseCommander):
 
         tropas = {
             SOLDIER: [p[0], p[1], p[2], p[3], p[4]],
-
             HIMARS: [p[5], p[6]],
-
             SCOUT: [p[7], p[8]],
-
             GAUSS: [p[9], p[10]],
-
             TOWER: [p[11]],
         }
 
@@ -91,7 +93,8 @@ class Commander(BaseCommander):
             if ids_actuales[SCOUT]:
                 for _id in ids_actuales[SCOUT]:
                     coord = filter(
-                        lambda x: x not in self.attacked_cells, self.coordenadas_validas)
+                        lambda x: x not in self.attacked_cells, self.coordenadas_validas
+                    )
                     pos = random.choice(list(coord))
                     return [_id, ATACAR, pos]
 
@@ -104,7 +107,9 @@ class Commander(BaseCommander):
                     if ids_actuales[priority]:
                         for _id in ids_actuales[priority]:
                             pos = filter(
-                                lambda x: x not in self.attacked_cells, self.coordenadas_validas)
+                                lambda x: x not in self.attacked_cells,
+                                self.coordenadas_validas,
+                            )
                             pos = random.choice(list(pos))
                             return [_id, ATACAR, pos]
                     else:
