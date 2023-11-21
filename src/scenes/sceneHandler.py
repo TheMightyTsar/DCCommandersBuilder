@@ -27,10 +27,10 @@ def showScene(scene):
 def changeScene(scene, option):
     nextScene = menus[scene].get(option, scene)
 
-    if nextScene == "input_commander_name":
+    if scene == "input_commander_name":
         verificacionNombre = verifyCommanderName(option)
         if verificacionNombre:
-            nextScene = menus[nextScene].get("0", scene)
+            nextScene = menus[scene].get("0", scene)
     if nextScene == "input_review_code" and option != "v":
         nextScene = menus[nextScene].get("0", scene)
 
