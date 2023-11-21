@@ -174,22 +174,27 @@ try:
             sorted(win_rates.items(), key=lambda item: item[1], reverse=True)
         )
 
-        print()
-        print(prett("Resultados:"))
-        print()
-        print(
-            GRE
-            + prett(
-                f"{list(win_rates.keys())[0]}: {list(win_rates.values())[0]}", mode="n"
+        try:
+            print()
+            print(prett("Resultados:"))
+            print()
+            print(
+                GRE
+                + prett(
+                    f"{list(win_rates.keys())[0]}: {list(win_rates.values())[0]}",
+                    mode="n",
+                )
             )
-        )
-        print(
-            RED
-            + prett(
-                f"{list(win_rates.keys())[1]}: {list(win_rates.values())[1]}", mode="n"
+            print(
+                RED
+                + prett(
+                    f"{list(win_rates.keys())[1]}: {list(win_rates.values())[1]}",
+                    mode="n",
+                )
             )
-        )
-        print(RST)
+            print(RST)
+        except IndexError:
+            pass
 
 except KeyboardInterrupt:
     print()
