@@ -475,7 +475,7 @@ class BaseCommander(ABC):
             id_tropa = reporte.movimiento.id_tropa
             posicion = reporte.movimiento.coord
 
-            if resultado is True:
+            if resultado is True and id_tropa in self.tropas:
                 self.tropas[id_tropa].coord = posicion
 
     def obtener_ids(self) -> dict[str, list[int]]:
