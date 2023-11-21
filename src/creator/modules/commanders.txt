@@ -1,8 +1,8 @@
 """Commander file for {commander_name}."""
 
 
-from src.base_files.base_classes import BaseCommander
-from src.base_files.parametros import (ATACAR, GAUSS, HIMARS, MOVER, SCOUT, SOLDIER, TOWER)
+from commanders.{commander_name}.clasesBase import BaseCommander, Soldier, Scout, Gauss, Himars, Tower
+from commanders.{commander_name}.parametros import (ATACAR, GAUSS, HIMARS, MOVER, SCOUT, SOLDIER, TOWER)
 
 
 class Commander(BaseCommander):
@@ -15,36 +15,36 @@ class Commander(BaseCommander):
     def montar_tropas(self):
         # Define aquí las posciciones iniciales de tus tropas
 
-        self.Soldier0 = soldier('pos')
-        self.Soldier1 = soldier('pos')
-        self.Soldier2 = soldier('pos')
-        self.Soldier3 = soldier('pos')
-        self.Soldier4 = soldier('pos')
+        self.Soldier0 = Soldier('pos')
+        self.Soldier1 = Soldier('pos')
+        self.Soldier2 = Soldier('pos')
+        self.Soldier3 = Soldier('pos')
+        self.Soldier4 = Soldier('pos')
 
-        self.Scout0 = scout('pos')
-        self.Scout1 = scout('pos')
+        self.Scout0 = Scout('pos')
+        self.Scout1 = Scout('pos')
 
-        self.Himars0 = himars('pos')
-        self.Himars1 = himars('pos')
+        self.Himars0 = Himars('pos')
+        self.Himars1 = Himars('pos')
 
-        self.Gauss0 = gauss('pos')
-        self.Gauss1 = gauss('pos')
+        self.Gauss0 = Gauss('pos')
+        self.Gauss1 = Gauss('pos')
 
-        self.Torre0 = tower('pos')
+        self.Torre0 = Tower('pos')
 
         tropas = [
-                self.Soldier0,
-                self.Soldier1,
-                self.Soldier2,
-                self.Soldier3,
-                self.Soldier4,
-                self.Scout0,
-                self.Scout1,
-                self.Himars0,
-                self.Himars1,
-                self.Gauss0,
-                self.Gauss1,
-                self.Torre0
+                [self.Soldier0.id, self.Soldier0.tipo, self.Soldier0.coord],
+                [self.Soldier1.id, self.Soldier1.tipo, self.Soldier1.coord],
+                [self.Soldier2.id, self.Soldier2.tipo, self.Soldier2.coord],
+                [self.Soldier3.id, self.Soldier3.tipo, self.Soldier3.coord],
+                [self.Soldier4.id, self.Soldier4.tipo, self.Soldier4.coord],
+                [self.Scout0.id, self.Scout0.tipo, self.Scout0.coord],
+                [self.Scout1.id, self.Scout1.tipo, self.Scout1.coord],
+                [self.Himars0.id, self.Himars0.tipo, self.Himars0.coord],
+                [self.Himars1.id, self.Himars1.tipo, self.Himars1.coord],
+                [self.Gauss0.id, self.Gauss0.tipo, self.Gauss0.coord],
+                [self.Gauss1.id, self.Gauss1.tipo, self.Gauss1.coord],
+                [self.Torre0.id, self.Torre0.tipo, self.Torre0.coord]
                 ]
 
         return tropas

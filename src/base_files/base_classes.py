@@ -33,6 +33,7 @@ class BaseTroop(ABC):
     >>> id : int
     >>> tipo : str
     >>> coord : str
+    >>> condicion : str
 
     Métodos
     -------
@@ -44,6 +45,7 @@ class BaseTroop(ABC):
                     on_setattr=setters.frozen)
     tipo: str = field(kw_only=True, on_setattr=setters.frozen)
     coord: str = field(kw_only=True, validator=validators.in_(CTT))
+    condicion: str = field(default="perfecta")
 
     @abstractmethod
     def mover(self) -> list[str]:
