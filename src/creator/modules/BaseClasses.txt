@@ -257,7 +257,7 @@ class BaseCommander(ABC):
     Atributos
     ---------
     >>> nombre : str
-    >>> tropas : dict[int, BaseTroop]
+    >>> tropas : list
     >>> coordenadas_validas : list[str]
 
     Métodos Obligatorios
@@ -270,7 +270,6 @@ class BaseCommander(ABC):
 
     """
     nombre: str = field(kw_only=True, on_setattr=setters.frozen)
-    tropas: dict[int, BaseTroop] = field(init=False)
     coordenadas_validas: list[str] = field(
         init=False, factory=CTT.keys, on_setattr=setters.frozen)
 
@@ -399,53 +398,57 @@ class BaseCommander(ABC):
 
             if resultado is True:
                 for tropa in self.tropas:
-                    if (tropa.id == id_tropa) and (tropa.condicion == "perfecta")
+                    if (tropa.id == id_tropa) and (tropa.condicion == "perfecta"):
                         tropa.coord = posicion
 
-    def obtener_ids(self) -> dict[str, list[int]]:
+
+    def enemigos_detectados(self, reporte: Report) -> list:
         """
         Función
         -------
-        * Obtiene los ids de las tropas del comandante segun su tipo
+        * Al entregarle TU reporte, retorna una lista con todas las casillas detectadas ocupadas por tropas enemigas
 
-        Retorna
-        -------
-        * {tipo_tropa: [id_tropa, ...], ...}
-                * tipo_tropa : str
-                * id_tropa : int
+        Parámetros
+        ----------
+        * reporte: reporte de tu turno
+
+        Estructura Reporte
+        ------------------
+        * detecciones : list[str]
         """
 
-        troops = {
-            SOLDIER: [],
-            HIMARS: [],
-            SCOUT: [],
-            GAUSS: [],
-            TOWER: [],
-        }
+        detectadas = []
 
-        for troop in self.tropas.values():
-            troops[troop.tipo].append(troop.id)
+        for casilla in reporte.detecciones:
+            detectadas.append(casilla)
+        return detectadas
 
-        return troops
 
-    def obtener_posiciones(self) -> list[str]:
+
+    def tropas_detectadas(self, reporteEnemigo: Report) -> list:
         """
         Función
         -------
-        * Obtiene las posiciones actuales de todas las tropas
+        * Al entregarle el reporte enemigo, retorna una lista con todas las ID de tus tropas detectadas por el enemigo
 
-        Retorna
-        -------
-        * [coordenada_tropa, ...]
-                * coordenada_tropa : str
+        Parámetros
+        ----------
+        * reporteEnemigo: reporte del turno rival
+
+        Estructura Reporte
+        ------------------
+        * detecciones : list[int]
         """
 
-        troops = []
+        detectadas = []
 
-        for troop in self.tropas.values():
-            troops.append(troop.coord)
+        for tropa in reporteEnemigo.detecciones:
+            detectadas.append(tropa)
+        return detectadas
 
-        return troops
+
+
+
 
     def __repr__(self):
         return f"Commander {self.nombre}"
