@@ -3,6 +3,11 @@ import sys
 import types
 from os import path
 
+from src.base_files.base_classes import (
+    InvalidPosition,
+    MoreTroopsThanAllowed,
+    TroopsInSamePosition,
+)
 from src.review.reviewExceptions import FuncionNoPermitida, ModuloNoPermitido
 from src.review.utils.globals_modder import add_globals_to_file, delete_extra_lines
 from src.review.utils.mock_vars import mock_informe, mock_informe_enemigo
@@ -202,6 +207,10 @@ def check_commander_structure(user_module, commanderName):
         raise AttributeError(
             'No se ha encontrado el método obligatorio "montar_tropas" en la clase Commander.'
         )
+    except (InvalidPosition, MoreTroopsThanAllowed, TroopsInSamePosition) as error:
+        raise AttributeError(
+            f'El método "montar_tropas" de la clase Commander no es válido. Motivo: {error.args[0]}'
+        ) from error
 
     try:
         commander.jugar_turno(mock_informe, mock_informe_enemigo)
