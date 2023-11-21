@@ -14,23 +14,40 @@ class Commander(BaseCommander):
 
     def montar_tropas(self):
         # Define aquí las posciciones iniciales de tus tropas
-        tropas = {
-            SOLDIER: ["A0", "A1", "A2", "A3", "A4"],
 
-            HIMARS: ["B0", "B1"],
+        self.Soldier0 =
+        self.Soldier1 =
+        self.Soldier2 =
+        self.Soldier3 =
+        self.Soldier4 =
 
-            SCOUT: ["C0", "C1"],
+        self.Scout0 =
+        self.Scout1 =
 
-            GAUSS: ["D0", "D1"],
+        self.Himars0 =
+        self.Himars1 =
 
-            TOWER: ["E0"],
-        }
+        self.Gauss0 =
+        self.Gauss1 =
 
-        my_troops, troop_list = self.instanciar_tropas(tropas)
+        self.Torre0 =
 
-        self.tropas = my_troops
+        tropas = [
+                self.Soldier0,
+                self.Soldier1,
+                self.Soldier2,
+                self.Soldier3,
+                self.Soldier4,
+                self.Scout0,
+                self.Scout1,
+                self.Himars0,
+                self.Himars1,
+                self.Gauss0,
+                self.Gauss1,
+                self.Torre0
+                ]
 
-        return troop_list
+        return tropas
 
     def jugar_turno(self, reporte, reporte_enemigo):
         # Completa tu código aquí
