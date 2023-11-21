@@ -41,8 +41,8 @@ def start():
                 running = False
 
             if scene == "review_code":
-                commander_name = input("Nombre del Commander: ")
-                reviewHandler.check_code(commander_name)
+
+                reviewHandler.check_code(option)
 
                 scene = "welcome"
                 sceneHandler.showScene(scene)
