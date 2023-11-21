@@ -18,11 +18,11 @@ def start():
     running = True
     scene = "welcome"
     sceneHandler.showScene(scene)
-    message = "opcion :"
+    message = "opcion: "
     while running:
 
         option = input(message)
-        message = "opcion :"
+        message = "opcion: "
         if option.lower() != "s":
             scene = sceneHandler.changeScene(scene, option)
             sceneHandler.showScene(scene)
@@ -30,10 +30,10 @@ def start():
             if scene == "input_commander_name":
                 message = "Introduce el nombre de tu nuevo Commander: "
 
+            if scene == "input_review_code":
+                message = "Ingresa el nombre del Commander a revisar: "
 
             if scene == "building_commander":
-
-
                 buildThread = threading.Thread(target=buildCommander, args=(option,))
 
                 buildThread.start()
@@ -41,7 +41,6 @@ def start():
                 running = False
 
             if scene == "review_code":
-
                 reviewHandler.check_code(option)
 
                 scene = "welcome"
