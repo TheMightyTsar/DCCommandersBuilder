@@ -10,29 +10,50 @@ class Commander(BaseCommander):
 
     def __init__(self):
         super().__init__(nombre="{commander_name}")
+        self.tropas = []
         # Define aquí atributos adicionales para tu comandante
 
     def montar_tropas(self):
         # Define aquí las posciciones iniciales de tus tropas
 
         self.Soldier0 = Soldier('pos')
+        self.tropas.append(self.Soldier0)
+
         self.Soldier1 = Soldier('pos')
+        self.tropas.append(self.Soldier1)
+
         self.Soldier2 = Soldier('pos')
+        self.tropas.append(self.Soldier2)
+
         self.Soldier3 = Soldier('pos')
+        self.tropas.append(self.Soldier3)
+
         self.Soldier4 = Soldier('pos')
+        self.tropas.append(self.Soldier4)
 
         self.Scout0 = Scout('pos')
+        self.tropas.append(self.Scout0)
+
         self.Scout1 = Scout('pos')
+        self.tropas.append(self.Scout1)
 
         self.Himars0 = Himars('pos')
+        self.tropas.append(self.Himars0)
+
         self.Himars1 = Himars('pos')
+        self.tropas.append(self.Himars1)
 
         self.Gauss0 = Gauss('pos')
+        self.tropas.append(self.Gauss0)
+
         self.Gauss1 = Gauss('pos')
+        self.tropas.append(self.Gauss1)
 
         self.Torre0 = Tower('pos')
+        self.tropas.append(self.Torre0)
 
-        tropas = [
+
+        orden = [
                 [self.Soldier0.id, self.Soldier0.tipo, self.Soldier0.coord],
                 [self.Soldier1.id, self.Soldier1.tipo, self.Soldier1.coord],
                 [self.Soldier2.id, self.Soldier2.tipo, self.Soldier2.coord],
@@ -47,7 +68,7 @@ class Commander(BaseCommander):
                 [self.Torre0.id, self.Torre0.tipo, self.Torre0.coord]
                 ]
 
-        return tropas
+        return orden
 
     def jugar_turno(self, reporte, reporte_enemigo):
         # Completa tu código aquí
