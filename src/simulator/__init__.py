@@ -87,7 +87,7 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.RawTextHelpFormatter,
 )
 parser._optionals.title = CYA + "syntax"
-parser.add_argument("-c1", "--commander1", help="nombre comandante 1", required=True)
+parser.add_argument("-c1", "--commander1", help="nombre comandante 1", required=False)
 parser.add_argument("-c2", "--commander2", help="nombre comandante 2", required=False)
 parser.add_argument(
     "-i",
@@ -97,32 +97,20 @@ parser.add_argument(
     type=int,
     default=1,
 )
-if len(sys.argv) not in (3, 5, 7):
-    print(GRE)
-    parser.print_help()
-    print(RST)
-    sys.exit()
+
 
 args = parser.parse_args()
 
 if args.iterations < 1:
     print(RED)
     print(prett(f"[!] {args.iterations} is not a valid number of iterations", mode="n"))
-    print(GRE)
-    parser.print_help()
-    print()
-    sys.exit()
+    sys.exit(RST)
+
+if not args.commander1:
+    args.commander1 = input()
 
 if not args.commander2:
     args.commander2 = "JorGeneral"
-
-if args.commander1 == args.commander2:
-    print(RED)
-    print(prett(f"[!] {args.commander1} is already selected", mode="n"))
-    print(GRE)
-    parser.print_help()
-    print()
-    sys.exit()
 
 valid_commanders = os.listdir("commanders")
 
@@ -134,11 +122,7 @@ for commander in (args.commander1, args.commander2):
         CHECK = False
 
 if not CHECK:
-    print(GRE)
-    parser.print_help()
-    print()
     sys.exit()
-
 if not check_code(args.commander1):
     sys.exit()
 if not check_code(args.commander2):
@@ -190,25 +174,29 @@ try:
             sorted(win_rates.items(), key=lambda item: item[1], reverse=True)
         )
 
-        print()
-        print(prett("Resultados:"))
-        print()
-        print(
-            GRE
-            + prett(
-                f"{list(win_rates.keys())[0]}: {list(win_rates.values())[0]}", mode="n"
+        try:
+            print()
+            print(prett("Resultados:"))
+            print()
+            print(
+                GRE
+                + prett(
+                    f"{list(win_rates.keys())[0]}: {list(win_rates.values())[0]}",
+                    mode="n",
+                )
             )
-        )
-        print(
-            RED
-            + prett(
-                f"{list(win_rates.keys())[1]}: {list(win_rates.values())[1]}", mode="n"
+            print(
+                RED
+                + prett(
+                    f"{list(win_rates.keys())[1]}: {list(win_rates.values())[1]}",
+                    mode="n",
+                )
             )
-        )
-        print(RST)
+            print(RST)
+        except IndexError:
+            pass
 
 except KeyboardInterrupt:
     print()
     print(RED + prett("[!] keyboard interrupt"))
     print(RST)
-    sys.exit()

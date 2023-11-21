@@ -99,8 +99,6 @@ def check_forbidden_builtins(commanderName):
             msg.append("open")
         if " input(" in line or line[0:6] == "input(":
             msg.append("input")
-        if " print(" in line or line[0:6] == "print(":
-            msg.append("print")
         if msg:
             raise FuncionNoPermitida(msg, "Se han encontrado funciones no permitidas:")
 
