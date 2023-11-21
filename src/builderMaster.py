@@ -55,10 +55,7 @@ def start():
                     pass
 
                 finally:
-                    input("Presiona enter para volver al menú.")
-
-                    scene = "welcome"
-                    sceneHandler.showScene(scene)
+                    sys.exit()
 
         else:
             running = False
