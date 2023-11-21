@@ -39,9 +39,8 @@ class BaseTroop(ABC):
     >>> mover()
     >>> atacar()
     """
-    id: int = field(init=False,
-                    factory=count().__next__,
-                    on_setattr=setters.frozen)
+
+    id: int = field(init=False, factory=count().__next__, on_setattr=setters.frozen)
     tipo: str = field(kw_only=True, on_setattr=setters.frozen)
     coord: str = field(kw_only=True, validator=validators.in_(CTT))
 
@@ -91,7 +90,6 @@ class Soldier(BaseTroop):
         moves = []
 
         for i in range(-3, 4):
-
             moves.append((CTT[self.coord][0] + i, CTT[self.coord][1]))
             moves.append((CTT[self.coord][0], CTT[self.coord][1] + i))
 
@@ -146,7 +144,6 @@ class Scout(BaseTroop):
         moves = []
 
         for i in range(-2, 3):
-
             moves.append((CTT[self.coord][0] + i, CTT[self.coord][1]))
             moves.append((CTT[self.coord][0], CTT[self.coord][1] + i))
 
@@ -201,7 +198,6 @@ class Himars(BaseTroop):
         moves = []
 
         for i in range(-2, 3):
-
             moves.append((CTT[self.coord][0] + i, CTT[self.coord][1]))
             moves.append((CTT[self.coord][0], CTT[self.coord][1] + i))
 
@@ -224,6 +220,7 @@ class Movement:
     >>> id_tropa : int
     >>> coord : str
     """
+
     resultado: bool
     id_tropa: int
     coord: str
@@ -241,6 +238,7 @@ class Report:
     >>> detecciones : list[int | str]
     >>> movimiento : Movement | None
     """
+
     ataques: list[str] = field(factory=list)
     eliminaciones: list = field(factory=list)
     detecciones: list = field(factory=list)
@@ -271,10 +269,12 @@ class BaseCommander(ABC):
     >>> obtener_ids()
     >>> obtener_posiciones()
     """
+
     nombre: str = field(kw_only=True, on_setattr=setters.frozen)
     tropas: dict[int, BaseTroop] = field(init=False)
     coordenadas_validas: list[str] = field(
-        init=False, factory=CTT.keys, on_setattr=setters.frozen)
+        init=False, factory=CTT.keys, on_setattr=setters.frozen
+    )
 
     @abstractmethod
     def montar_tropas(self) -> list[list[int | str]]:
@@ -296,11 +296,7 @@ class BaseCommander(ABC):
         """
 
     @abstractmethod
-    def jugar_turno(
-        self,
-        reporte: Report,
-        reporte_enemigo: Report
-    ) -> list[int | str]:
+    def jugar_turno(self, reporte: Report, reporte_enemigo: Report) -> list[int | str]:
         """
         Función
         -------
@@ -313,19 +309,19 @@ class BaseCommander(ABC):
 
         Estructura Reporte
         ------------------
-        * ataques : varia según el reporte
+        * ataques : list[str]
+                * lista de coordenadas donde se atacó
+
+        * eliminaciones : varia según el reporte
                 * reporte : list[str]
                         * lista de tipo de tropas del oponente eliminadoas
-                * reporte_enemigo : list[int] 
+                * reporte_enemigo : list[int]
                         * lista de ids de tus tropas eliminadas
-
-        * eliminaciones : list[int]
-                * lista de ids de tropas eliminadas
 
         * detecciones : varia según el reporte
                 * reporte : list[str]
                         * lista de coordenadas donde se detectaron tropas enemigas
-                * reporte_enemigo : list[int] 
+                * reporte_enemigo : list[int]
                         * lista de ids de tus tropas detectadas
 
         * movimiento: objeto con los siguientes atributos o None
@@ -345,7 +341,7 @@ class BaseCommander(ABC):
         """
 
     def instanciar_tropas(
-            self, troops_dict: dict[str, list[str]]
+        self, troops_dict: dict[str, list[str]]
     ) -> tuple[dict[int, BaseTroop], list[int | str]]:
         """
         Función
@@ -382,54 +378,49 @@ class BaseCommander(ABC):
         for troop_type, positions in troops_dict.items():
             if len(positions) > AVAILABLE_TROOPS[troop_type]:
                 raise MoreTroopsThanAllowed(
-                    f"Hay más tropas {troop_type} de las permitidas")
+                    f"Hay más tropas {troop_type} de las permitidas"
+                )
 
         my_troops, troop_list = {}, []
 
         for troop_type, positions in troops_dict.items():
-
             for position in positions:
-
                 try:
                     match troop_type:
                         case "soldier":
                             troop = Soldier(position)
 
                             my_troops[troop.id] = troop
-                            troop_list.append(
-                                [troop.id, troop.tipo, troop.coord])
+                            troop_list.append([troop.id, troop.tipo, troop.coord])
 
                         case "himars":
                             troop = Himars(position)
 
                             my_troops[troop.id] = troop
-                            troop_list.append(
-                                [troop.id, troop.tipo, troop.coord])
+                            troop_list.append([troop.id, troop.tipo, troop.coord])
 
                         case "scout":
                             troop = Scout(position)
 
                             my_troops[troop.id] = troop
-                            troop_list.append(
-                                [troop.id, troop.tipo, troop.coord])
+                            troop_list.append([troop.id, troop.tipo, troop.coord])
 
                         case "gauss":
                             troop = Gauss(position)
 
                             my_troops[troop.id] = troop
-                            troop_list.append(
-                                [troop.id, troop.tipo, troop.coord])
+                            troop_list.append([troop.id, troop.tipo, troop.coord])
 
                         case "tower":
                             troop = Tower(position)
 
                             my_troops[troop.id] = troop
-                            troop_list.append(
-                                [troop.id, troop.tipo, troop.coord])
+                            troop_list.append([troop.id, troop.tipo, troop.coord])
 
                 except ValueError as exc:
                     raise InvalidPosition(
-                        f"La posición {position} de {troop_type} no existe") from exc
+                        f"La posición {position} de {troop_type} no existe"
+                    ) from exc
 
         return my_troops, troop_list
 
