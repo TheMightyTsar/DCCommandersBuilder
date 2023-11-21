@@ -1,4 +1,4 @@
-"""Runs the builder or simulator depending on the command line arguments."""
+"""Inicia el Builder de DCCommanders"""
 
 import sys
 
