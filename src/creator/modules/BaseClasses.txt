@@ -310,14 +310,16 @@ class BaseCommander(ABC):
 
         Estructura Reporte
         ------------------
-        * ataques : varia según el reporte
+        * ataques : list[int]
+                * lista de coordenadas atacadas
+
+
+        * eliminaciones : varia según el reporte
                 * reporte : list[str]
-                        * lista de tipo de tropas del oponente eliminadoas
+                        * lista de tipo de tropas del oponente eliminadas
                 * reporte_enemigo : list[int]
                         * lista de ids de tus tropas eliminadas
 
-        * eliminaciones : list[int]
-                * lista de ids de tropas eliminadas
 
         * detecciones : varia según el reporte
                 * reporte : list[str]
