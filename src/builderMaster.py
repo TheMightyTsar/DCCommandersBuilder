@@ -48,24 +48,8 @@ def start():
                 sceneHandler.showScene(scene)
 
             if scene == "test":
-                c1 = input()
-
                 try:
-                    if (
-                        subprocess.run(
-                            ["python", "main.py", "-c1", c1], shell=True
-                        ).returncode
-                        == 0
-                    ):
-                        pass
-
-                    elif (
-                        subprocess.run(
-                            ["python3", "main.py", "-c1", c1], shell=True
-                        ).returncode
-                        == 0
-                    ):
-                        pass
+                    import src.simulator
 
                 except KeyboardInterrupt:
                     pass
