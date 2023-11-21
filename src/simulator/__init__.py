@@ -195,4 +195,3 @@ except KeyboardInterrupt:
     print()
     print(RED + prett("[!] keyboard interrupt"))
     print(RST)
-    sys.exit()
