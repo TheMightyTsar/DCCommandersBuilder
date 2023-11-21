@@ -31,7 +31,7 @@ def changeScene(scene, option):
         verificacionNombre = verifyCommanderName(option)
         if verificacionNombre:
             nextScene = menus[scene].get("0", scene)
-    if nextScene == "input_review_code" and option != "v":
+    if scene == "input_review_code" and option != "v":
         nextScene = menus[nextScene].get("0", scene)
 
     return nextScene
