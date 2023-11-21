@@ -15,22 +15,22 @@ class Commander(BaseCommander):
     def montar_tropas(self):
         # Define aquí las posciciones iniciales de tus tropas
 
-        self.Soldier0 =
-        self.Soldier1 =
-        self.Soldier2 =
-        self.Soldier3 =
-        self.Soldier4 =
+        self.Soldier0 = soldier('pos')
+        self.Soldier1 = soldier('pos')
+        self.Soldier2 = soldier('pos')
+        self.Soldier3 = soldier('pos')
+        self.Soldier4 = soldier('pos')
 
-        self.Scout0 =
-        self.Scout1 =
+        self.Scout0 = scout('pos')
+        self.Scout1 = scout('pos')
 
-        self.Himars0 =
-        self.Himars1 =
+        self.Himars0 = himars('pos')
+        self.Himars1 = himars('pos')
 
-        self.Gauss0 =
-        self.Gauss1 =
+        self.Gauss0 = gauss('pos')
+        self.Gauss1 = gauss('pos')
 
-        self.Torre0 =
+        self.Torre0 = tower('pos')
 
         tropas = [
                 self.Soldier0,
