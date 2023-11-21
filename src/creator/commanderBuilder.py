@@ -26,6 +26,37 @@ def buildCommander(commanderName):
     printMessage('Creado el modulo de comandante')
 
 
+    clasesFile = commanderPath + 'clasesBase.py'
+    textPath = 'src/creator/modules/BaseClasses.txt'
+
+    with open(clasesFile, 'w') as cFile:
+
+        with open(textPath) as baseFile:
+            for line in baseFile:
+
+                if "{commander_name}" in line:
+                    line = line.replace("{commander_name}", commanderName)
+
+                cFile.write(line)
+    printMessage('Creado modulos Base')
+
+
+
+    paraFiles = commanderPath + 'parametros.py'
+    textPath = 'src/creator/modules/parametros.txt'
+
+    with open(paraFiles, 'w') as cFile:
+
+        with open(textPath) as baseFile:
+            for line in baseFile:
+
+                if "{commander_name}" in line:
+                    line = line.replace("{commander_name}", commanderName)
+
+                cFile.write(line)
+    printMessage('Creado parametros')
+
+
 def printMessage(msg):
     print('...')
     print(msg + '...')
