@@ -449,6 +449,71 @@ class BaseCommander(ABC):
         return detectadas
 
 
+    def ataque_recibido(self, reporteEnemigo: Report) -> list:
+        """
+        Función
+        -------
+        * Al entregarle el reporte enemigo, retorna una lista con todas las coordenadas que fueron atacadas por el enemigo
+
+        Parámetros
+        ----------
+        * reporteEnemigo: reporte del turno rival
+
+        Estructura Reporte
+        ------------------
+        * ataques : list[int]
+                * lista de coordenadas atacadas
+        """
+
+        atacadas = []
+
+        for casilla in reporteEnemigo.ataques:
+            atacadas.append(casilla)
+        return atacadas
+
+
+    def ataque_realizado(self, reporte: Report) -> list:
+        """
+        Función
+        -------
+        * Al entregarle tu reporte, retorna una lista con todas las coordenadas que atacaste
+
+        Parámetros
+        ----------
+        * reporte: reporte de tu turno
+
+        Estructura Reporte
+        ------------------
+        * ataques : list[int]
+                * lista de coordenadas atacadas
+        """
+
+        atacadas = []
+
+        for casilla in reporte.ataques:
+            atacadas.append(casilla)
+        return atacadas
+
+
+    def enemigos_destruidos(self, reporte: Report) -> list:
+        """
+        Función
+        -------
+        * Al entregarle tu reporte, retorna una lista con todas las tropas enemigas que has destruido durante el juego
+
+        Parámetros
+        ----------
+        * reporte: reporte de tu turno
+
+        Estructura Reporte
+        ------------------
+        * eliminaciones : list[str]
+                * lista de tipos de tropa destruidas
+        """
+        destruidas = reporte.eliminaciones
+        return destruidas
+
+
 
 
 
