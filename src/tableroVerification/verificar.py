@@ -9,14 +9,14 @@ validPOS = ['A0', 'B0', 'C0', 'D0', 'E0', 'F0', 'G0', 'H0', 'I0', 'J0',
             'A8', 'B8', 'C8', 'D8', 'E8', 'F8', 'G8', 'H8', 'I8', 'J8',
             'A9', 'B9', 'C9', 'D9', 'E9', 'F9', 'G9', 'H9', 'I9', 'J9']
 
-validTipos = ['soldier', 'scout', 'tower', 'gauss', 'grenadier']
+validTipos = ['soldier', 'scout', 'tower', 'gauss', 'himars']
 
 def verifyTablero():
     import importlib.util
 
 
     from os import listdir, path
-    print(listdir('commanders'))
+
     message = ''
     commanderName = input('Ingresa el nombre de tu Commander: ')
     if commanderName in listdir('commanders'):
@@ -41,8 +41,8 @@ def verifyTablero():
             numGauss = 0
             numTower = 0
             numScout = 0
-            numGrenadier = 0
-            if len(tablero) == 13:
+            numHimars = 0
+            if len(tablero) == 12:
 
                 for unit in tablero:
                     if not isinstance(unit, list):
@@ -94,15 +94,15 @@ def verifyTablero():
                                                         else:
                                                             message += f'ERROR: Has entregado más de 2 Scout'
                                                     elif unit[1] == 'gauss':
-                                                        if numGauss < 2:
+                                                        if numGauss < 3:
                                                             numGauss += 1
                                                         else:
-                                                            message += f'ERROR: Has entregado más de 1 Gauss'
+                                                            message += f'ERROR: Has entregado más de 2 Gauss'
                                                     elif unit[1] == 'grenadier':
-                                                        if numGrenadier < 3:
-                                                            numGrenadier += 1
+                                                        if numHimars < 3:
+                                                            numHimars += 1
                                                         else:
-                                                            message += f'ERROR: Has entregado más de 2 Grenadier'
+                                                            message += f'ERROR: Has entregado más de 2 HIMARS'
                                                     elif unit[1] == 'tower':
                                                         if numTower < 1:
                                                             numTower += 1
@@ -133,5 +133,5 @@ def verifyTablero():
     else:
         message = 'Entregaste un nombre de un Commander que no existe ....'
 
-    message += '\n \n [v] volver al menu .... \n [s] para salir ...'
+
     print(message)
