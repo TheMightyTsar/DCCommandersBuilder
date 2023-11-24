@@ -1,0 +1,505 @@
+"""Contiene todas las clases necesarias para construir un DCCommander."""
+
+from abc import ABC, abstractmethod
+from itertools import chain, count
+
+from attrs import define, field, setters, validators
+
+from src.base_files.parametros import AVAILABLE_TROOPS
+from src.base_files.parametros import COORD_TO_TUPLE as CTT
+from src.base_files.parametros import GAUSS, HIMARS, SCOUT, SOLDIER, TOWER
+from src.base_files.parametros import TUPLE_TO_COORD as TTC
+
+
+class TroopsInSamePosition(Exception):
+    """Error para cuando hay tropas en la misma posición."""
+
+
+class MoreTroopsThanAllowed(Exception):
+    """Error para cuando hay más tropas de las permitidas."""
+
+
+class InvalidPosition(Exception):
+    """Error para cuando se intenta utilizar una posicion inexistente."""
+
+
+@define
+class BaseTroop(ABC):
+    """
+    ABC para todas las tropas.
+
+    Atributos
+    ---------
+    >>> id : int
+    >>> tipo : str
+    >>> coord : str
+    >>> condicion : str
+
+    Métodos
+    -------
+    >>> mover()
+    >>> atacar()
+    """
+
+    id: int = field(init=False, factory=count().__next__, on_setattr=setters.frozen)
+    tipo: str = field(kw_only=True, on_setattr=setters.frozen)
+    coord: str = field(kw_only=True, validator=validators.in_(CTT))
+    condicion: str = field(default="perfecta")
+
+    @abstractmethod
+    def mover(self) -> list[str]:
+        """
+        Obtiene las pocisiones validas para el movimiento de la tropa.
+
+        Retorna
+        -------
+        * [coordenada, ...]
+                * coordenada : str
+
+        ESTE METODO NO MODIFICA LA POSCICION DE LA TROPA.
+        -------------------------------------------------
+        """
+
+    @abstractmethod
+    def atacar(self) -> list[str]:
+        """
+        Obtiene las pocisiones validas para el ataque de la tropa.
+
+        Retorna
+        -------
+        * [coordenada, ...]
+                * coordenada : str
+        """
+
+
+class Soldier(BaseTroop):
+    """
+    Tropa Soldier.
+
+    Ataque
+    ------
+    * Todo el tablero
+
+    Movimiento
+    ----------
+    * 3 casillas en dirección vertical u horizontal
+    """
+
+    def __init__(self, coord: str):
+        super().__init__(tipo=SOLDIER, coord=coord)
+
+    def mover(self):
+        moves = []
+
+        for i in range(-3, 4):
+            moves.append((CTT[self.coord][0] + i, CTT[self.coord][1]))
+            moves.append((CTT[self.coord][0], CTT[self.coord][1] + i))
+
+        moves = [TTC[move] for move in moves if move in TTC]
+
+        return sorted(set(moves))
+
+    def atacar(self):
+        return list(CTT.keys())
+
+
+class Gauss(BaseTroop):
+    """
+    Tropa Gauss.
+
+    Ataque
+    ------
+    * Misma fila
+
+    Movimiento
+    ----------
+    * No se puede mover
+    """
+
+    def __init__(self, coord: str):
+        super().__init__(tipo=GAUSS, coord=coord)
+
+    def mover(self):
+        return [self.coord]
+
+    def atacar(self):
+        return [coord for coord in CTT if coord[1] == self.coord[1]]
+
+
+class Scout(BaseTroop):
+    """
+    Tropa Scout.
+
+    Ataque
+    ------
+    * Todo el tablero
+
+    Movimiento
+    ----------
+    * 2 casillas en dirección vertical u horizontal
+    """
+
+    def __init__(self, coord: str):
+        super().__init__(tipo=SCOUT, coord=coord)
+
+    def mover(self):
+        moves = []
+
+        for i in range(-2, 3):
+            moves.append((CTT[self.coord][0] + i, CTT[self.coord][1]))
+            moves.append((CTT[self.coord][0], CTT[self.coord][1] + i))
+
+        moves = [TTC[move] for move in moves if move in TTC]
+
+        return sorted(set(moves))
+
+    def atacar(self):
+        return list(CTT.keys())
+
+
+class Tower(BaseTroop):
+    """
+    Tropa Tower.
+
+    Ataque
+    ------
+    * Todo el tablero
+
+    Movimiento
+    ----------
+    * No se puede mover
+    """
+
+    def __init__(self, coord: str):
+        super().__init__(tipo=TOWER, coord=coord)
+
+    def mover(self):
+        return [self.coord]
+
+    def atacar(self):
+        return list(CTT.keys())
+
+
+class Himars(BaseTroop):
+    """
+    Tropa Himars.
+
+    Ataque
+    ------
+    * Todo el tablero
+
+    Movimiento
+    ----------
+    * 2 casillas en dirección vertical u horizontal
+    """
+
+    def __init__(self, coord: str):
+        super().__init__(tipo=HIMARS, coord=coord)
+
+    def mover(self):
+        moves = []
+
+        for i in range(-2, 3):
+            moves.append((CTT[self.coord][0] + i, CTT[self.coord][1]))
+            moves.append((CTT[self.coord][0], CTT[self.coord][1] + i))
+
+        moves = [TTC[move] for move in moves if move in TTC]
+
+        return sorted(set(moves))
+
+    def atacar(self):
+        return list(CTT.keys())
+
+
+@define
+class Movement:
+    """
+    Movimiento de una tropa.
+
+    Atributos
+    ---------
+    >>> resultado : bool
+    >>> id_tropa : int
+    >>> coord : str
+    """
+
+    resultado: bool
+    id_tropa: int
+    coord: str
+
+
+@define
+class Report:
+    """
+    Reporte de un turno.
+
+    Atributos
+    ---------
+    >>> ataques : list[str]
+    >>> eliminaciones : list[int | str]
+    >>> detecciones : list[int | str]
+    >>> movimiento : Movement | None
+    """
+
+    ataques: list[str] = field(factory=list)
+    eliminaciones: list = field(factory=list)
+    detecciones: list = field(factory=list)
+    movimiento: Movement | None = field(default=None)
+
+
+@define
+class BaseCommander(ABC):
+    """
+    ABC para todos los comandantes.
+
+    Atributos
+    ---------
+    >>> nombre : str
+    >>> tropas : list
+    >>> coordenadas_validas : list[str]
+
+    Métodos Obligatorios
+    -------
+    >>> montar_tropas()
+    >>> jugar_turno(reporte: Report, reporte_enemigo: Report)
+
+    Métodos Adicionales
+    ------------------
+
+    """
+
+    nombre: str = field(kw_only=True, on_setattr=setters.frozen)
+    coordenadas_validas: list[str] = field(
+        init=False, factory=CTT.keys, on_setattr=setters.frozen
+    )
+    tropas: list = field(init=False, factory=list)
+
+    @abstractmethod
+    def montar_tropas(self) -> list[list[int | str]]:
+        """
+        Función
+        -------
+        * Define un diccionario con las posiciones de tropas del comandante según el tipo de tropa
+                * {tipo_tropa: [coordenada_tropa, ...], ...}
+        * Llama al método instanciar_tropas
+                * Almacena el primer resultado del método instanciar_tropas en el atributo tropas
+                * Retorna el segundo resultado del método instanciar_tropas
+
+        Retorna
+        -------
+        * [[id_tropa, tipo_tropa, coordenada_tropa], ...]
+                * id_tropa : int
+                * tipo_tropa : str
+                * coordenada_tropa : str
+        """
+
+    @abstractmethod
+    def jugar_turno(self, reporte: Report, reporte_enemigo: Report) -> list[int | str]:
+        """
+        Función
+        -------
+        * Lógica del comandante para jugar un turno.
+
+        Parámetros
+        ----------
+        * reporte: reporte de tu turno
+        * reporte_enemigo: reporte del turno del enemigo
+
+        Estructura Reporte
+        ------------------
+        * ataques : list[int]
+                * lista de coordenadas atacadas
+
+
+        * eliminaciones : varia según el reporte
+                * reporte : list[str]
+                        * lista de tipo de tropas del oponente eliminadas
+                * reporte_enemigo : list[int]
+                        * lista de ids de tus tropas eliminadas
+
+
+        * detecciones : varia según el reporte
+                * reporte : list[str]
+                        * lista de coordenadas donde se detectaron tropas enemigas
+                * reporte_enemigo : list[int]
+                        * lista de ids de tus tropas detectadas
+
+        * movimiento: objeto con los siguientes atributos o None
+                * resultado : bool
+                        * indica si el movimiento fue exitoso o no
+                * id_tropa : int
+                        * id de la tropa que se intento mover
+                * coord : str
+                        * coordenada a la cual se intento mover la tropa
+
+        Debes Retornar
+        -------
+        * [id_tropa, acción, coordenada]
+                * id_tropa : int
+                * acción : str
+                * coordenada : str
+        """
+
+    def dar_de_baja_tropas(self, reporte_enemigo: Report) -> None:
+        """
+        Función
+        -------
+        * Cambia las condiciones de tus tropas atacadas
+
+        Parámetros
+        ----------
+        * reporte_enemigo: reporte del turno del enemigo
+
+        Estructura Reporte
+        ------------------
+        * eliminaciones : list[int]
+                * lista de ids de tropas eliminadas
+        """
+
+        if reporte_enemigo.eliminaciones:
+            for _id in reporte_enemigo.eliminaciones:
+                for tropa in self.tropas:
+                    try:
+                        if tropa.id == _id:
+                            tropa.condicion = "destruida"
+                    except KeyError:
+                        pass
+
+    def mover_tropas(self, reporte: Report) -> None:
+        """
+        Función
+        -------
+        * Mueve las tropas cuya solicitud de movimiento haya sido aprobada y la tropa tenga una
+        condicion perfecta
+
+        Parámetros
+        ----------
+        * reporte: reporte de tu turno
+
+        Estructura Reporte
+        ------------------
+        * movimiento: objeto con los siguientes atributos o None
+                * resultado : bool
+                        * indica si el movimiento fue exitoso o no
+                * id_tropa : int
+                        * id de la tropa que se intento mover
+                * coord : str
+                        * coordenada a la cual se intento mover la tropa
+        """
+
+        if reporte.movimiento:
+            resultado = reporte.movimiento.resultado
+            id_tropa = reporte.movimiento.id_tropa
+            posicion = reporte.movimiento.coord
+
+            if resultado is True:
+                for tropa in self.tropas:
+                    if (tropa.id == id_tropa) and (tropa.condicion == "perfecta"):
+                        tropa.coord = posicion
+
+    def enemigos_detectados(self, reporte: Report) -> list:
+        """
+        Función
+        -------
+        * Al entregarle TU reporte, retorna una lista con todas las casillas detectadas ocupadas por tropas enemigas
+
+        Parámetros
+        ----------
+        * reporte: reporte de tu turno
+
+        Estructura Reporte
+        ------------------
+        * detecciones : list[str]
+        """
+
+        detectadas = []
+
+        for casilla in reporte.detecciones:
+            detectadas.append(casilla)
+        return detectadas
+
+    def tropas_detectadas(self, reporteEnemigo: Report) -> list:
+        """
+        Función
+        -------
+        * Al entregarle el reporte enemigo, retorna una lista con todas las ID de tus tropas detectadas por el enemigo
+
+        Parámetros
+        ----------
+        * reporteEnemigo: reporte del turno rival
+
+        Estructura Reporte
+        ------------------
+        * detecciones : list[int]
+        """
+
+        detectadas = []
+
+        for tropa in reporteEnemigo.detecciones:
+            detectadas.append(tropa)
+        return detectadas
+
+    def ataque_recibido(self, reporteEnemigo: Report) -> list:
+        """
+        Función
+        -------
+        * Al entregarle el reporte enemigo, retorna una lista con todas las coordenadas que fueron atacadas por el enemigo
+
+        Parámetros
+        ----------
+        * reporteEnemigo: reporte del turno rival
+
+        Estructura Reporte
+        ------------------
+        * ataques : list[int]
+                * lista de coordenadas atacadas
+        """
+
+        atacadas = []
+
+        for casilla in reporteEnemigo.ataques:
+            atacadas.append(casilla)
+        return atacadas
+
+    def ataque_realizado(self, reporte: Report) -> list:
+        """
+        Función
+        -------
+        * Al entregarle tu reporte, retorna una lista con todas las coordenadas que atacaste
+
+        Parámetros
+        ----------
+        * reporte: reporte de tu turno
+
+        Estructura Reporte
+        ------------------
+        * ataques : list[int]
+                * lista de coordenadas atacadas
+        """
+
+        atacadas = []
+
+        for casilla in reporte.ataques:
+            atacadas.append(casilla)
+        return atacadas
+
+    def enemigos_destruidos(self, reporte: Report) -> list:
+        """
+        Función
+        -------
+        * Al entregarle tu reporte, retorna una lista con todas las tropas enemigas que has destruido durante el juego
+
+        Parámetros
+        ----------
+        * reporte: reporte de tu turno
+
+        Estructura Reporte
+        ------------------
+        * eliminaciones : list[str]
+                * lista de tipos de tropa destruidas
+        """
+        destruidas = reporte.eliminaciones
+        return destruidas
+
+    def __repr__(self):
+        return f"Commander {self.nombre}"
