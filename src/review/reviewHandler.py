@@ -3,13 +3,12 @@ import sys
 import types
 from os import path
 
-from src.base_files.base_classes import (
-    InvalidPosition,
-    MoreTroopsThanAllowed,
-    TroopsInSamePosition,
-)
+from src.base_files.base_classes import (InvalidPosition,
+                                         MoreTroopsThanAllowed,
+                                         TroopsInSamePosition)
 from src.review.reviewExceptions import FuncionNoPermitida, ModuloNoPermitido
-from src.review.utils.globals_modder import add_globals_to_file, delete_extra_lines
+from src.review.utils.globals_modder import (add_globals_to_file,
+                                             delete_extra_lines)
 from src.review.utils.mock_vars import mock_informe, mock_informe_enemigo
 from src.review.utils.print_styles import print_test_fail, print_test_pass
 
@@ -105,7 +104,8 @@ def check_forbidden_builtins(commanderName):
         if " input(" in line or line[0:6] == "input(":
             msg.append("input")
         if msg:
-            raise FuncionNoPermitida(msg, "Se han encontrado funciones no permitidas:")
+            raise FuncionNoPermitida(
+                msg, "Se han encontrado funciones no permitidas:")
 
 
 # Definir tester de modulos importados
@@ -124,6 +124,8 @@ def check_imported_modules(commanderName, user_module):
         "math",
         "random",
         "time",
+        "numpy",
+        "np"
     ]
 
     functions_blacklist = ["rmdir", "mkdir", "call", "exec", "eval"]
@@ -132,7 +134,8 @@ def check_imported_modules(commanderName, user_module):
     original_lines = add_globals_to_file(commanderName)
 
     # Re-importar modulo usuario
-    user_module = importlib.import_module(f"commanders.{commanderName}.{commanderName}")
+    user_module = importlib.import_module(
+        f"commanders.{commanderName}.{commanderName}")
     user_module = importlib.reload(user_module)
     modules_whitelist.append(f"commanders.{commanderName}.{commanderName}")
     modules_whitelist.append(f"commanders.{commanderName}")

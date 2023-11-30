@@ -257,7 +257,7 @@ class BaseCommander(ABC):
     Atributos
     ---------
     >>> nombre : str
-    >>> tropas : list
+    >>> tropas : dict
     >>> coordenadas_validas : list[str]
 
     Métodos Obligatorios
@@ -343,7 +343,89 @@ class BaseCommander(ABC):
                 * coordenada : str
         """
 
+    def instanciar_tropas(
+        self, troops_dict: dict[str, list[str]]
+    ) -> tuple[dict[int, BaseTroop], list[int | str]]:
+        """
+        Función
+        -------
+        * Crea un diccionario con instancias de tropas del comandante
+                * {id_tropa: instancia_tropa, ...}
+        * Crea una lista con las tropas del comandante para enviar al servidor
+                * [[id_tropa, tipo_tropa, coordenada_tropa], ...]
 
+        Parámetros
+        ----------
+        * troops_dict: diccionario con posiciones de tropas segun su tipo
+                * {tipo_tropa: [coordenada_tropa, ...], ...}
+
+        Retorna
+        -------
+        * {id_tropa: instancia_tropa, ...}
+                * id_tropa : int
+                * instancia_tropa : BaseTroop
+        * [[id_tropa, tipo_tropa, coordenada_tropa], ...]
+                * id_tropa : int
+                * tipo_tropa : str
+                * coordenada_tropa : str
+        """
+
+        positions = list(chain.from_iterable(troops_dict.values()))
+
+        if len(set(positions)) != len(positions):
+            raise TroopsInSamePosition("Hay tropas en la misma posición")
+
+        if len(positions) > 12:
+            raise MoreTroopsThanAllowed("Hay más tropas de las permitidas")
+
+        for troop_type, positions in troops_dict.items():
+            if len(positions) > AVAILABLE_TROOPS[troop_type]:
+                raise MoreTroopsThanAllowed(
+                    f"Hay más tropas {troop_type} de las permitidas"
+                )
+
+        my_troops, troop_list = {}, []
+
+        for troop_type, positions in troops_dict.items():
+            for position in positions:
+                try:
+                    match troop_type:
+                        case "soldier":
+                            troop = Soldier(position)
+
+                            my_troops[troop.id] = troop
+                            troop_list.append([troop.id, troop.tipo, troop.coord])
+
+                        case "himars":
+                            troop = Himars(position)
+
+                            my_troops[troop.id] = troop
+                            troop_list.append([troop.id, troop.tipo, troop.coord])
+
+                        case "scout":
+                            troop = Scout(position)
+
+                            my_troops[troop.id] = troop
+                            troop_list.append([troop.id, troop.tipo, troop.coord])
+
+                        case "gauss":
+                            troop = Gauss(position)
+
+                            my_troops[troop.id] = troop
+                            troop_list.append([troop.id, troop.tipo, troop.coord])
+
+                        case "tower":
+                            troop = Tower(position)
+
+                            my_troops[troop.id] = troop
+                            troop_list.append([troop.id, troop.tipo, troop.coord])
+
+                except ValueError as exc:
+                    raise InvalidPosition(
+                        f"La posición {position} de {troop_type} no existe"
+                    ) from exc
+
+        return my_troops, troop_list
 
     def dar_de_baja_tropas(self, reporte_enemigo: Report) -> None:
         """
@@ -399,10 +481,10 @@ class BaseCommander(ABC):
             posicion = reporte.movimiento.coord
 
             if resultado is True:
-                for tropa in self.tropas:
-                    if (tropa.id == id_tropa) and (tropa.condicion == "perfecta"):
-                        tropa.coord = posicion
-
+                for lista in self.tropas.values():
+                    for tropa in lista:
+                        if (tropa.id == id_tropa) and (tropa.condicion == "perfecta"):
+                            tropa.coord = posicion
 
     def enemigos_detectados(self, reporte: Report) -> list:
         """
@@ -512,9 +594,111 @@ class BaseCommander(ABC):
         """
         destruidas = reporte.eliminaciones
         return destruidas
+    
+    def eliminar_tropas(self, reporte_enemigo: Report) -> None:
+        """
+        Función
+        -------
+        * Elimina las tropas muertas del diccionario tropas
 
+        Parámetros
+        ----------
+        * reporte_enemigo: reporte del turno del enemigo
 
+        Estructura Reporte
+        ------------------
+        * eliminaciones : list[int]
+                * lista de ids de tropas eliminadas
+        """
 
+        if reporte_enemigo.eliminaciones:
+            for _id in reporte_enemigo.eliminaciones:
+                try:
+                    for lista in self.tropas.values():
+                        for tropa in lista:
+                            if tropa.id == _id:
+                                indice = self.tropas[tropa.tipo].index(tropa)
+                                del self.tropas[tropa.tipo][indice]
+                except KeyError:
+                    pass
+
+    def obtener_ids(self) -> dict[str, list[int]]:
+        """
+        Función
+        -------
+        * Obtiene los ids de las tropas del comandante segun su tipo
+
+        Retorna
+        -------
+        * {tipo_tropa: [id_tropa, ...], ...}
+                * tipo_tropa : str
+                * id_tropa : int
+        """
+
+        troops = {
+            SOLDIER: [],
+            HIMARS: [],
+            SCOUT: [],
+            GAUSS: [],
+            TOWER: [],
+        }
+
+        for troop in self.tropas.values():
+            troops[troop.tipo].append(troop.id)
+
+        return troops
+
+    def obtener_posiciones(self) -> list[str]:
+        """
+        Función
+        -------
+        * Obtiene las posiciones actuales de todas las tropas
+
+        Retorna
+        -------
+        * [coordenada_tropa, ...]
+                * coordenada_tropa : str
+        """
+
+        troops = []
+
+        for troop in self.tropas.values():
+            troops.append(troop.coord)
+
+        return troops
+    
+    def coordenada_mas_lejana(self, coord1, coord2, coord_posibles, rango):
+        # Crear un diccionario para mapear letras de columna a índices numéricos
+        columna_a_indice = {chr(ord('A') + i): i for i in range(10)}
+
+        # Convertir las coordenadas de entrada en índices numéricos
+        fila1, col1 = int(coord1[1]), columna_a_indice[coord1[0]]
+        fila2, col2 = int(coord2[1]), columna_a_indice[coord2[0]]
+
+        # Definir todas las direcciones posibles de movimiento
+        direcciones = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+
+        max_distancia = -1
+        coordenada_mas_lejana = None
+
+        # Recorrer todas las direcciones y distancias posibles
+        for dx, dy in direcciones:
+            for i in range(1, rango + 1):  # Máximo 3 movimientos
+                nueva_fila = fila1 + i * dx
+                nueva_col = col1 + i * dy
+
+                # Verificar si la nueva fila y columna están dentro del rango del tablero
+                if 0 <= nueva_fila < 10 and 0 <= nueva_col < 10:
+                    # Calcular la distancia desde la nueva coordenada a coord2
+                    d = abs(nueva_fila - fila2) + abs(nueva_col - col2)
+
+                    if d > max_distancia:
+                        max_distancia = d
+                        coordenada_mas_lejana = (chr(ord('A') + nueva_col), nueva_fila)
+                        if coordenada_mas_lejana in coord_posibles:
+                            record = coordenada_mas_lejana
+
+        return record
 
 
     def __repr__(self):
